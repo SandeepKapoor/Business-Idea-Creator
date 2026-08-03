@@ -1,0 +1,68 @@
+/* builder */
+.bld{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.fld{display:flex;flex-direction:column;gap:6px}
+.fld label{font-size:12.5px;color:var(--ink-3);font-weight:600}
+select,input[type=number]{background:var(--raise);color:var(--ink-1);border:1px solid var(--ring);
+  border-radius:8px;padding:10px 11px;font:inherit;font-size:13px;width:100%}
+select:focus,input:focus{outline:2px solid var(--f1);outline-offset:-1px}
+.fld.a label{color:var(--f1)} .fld.b label{color:var(--f2)}
+.fld.c label{color:var(--f3)} .fld.d label{color:var(--f4)}
+.bldbar{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-top:14px}
+.bldbar .fld{max-width:190px}
+.stmt{background:var(--surface-1);border:1px solid var(--ring);border-left:3px solid var(--f1);
+  border-radius:0 12px 12px 0;padding:22px 24px;margin-bottom:14px}
+.stmt .lb{font-size:12.5px;color:var(--ink-3);margin-bottom:9px}
+.stmt .sx{font-size:22px;line-height:1.4;letter-spacing:-.011em;color:var(--ink-1)}
+.stmt .sx em{font-style:normal;font-weight:600}
+.ideacard{background:var(--surface-1);border:1px solid var(--ring);border-radius:12px;padding:22px 24px;margin-bottom:14px}
+/* variant navigator */
+.vnav{display:flex;gap:12px;align-items:center;background:var(--surface-1);
+  border:1px solid var(--ring);border-radius:12px;padding:12px 14px;margin-bottom:13px}
+.vbtn{background:var(--raise);color:var(--ink-2);border:1px solid var(--ring);border-radius:9px;
+  width:38px;height:38px;cursor:pointer;font:inherit;font-size:13px;flex-shrink:0}
+.vbtn:hover{color:var(--ink-1);border-color:var(--f1)}
+.vmid{flex:1;min-width:0}
+.vcount{font-size:12px;color:var(--ink-2);margin-bottom:8px}
+.vcount b{color:var(--ink-1)}
+.vpills{display:flex;flex-wrap:wrap;gap:6px}
+.vpill{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--ink-2);
+  border:1px solid var(--ring);border-radius:20px;padding:5px 11px;font:inherit;font-size:12px;
+  cursor:pointer}
+.vpill:hover{color:var(--ink-1)}
+.vpill.on{background:var(--raise);color:var(--ink-1);border-color:var(--f1);font-weight:650}
+.vpill .vd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.vpill .vt{font-variant-numeric:tabular-nums;color:var(--ink-3);font-weight:600}
+.vpill.on .vt{color:var(--f1)}
+.vpill.vinfo{padding:5px 9px;font-size:13px;color:var(--f2);border-color:var(--ring)}
+.vpill.vinfo:hover{border-color:var(--f2)}
+.vpill.vinfo.on{background:var(--f2);color:#fff;border-color:var(--f2)}
+.viexp{background:var(--surface-1);border:1px solid var(--f2);border-radius:12px;
+  padding:18px 20px;margin:-6px 0 13px}
+.viexp p{font-size:13px}
+.viexp .vd{width:8px;height:8px;border-radius:50%;margin:0 1px 0 5px}
+.vitab{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:9px}
+.viv{border:1px solid var(--ring);border-radius:10px;padding:13px 14px;background:var(--plane)}
+.viv.on{border-color:var(--f1);background:var(--raise)}
+.vivh{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap;margin-bottom:7px}
+.vivh b{font-size:14px;color:var(--ink-1)}
+.vivp{font-size:12px;color:var(--ink-3);border:1px solid var(--ring);border-radius:3px;padding:1px 5px}
+.vivt{font-size:12.5px;font-weight:700;margin-left:auto;white-space:nowrap}
+.vivd{font-size:12.5px;color:var(--ink-2);line-height:1.5;margin-bottom:7px}
+/* the everyday parallel — set apart, so it reads as an aside rather than more instruction */
+.vivx{font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:8px;
+  border-left:2px solid var(--f2);padding-left:11px}
+.vivx b{color:var(--ink-1)}
+.vivg{font-size:12px;color:var(--ink-3);line-height:1.5;margin-bottom:8px}
+.vivg b{color:var(--ink-2)}
+.vivs{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;line-height:1.4}
+.vplus{color:var(--good)} .vminus{color:var(--crit)}
+tr.vrow{cursor:pointer}
+tr.vrow:hover td{background:var(--raise)}
+tr.vrow.on td{background:var(--raise)}
+tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
+.vbest{font-size:12px;color:var(--good);border:1px solid currentColor;border-radius:3px;
+  padding:0 4px;letter-spacing:.04em;font-weight:700;vertical-align:middle}
+/* provenance chips — every generated number declares where it came from */
+.prov{display:inline-block;font-size:12px;line-height:1.35;margin-top:6px;padding:2px 7px;
+  border-radius:4px;border:1px solid currentColor;letter-spacing:.01em}
+.prov.ok{color:var(--good)} .prov.weak{color:var(--warn)} .prov.judg{color:var(--f4)}

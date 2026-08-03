@@ -1,0 +1,33 @@
+/* podium */
+.pick{display:flex;gap:14px;background:var(--surface-1);border:1px solid var(--ring);
+  border-radius:11px;padding:16px;margin-bottom:9px;border-left:3px solid var(--f1)}
+.rank{font-size:26px;font-weight:750;color:var(--f1);line-height:1;min-width:34px}
+.pick .pt{font-weight:650;font-size:15.5px;margin-bottom:5px}
+.pick .pw{font-size:13px;color:var(--ink-2)}
+.pick .pw b{color:var(--ink-1)}
+.dead{border-left:3px solid var(--crit);background:var(--surface-1);border:1px solid var(--ring);
+  border-radius:11px;padding:16px;margin-bottom:9px}
+.dead .dt{font-weight:650;color:var(--crit);margin-bottom:4px;font-size:14.5px}
+.dead .dd{font-size:13px;color:var(--ink-2)}
+
+/* tree */
+.tree{font-size:13px;line-height:1.9;color:var(--ink-2);white-space:pre;overflow-x:auto;
+  background:var(--surface-1);border:1px solid var(--ring);border-radius:11px;padding:18px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tree b{color:var(--ink-1)}
+.tree .a{color:var(--f1)} .tree .b{color:var(--f2)} .tree .c{color:var(--f3)}
+
+.action{background:var(--surface-1);border:1px solid var(--ring);border-left:3px solid var(--good);
+  border-radius:0 12px 12px 0;padding:20px}
+.legendrow{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.lg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2)}
+.sw{width:11px;height:11px;border-radius:3px}
+a{color:var(--f1)}
+
+/* tabs */
+.tabs{display:flex;gap:8px;margin-top:22px}
+.tab{background:var(--surface-1);border:1px solid var(--ring);color:var(--ink-2);
+  border-radius:9px;padding:11px 18px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.tab:hover{color:var(--ink-1)}
+.tab.on{background:var(--f1);border-color:var(--f1);color:#fff}
+

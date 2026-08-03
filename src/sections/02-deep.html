@@ -1,0 +1,25 @@
+<!-- ============ GO DEEP ============ -->
+<div class="sec" id="deep" hidden>
+  <h2>Deep dive</h2>
+  <h3>Type an idea number, 1 to 112. Get the plan for that idea only.</h3>
+  <div class="card">
+    <div class="bldbar" style="margin-top:0">
+      <div class="fld" style="max-width:130px"><label>Idea number</label>
+        <input type="number" id="dNum" min="1" max="112" value="23"
+          onkeydown="if(event.key==='Enter')goDeep()"></div>
+      <div class="fld" style="max-width:430px"><label>…or pick it from the list</label>
+        <select id="dSel" onchange="document.getElementById('dNum').value=this.value;goDeep()"></select></div>
+      <button class="rollbtn" onclick="goDeep()">🔍 Build the plan</button>
+      <div class="fld" style="max-width:170px"><label>Monthly income target ₹</label>
+        <input type="number" id="dTgt" value="250000" step="25000" min="25000" onchange="goDeep()"></div>
+    </div>
+    <div class="tiny" style="margin-top:12px">Every number in the plan carries its provenance.
+    Where I have a verified market figure for that segment you get it with the source; where I do not,
+    the plan says so and leaves you the arithmetic rather than inventing a total.</div>
+  </div>
+  <div id="dOut"><div class="empty">Enter a number and press
+    <b style="color:var(--ink-1)">Build the plan</b>. Try <b style="color:var(--ink-1)">23</b>
+    (best-evidenced), <b style="color:var(--ink-1)">33</b> (hard market data),
+    <b style="color:var(--ink-1)">112</b> (fastest to cash) or
+    <b style="color:var(--ink-1)">37</b> (to see a plan argue against its own idea).</div></div>
+</div>

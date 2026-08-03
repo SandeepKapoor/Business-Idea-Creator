@@ -1,0 +1,6 @@
+[hidden]{display:none !important}
+@media(max-width:900px){
+  .bld{grid-template-columns:1fr 1fr} .ladder{grid-template-columns:1fr}
+  .engine{grid-template-columns:1fr 1fr} .stuck{grid-template-columns:1fr}
+  .arrow{display:none} .gantt{grid-template-columns:1fr}
+}

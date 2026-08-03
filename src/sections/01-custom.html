@@ -1,0 +1,24 @@
+<!-- ============ CUSTOM BUILDER ============ -->
+<div class="sec" id="custom" hidden>
+  <h2>Custom mode</h2>
+  <h3>Pick one from each axis. Every part below rebuilds around your choice.</h3>
+  <div class="card">
+    <div class="bld">
+      <div class="fld a"><label>1 · Who</label><select id="sWHO"></select></div>
+      <div class="fld b"><label>2 · Outcome they want</label><select id="sOUT"></select></div>
+      <div class="fld c"><label>3 · How it's delivered</label><select id="sHOW"></select></div>
+      <div class="fld d"><label>4 · Who pays</label><select id="sPAY"></select></div>
+    </div>
+    <div class="bldbar">
+      <button class="rollbtn" onclick="gen()">⚡ Create idea</button>
+      <button class="rollbtn ghost" onclick="surprise()">⟳ Surprise me</button>
+      <div class="fld" style="min-width:170px"><label>Monthly income target ₹</label>
+        <input type="number" id="tgt" value="250000" step="25000" min="25000"></div>
+      <div class="tiny" style="max-width:300px">Used for the break-even maths in Part 9. Set it to
+      whatever number actually lets you resign.</div>
+    </div>
+  </div>
+  <div id="cOut"><div class="empty">Choose four values and hit <b style="color:var(--ink-1)">Create idea</b>.
+    193,600 combinations are reachable from here — most are garbage, and finding that out in ten
+    seconds is the entire point.</div></div>
+</div>

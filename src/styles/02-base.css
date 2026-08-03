@@ -1,0 +1,25 @@
+*{box-sizing:border-box}
+/* Inter first, then the platform UI face. The artifact is one self-contained file: no stylesheet
+   link, no import rule, no remote url() — all three enforced by tools/verify.js — so a webfont
+   cannot be fetched. It renders in Inter wherever Inter is installed, and falls back elsewhere.
+   (Do not write the import keyword literally here; that invariant is a plain substring check.) */
+body{margin:0;background:var(--plane);color:var(--ink-1);
+  font:16px/1.5 "Inter","Inter Display","Inter var",-apple-system,BlinkMacSystemFont,
+    "Segoe UI",Roboto,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.wrap{max-width:960px;margin:0 auto;padding:0 22px 120px}
+/* Type scale in the shape Airbnb uses: 32 / 22 / 18 / 16 / 14 / 12, weight 600 for headings
+   rather than bold, and tracking at or just below zero — never the wide tracking that exists
+   only to make uppercase legible. */
+h1{font-size:32px;line-height:1.15;margin:0 0 8px;letter-spacing:-.022em;font-weight:600}
+h2{font-size:14px;color:var(--ink-3);margin:0 0 4px;font-weight:600;letter-spacing:0}
+h3{font-size:22px;line-height:1.3;margin:0 0 14px;letter-spacing:-.011em;font-weight:600}
+h4{font-size:18px;line-height:1.35;font-weight:600;letter-spacing:-.008em}
+p{color:var(--ink-2);margin:0 0 10px}
+.mono{font-variant-numeric:tabular-nums}
+.sec{margin-top:56px}
+.card{background:var(--surface-1);border:1px solid var(--ring);border-radius:12px;padding:20px}
+.grid{display:grid;gap:12px}
+.tiny{font-size:13px;color:var(--ink-3);line-height:1.5}
+hr{border:0;border-top:1px solid var(--grid);margin:34px 0}
+

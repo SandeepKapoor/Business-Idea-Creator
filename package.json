@@ -1,0 +1,19 @@
+{
+  "name": "sandeep-idea-map",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A business-ideation research artifact plus a deterministic rules engine, built as one self-contained HTML file.",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch",
+    "serve": "node tools/serve.js",
+    "dev": "node tools/serve.js 3007",
+    "verify": "node tools/verify.js",
+    "check": "node build.js && node tools/verify.js && node tools/fold.js",
+    "open": "node build.js && open sandeep-idea-map.html",
+    "fold": "node tools/fold.js"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

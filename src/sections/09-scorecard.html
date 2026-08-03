@@ -1,0 +1,44 @@
+<!-- ============ SCORECARD ============ -->
+<div class="sec" id="score">
+  <h2>7 · Scorecard with hard gates</h2>
+  <h3>All 112 ideas scored 1–5. Red outline = gate failure = dead regardless of total.</h3>
+  <div class="card">
+    <div class="filters" style="margin-bottom:15px">
+      <span class="flabel">Attribute</span>
+      <select id="fCrit" style="max-width:200px"></select>
+      <select id="fOp" style="max-width:96px">
+        <option value="gte">is ≥</option><option value="eq">is exactly</option><option value="lte">is ≤</option></select>
+      <select id="fVal" style="max-width:80px">
+        <option value="0">any</option><option>1</option><option>2</option>
+        <option>3</option><option>4</option><option>5</option></select>
+      <span class="flabel" style="margin-left:12px">Cluster</span>
+      <select id="fClus" style="max-width:230px"></select>
+      <span class="flabel" style="margin-left:12px">Verdict</span>
+      <span id="fVerd"></span>
+      <button class="chip" id="fReset">↺ reset</button>
+      <span class="count" id="fCnt"></span>
+    </div>
+    <div id="heat"></div>
+    <div class="legendrow" style="margin-top:16px">
+      <div class="lg"><span class="sw" style="background:var(--s2)"></span>1 — weak</div>
+      <div class="lg"><span class="sw" style="background:var(--s4)"></span>3 — adequate</div>
+      <div class="lg"><span class="sw" style="background:var(--s7)"></span>5 — strong</div>
+      <div class="lg"><span class="sw" style="outline:2px solid var(--crit);outline-offset:-2px;background:transparent"></span>gate failure</div>
+    </div>
+    <div id="scoreHow"></div>
+    <p class="tiny" style="margin-top:16px"><b style="color:var(--ink-1)">Click any row</b> to open that
+    idea in <b style="color:var(--ink-1)">Build my own idea</b> with its four dropdowns pre-filled — then
+    change one axis to fork it. Scroll the table; all 112 are in there, sorted by total.
+    Eight rows carry a <b style="color:var(--f4)">HAND-SCORED</b>
+    badge: those are the finalists I judged myself and argued about below, and my judgment overrides the
+    engine on those rows. The other 104 are scored by the same rules engine that powers
+    <b style="color:var(--ink-1)">Build my own idea</b>, from each idea's position on the four axes — so
+    the bank and the builder can never contradict each other. Treat derived scores as a first pass, not a verdict.</p>
+    <p class="tiny" style="margin-top:10px">Two instructive failures. <b style="color:var(--ink-1)">#37
+    India's Got Designers</b> scores 1 on willingness to pay — nobody pays to be judged, and sponsors
+    won't fund a show with no audience yet. As a business it's dead; as marketing for #2 or #23 it's
+    excellent. <b style="color:var(--ink-1)">#52 Certification body</b> scores 1 on distribution — it's
+    structurally the best idea in the whole bank and you cannot start it, because certification requires
+    an audience that already trusts you. Park it as the year-3 move, not the year-1 one.</p>
+  </div>
+</div>
