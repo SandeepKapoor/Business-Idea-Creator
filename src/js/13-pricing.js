@@ -67,4 +67,10 @@ function priceCheck(h,p,core){
 }
 const RECUR_H=[5,6,15,16,19];
 const inr=n=>"₹"+Math.round(n).toLocaleString("en-IN");
+/* Small text helpers, here because this is the earliest file that already owns formatting and
+   because three later files need them. aAn is a spelling rule, not a pronunciation one: every
+   string it is fed is checked exactly in tools/verify.js, so a "an hour" case would be caught
+   rather than reasoned about. */
+function aAn(s){return `${/^[aeiou]/i.test(s)?'an':'a'} ${s}`;}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
 

@@ -11,7 +11,8 @@
     "verify": "node tools/verify.js",
     "check": "node build.js && node tools/verify.js && node tools/fold.js",
     "open": "node build.js && open sandeep-idea-map.html",
-    "fold": "node tools/fold.js"
+    "fold": "node tools/fold.js",
+    "premise": "node tools/premise.js"
   },
   "engines": {
     "node": ">=16"

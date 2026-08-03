@@ -99,6 +99,7 @@ sandbox.globalThis = sandbox;
 const EXPORTS = ['scoreIt', 'rules', 'verdict', 'buildVars', 'deepPlan', 'priceCheck', 'nearest',
   'readRow', 'HOWTO', 'compFor', 'inr', 'AX', 'CL', 'TAGS', 'HAND', 'FAST', 'ALLC', 'MW', 'MO', 'MH', 'MP',
   'HOW_BASE', 'PAY_MULT', 'BASE_EV', 'SCEN', 'SEG_EV', 'COMP', 'MOTION', 'FIRST', 'ARCH',
+  'PREM', 'premFor', 'premEv', 'aAn', 'cap',
   'CRIT', 'CRIT2', 'CRIT_GUESS', 'CRIT_DEF', 'BANDS', 'RAMP_L', 'RAMP_D', 'INK_L', 'INK_D',
   'EMPLOYER', 'LEARNER', 'NO_EMPLOYER', 'KIDS', 'ORG_BUYER', 'TRAVEL', 'CONTENT', 'RECUR_H'];
 
@@ -174,29 +175,131 @@ if (QUICK) {
   ok('every verdict band is reachable', seenVerdicts.size >= 5, `only saw: ${[...seenVerdicts].join(' / ')}`);
 }
 
-// --- variants -----------------------------------------------------------
+// --- the premise dimension ----------------------------------------------
+// The load-bearing check here is `ob`. A premise claims two different things: "this kind of
+// business exists" (ev, pointing at bank ideas) and "the bank has built it at these formats"
+// (ob). The second is fully derivable from the first plus TAGS, so it is verified rather than
+// trusted — otherwise `ob` could quietly drift into a wish list and the UI would go on printing
+// "built this way in your own bank" about formats where nothing was.
 {
-  let bad = 0, minV = 99, maxV = 0, sampled = 0, firstBad = null;
+  const P0 = A.PREM[0];
+  ok('PREM[0] is the no-premise default', P0.k === 'none');
+  ok('the default premise is inert — zero deltas, ×1 price',
+    P0.dS.every((d) => d === 0) && P0.pm === 1,
+    'a non-inert default would silently change every score this page produced before premises existed');
+
+  const real = A.PREM.filter((P) => P.k !== 'none');
+  ok('every premise carries eight score deltas',
+    A.PREM.every((P) => Array.isArray(P.dS) && P.dS.length === 8 && P.dS.every(Number.isInteger)));
+  ok('every premise cites bank ideas that exist',
+    real.every((P) => P.ev.length && P.ev.every((n) => nums.includes(n))));
+  ok('every premise has a one-word tag, and they are unique',
+    new Set(real.map((P) => P.w1)).size === real.length &&
+    real.every((P) => /^[A-Z]+$/.test(P.w1)));
+
+  // ob must BE the observed set — not a superset, not a subset.
+  let obBad = null;
+  for (const P of real) {
+    const derived = [...new Set(P.ev.map((n) => A.TAGS[n][2]))].sort((a, b) => a - b);
+    const stated = [...P.ob].sort((a, b) => a - b);
+    if (derived.join() !== stated.join()) {
+      obBad = `${P.nm}: ob=[${stated}] but its bank ideas actually sit at [${derived}]`;
+      break;
+    }
+  }
+  ok('each premise\'s "observed" formats are exactly those its bank ideas use', !obBad, obBad);
+  ok('no format is claimed as both observed and judged',
+    real.every((P) => !P.ob.some((h) => P.xt.includes(h))),
+    'a format in both ob and xt would render as evidenced and as judgement at the same time');
+  ok('every premise stays inside the 22 formats',
+    real.every((P) => [...P.ob, ...P.xt].every((h) => Number.isInteger(h) && h >= 0 && h < NH)));
+
+  // premEv is what puts the chip on screen. It must say "built" only when that is literally true.
+  let evBad = null;
+  for (let h = 0; h < NH && !evBad; h++) for (const P of real) {
+    const truth = P.ev.some((n) => A.TAGS[n][2] === h);
+    const said = A.premEv(P, h);
+    if ((said.k === 'ok') !== truth) { evBad = `${P.nm} at format ${h}: chip says ${said.k}, truth is ${truth}`; break; }
+  }
+  ok('the evidence chip claims "built in your bank" only where a bank idea actually is', !evBad, evBad);
+  ok('premEv is silent for the default premise', A.premEv(P0, 0) === null);
+
+  let minP = 99, maxP = 0;
+  for (let h = 0; h < NH; h++) for (let o = 0; o < NO; o++) {
+    const set = A.premFor(h, o);
+    minP = Math.min(minP, set.length); maxP = Math.max(maxP, set.length);
+  }
+
+  // Artefact is the one premise gated on the outcome. "They leave holding one finished thing"
+  // is unsayable about Belonging or Clarity, so it must not be offered there — and it must
+  // still be offered wherever the outcome IS pointable, or the filter is suppression, not logic.
+  const artefact = A.PREM.find((P) => P.k === 'artefact');
+  eq('exactly one premise is outcome-gated', A.PREM.filter((P) => P.apO).length, 1);
+  const vague = [], solid = [];
+  for (let o = 0; o < NO; o++) (A.MO[o][2] >= 3 ? solid : vague).push(o);
+  ok('Artefact is withheld from outcomes nobody can hold',
+    vague.length > 0 && vague.every((o) => !A.premFor(0, o).includes(artefact)),
+    `measurable<3: ${vague.map((o) => A.AX.OUT[o]).join(', ')}`);
+  ok('Artefact still appears for every pointable outcome',
+    solid.every((o) => A.premFor(0, o).includes(artefact)));
+  notes.push(`Artefact withheld from ${vague.length} of ${NO} outcomes: ` +
+    vague.map((o) => A.AX.OUT[o]).join(', ') + '.');
+  // aAn is a spelling rule and will be wrong for "an hour" / "a user" style words. Rather than
+  // trust that no such string ever enters these tables, check every string it is actually fed.
+  // WRONG lists the known exceptions in both directions; if a future axis or format name lands
+  // on one, this fails rather than shipping "a hour".
+  const WRONG = /^(hour|honest|honou?r|heir)|^(one|once|uniqu|unit|user|usual|util|europ|eu)/i;
+  const fed = [...A.AX.HOW.map((s) => s.toLowerCase()), ...A.MH.map((r) => r[6].toLowerCase())];
+  const artBad = fed.filter((s) => WRONG.test(s));
+  ok('no format name needs an article exception', artBad.length === 0,
+    `aAn() would mis-article: ${artBad.join(', ')}`);
+  // Spot-check the real aAn against hand-written expectations, so this tests the function
+  // rather than restating its implementation.
+  const artCases = [['live cohort', 'a live cohort'], ['in-person workshop', 'an in-person workshop'],
+    ['advisory retainer', 'an advisory retainer'], ['async video critique', 'an async video critique'],
+    ['assessment + certification', 'an assessment + certification'], ['1:1 coaching', 'a 1:1 coaching'],
+    ['awards', 'an awards'], ['podcast', 'a podcast']];
+  const artFail = artCases.find(([s, want]) => A.aAn(s) !== want);
+  ok('aAn articles every format string correctly', !artFail,
+    artFail && `aAn(${artFail[0]}) = "${A.aAn(artFail[0])}", expected "${artFail[1]}"`);
+
+  ok('every format offers at least the default premise', minP >= 1, `saw ${minP}`);
+  ok('no format offers more premises than exist', maxP <= A.PREM.length, `saw ${maxP}`);
+  notes.push(`premises available per format: ${minP}–${maxP} of ${A.PREM.length}.`);
+}
+
+// --- variants, across every premise --------------------------------------
+{
+  let bad = 0, minV = 99, maxV = 0, sampled = 0, ideas = 0, firstBad = null;
+  let minIdeas = 1e9, maxIdeas = 0;
   const STRIDE = QUICK ? 997 : 1; // 1 = exhaustive; the sweep is cheap enough to not sample
   for (let i = 0; i < NW * NO * NH * NP; i += STRIDE) {
     const w = Math.floor(i / (NO * NH * NP)) % NW, o = Math.floor(i / (NH * NP)) % NO;
     const h = Math.floor(i / NP) % NH, p = i % NP;
     sampled++;
     try {
-      const V = A.buildVars(w, o, h, p);
-      minV = Math.min(minV, V.length); maxV = Math.max(maxV, V.length);
-      for (const v of V) {
-        if (!v.S.every((x) => Number.isInteger(x) && x >= 1 && x <= 5) ||
-            !Number.isFinite(v.core) || v.core < 500 || !v.title || !v.V) {
-          bad++; firstBad = firstBad || `[${w},${o},${h},${p}] ${v.nm}: core=${v.core}`;
+      const PS = A.premFor(h, o);
+      let here = 0;
+      for (const P of PS) {
+        const V = A.buildVars(w, o, h, p, P);
+        minV = Math.min(minV, V.length); maxV = Math.max(maxV, V.length);
+        here += V.length; ideas += V.length;
+        for (const v of V) {
+          if (!v.S.every((x) => Number.isInteger(x) && x >= 1 && x <= 5) ||
+              !Number.isFinite(v.core) || v.core < 500 || !v.title || !v.V) {
+            bad++; firstBad = firstBad || `[${w},${o},${h},${p}] ${P.nm}×${v.nm}: core=${v.core}, S=${v.S}`;
+          }
         }
       }
+      minIdeas = Math.min(minIdeas, here); maxIdeas = Math.max(maxIdeas, here);
     } catch (e) { bad++; firstBad = firstBad || `[${w},${o},${h},${p}] threw ${e.message}`; }
   }
-  ok(`variants build cleanly across ${sampled} sampled combinations`, bad === 0, firstBad);
+  ok(`premise × angle builds cleanly across ${sampled} combinations`, bad === 0, firstBad);
   ok('every combination yields 4–7 variant angles', minV >= 4 && maxV <= 7, `saw ${minV}–${maxV}`);
+  ok('every combination now yields more than one idea', minIdeas > 1, `saw a low of ${minIdeas}`);
   notes.push(STRIDE === 1
-    ? `variant sweep covered all ${sampled.toLocaleString('en-US')} combinations exhaustively.`
+    ? `swept all ${sampled.toLocaleString('en-US')} combinations × every applicable premise — ` +
+      `${ideas.toLocaleString('en-US')} distinct ideas, ${minIdeas}–${maxIdeas} per combination.`
     : `variant sweep sampled ${sampled.toLocaleString('en-US')} of 193,600 combinations (stride ${STRIDE}) — NOT exhaustive.`);
 }
 

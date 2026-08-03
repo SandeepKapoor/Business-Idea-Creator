@@ -19,6 +19,10 @@
 .ibox{border-left:2px solid var(--f2);padding:1px 0 1px 14px;margin:0 0 16px;max-width:68ch}
 .ibox p{margin:0;font-size:14px;line-height:1.6;color:var(--ink-2)}
 .ibox.cost{border-left-color:var(--warn)}
+/* The angle box sits under the premise box on the same card. Different rule colour so the two
+   layers read as two decisions — what happens inside, then the one thing the angle changes —
+   rather than as one long description that happens to have a subheading in it. */
+.ibox.angle{border-left-color:var(--f1)}
 .ifacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
   gap:0 26px;margin:0 0 16px}
 .ifacts>div{padding:11px 0;border-top:1px solid var(--grid);

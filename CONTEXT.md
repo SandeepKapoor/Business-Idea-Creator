@@ -28,7 +28,8 @@ validation sprint.
   one `<script>` block, no external assets. **This file is generated. Do not edit it.**
 - **Source**: `src/` — 15 HTML section partials, 11 CSS files, 21 JS files.
 - **Build**: `npm run build` (zero dependencies; `build.js` is ~130 lines of plain Node).
-- **Verify**: `npm run verify` — 78 checks, ~5s. See §16.
+- **Verify**: `npm run verify` — 96 checks, ~11s. See §16.
+- **Premise provenance**: `npm run premise` — how `PREM` was mined out of the 112. See §10.
 - **Runs by**: opening the built file in a browser. `open sandeep-idea-map.html`.
 - **Audience**: one reader. It is intentionally opinionated and addresses him directly.
 - **Language/tone**: British-leaning English, direct, no hedging, no emoji except a few
@@ -47,7 +48,8 @@ build.js                  src/ → sandeep-idea-map.html. Zero deps. Concatenati
 sandeep-idea-map.html     BUILD OUTPUT — the deliverable. Never edit.
 CONTEXT.md                this file
 README.md                 workflow, file map, known issues
-tools/verify.js           78-check harness (§16)
+tools/verify.js           96-check harness (§16)
+tools/premise.js          premise extraction + orthogonality test (§10)
 src/index.html            shell: <head>, section includes, <!--@css--> / <!--@js--> markers
 src/sections/*.html       15 partials, one per report section, in document order
 src/styles/*.css          11 files, concatenated in filename order
@@ -84,13 +86,14 @@ The JS split maps to this document as follows:
 | `10-picks.js` | — | `PICK` |
 | `11-draw.js` | — | `draw()`, first `renderAx()` |
 | `12-attributes.js` | §4 | `MW` `MO` `MH` `MP` |
-| `13-pricing.js` | §8 | `HOW_BASE`, `PAY_MULT`, `BASE_EV`, `SCEN`, `priceCheck`, `inr` |
+| `13-pricing.js` | §8 | `HOW_BASE`, `PAY_MULT`, `BASE_EV`, `SCEN`, `priceCheck`, `inr`, `aAn`, `cap` |
 | `14-rules.js` | §6 | membership sets, `rules()` |
 | `15-scoring.js` | §5 §7 | `CRIT_DEF`, `BANDS`, `HOWTO`, `readRow`, `scoreIt`, `verdict` |
 | `16-similarity.js` | — | `nearest()` |
 | `17-evidence.js` | §11 | `SEG_EV`, `COMP`, `FIRST`, `MOTION` |
 | `18-modes.js` | §2 | `mode()`, `openInBuilder`, `fillSel`, `surprise` |
-| `19-variants.js` | §10 | `ARCH`, `buildVars`, `gen`, `renderVars` |
+| `18a-premise.js` | §10 | `PREM`, `premFor`, `premEv` — the fifth dimension |
+| `19-variants.js` | §10 | `ARCH`, `buildVars`, `gen`, `renderVars`, `setPrem`, `premPanel` |
 | `20-deep-dive.js` | §11 | `goDeep`, `deepPlan` |
 | `99-boot.js` | §16 | the required bottom call order |
 
@@ -494,12 +497,18 @@ sorted by total descending then by number.
 Flow: 4 `<select>` → `gen()` → `buildVars()` → `renderVars()`.
 
 ```js
-let VARS=[], VIDX=0, AXS=[w,o,h,p], LASTKEY='', VI=false;
-// VIDX resets to 0 only when the axis combination changes (LASTKEY guard)
-// VI = whether the ⓘ variant explainer is expanded
+let VARS=[], VIDX=0, PREMS=[], PIDX=0, AXS=[w,o,h,p], LASTKEY='', VI=false, PI=false;
+// VIDX and PIDX both reset to 0 only when the axis combination changes (LASTKEY guard)
+// VI / PI = whether the angle / premise ⓘ explainer is expanded
 ```
 
-### Variants (`ARCH`) — 7 strategic angles
+**An idea is PREMISE × ANGLE on top of the four axes.** The axes fix the shape, the premise
+fixes what happens inside, the angle changes one structural thing about how it is built.
+`buildVars(w,o,h,p,P)` sums the premise deltas and the angle deltas and clamps **once** —
+clamping twice would let a premise that pushes a criterion to 5 swallow an angle's +1 and
+hide the trade-off. Prices multiply: `core *= P.pm * a.pm`.
+
+### Angles (`ARCH`) — 7 ways to build the same idea
 
 Same four axes, different way to build it. Each has score deltas and a price multiplier.
 
@@ -518,23 +527,68 @@ So **4 to 7 variants** per combination. Average spread between best and worst va
 is BUILD).
 
 Each archetype also carries prose: `an()` the angle, `gv` what it trades away,
-`kl()` an angle-specific kill criterion, `ts` what to test first.
+`kl()` an angle-specific kill criterion, `ts` what to test first, `w1` a one-word tag and
+`lem` the lemonade-stand parallel.
 
 **Directions are defensible; magnitudes are judgment.** The `.prov.judg` chip in the ⓘ
 panel says exactly that. Keep it.
+
+### Premises (`PREM`, `18a-premise.js`) — 7 things that can happen inside
+
+The four axes and the seven angles both leave the *premise* free, and that is why one
+combination used to render as a single idea. Proof it is a real variable: 112 bank ideas
+occupy only 106 combinations, and #36 *The Roast* and #99 *Design Court* share all four axes.
+
+| key | name | word | price × | score deltas (8) | availability |
+|---|---|---|---|---|---|
+| none | Not chosen | — | 1.0 | `[0,0,0,0,0,0,0,0]` | always |
+| teardown | Teardown | BREAK | 0.8 | `[0,1,0,2,-1,0,0,1]` | 14 formats |
+| record | The record | TRUTH | 0.5 | `[-1,2,0,-2,1,2,0,0]` | 9 formats |
+| drill | Drill | REPS | 1.0 | `[1,0,0,1,0,-1,0,-1]` | 12 formats |
+| diagnose | Diagnosis | JUDGE | 1.4 | `[1,-1,0,-1,1,2,0,0]` | 10 formats |
+| translate | Translation | CARRY | 1.2 | `[0,0,2,0,0,1,0,0]` | 10 formats |
+| artefact | Artefact | OBJECT | 1.3 | `[1,0,0,0,-1,0,0,-1]` | 9 formats, `MO[o][2]>=3` |
+| door | Access | ROOM | 1.6 | `[0,1,2,-1,0,2,-1,0]` | 9 formats |
+
+`PREM[0]` is **inert by construction** — zero deltas, ×1 price — so the default state of the
+page scores and prices exactly as it did before this dimension existed. verify.js asserts it.
+
+So **2 to 7 premises × 4 to 7 angles = 12 to 42 ideas** per combination; 5,045,920 across
+the whole space. Artefact is the only premise gated on the OUTCOME: "they leave holding one
+finished thing" is unsayable about Belonging or Clarity.
+
+**Provenance is stricter here than anywhere else in the engine**, because a premise claims a
+*kind of business exists*, not just a way of building one:
+
+- `ev` — the bank ideas that already are this premise. Rendered as clickable receipts.
+- `ob` — formats the bank has **built** it at. **Fully derivable from `ev` + `TAGS`, and
+  verify.js recomputes it.** Never hand-edit `ob` to include a format you wish were there.
+- `xt` — formats it is judged to transfer to. Rendered with a `J` chip and the words
+  "my judgement is that it transfers — that judgement is not evidence."
+
+The list was mined from the 112, not invented: `npm run premise`. A premise had to appear
+across ≥3 formats with no single format over 60% of it, or it was cut as the HOW axis under
+a new name. That killed *Contest*, *Matchmaking* and *Frontier*; *Instrument* and
+*Done-for-them* were cut on judgement, their dominant format being the premise's own name.
+
+**Deliberately not modelled: the SUBJECT.** #46 *Studio Tour* and #72 *How They Design* share
+the Access premise and differ only in which doors get opened. Generating those would mean
+inventing rooms Sandeep can get into. Do not add it.
 
 ### What `renderVars()` emits, in order
 
 1. origin banner (if launched from the bank) — includes a 3-line "what it is as a business"
 2. statement sentence
-3. variant navigator `#vnav` + ⓘ explainer
-4. idea card — angle, person, promise, mechanic, money, what it gives up, one-line pitch
+3. two-row navigator `#vnav` (premise, then angle) + both ⓘ explainers
+4. idea card — premise leads, angle follows, then facts, costs, one-line pitch
 5. axis-level flags
 6. Part 6 — four stages (founder-fit answers labelled as *the engine's guesses*)
-7. Part 7 — **all variants** side by side, active row highlighted, click to switch
-8. Part 8 — all variants plotted; filled = active, hollow rings = siblings
-9. Part 9 — pricing ladder + `priceCheck` chip + break-even arithmetic
-10. closest ideas in the bank (`nearest`, requires ≥2 keyword hits)
+7. Part 7 — **all angles** at the current premise, click to switch
+8. Part 7b — **all premises** at the current angle, with `J` chips and prices
+9. Part 8 — all angles plotted; filled = active, hollow rings = siblings
+10. Part 9 — pricing ladder + `priceCheck` chip + break-even arithmetic
+11. closest ideas in the bank (`nearest`, requires ≥2 keyword hits)
+12. Part 10 — the full business case, at `P.pm * a.pm`
 
 `openInBuilder(n)` loads bank idea `n`: sets the 4 selects from `TAGS[n]`, sets `ORIGIN`,
 switches mode, generates. The banner clears the moment any dropdown differs from

@@ -15,7 +15,7 @@ function rules(w,o,h,p){
       "A percentage of a raise, or an income share, only works when the person you serve is an individual whose pay you can move. "+MW[w][4].replace(/^./,c=>c.toUpperCase())+" do not fit that shape.");
   if(p===21&&![2,19].includes(h))
     add("bad","✕","Expert networks buy hours, not products.",
-      "GLG and Third Bridge pay for a call with a named expert. They will not buy a "+MH[h][6].toLowerCase()+". Set HOW to a 1:1 intensive or a retainer, or change the payer.");
+      "GLG and Third Bridge pay for a call with a named expert. They will not buy "+aAn(MH[h][6].toLowerCase())+". Set HOW to a 1:1 intensive or a retainer, or change the payer.");
   if(p===13&&MW[w][0]<4)
     add("warn","!","Certification requires trust you do not have yet.",
       "Charging for judgment is the best position in this whole bank — and it is unreachable until an audience already believes your judgment is worth something. This is a year-three move. Park it and build distribution first.");

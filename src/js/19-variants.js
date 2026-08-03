@@ -84,22 +84,39 @@ const ARCH=[
  gv:`By far the slowest to start, and two groups to keep happy instead of one. In return, it runs when you are ill, busy or asleep.`,
  kl:W=>`If you cannot name three people who would deliver this at your standard, for your cut, you are the syndicate — and that is the version you already have.`,
  ts:`Sign one deliverer before you sign one buyer. Supply is the hard side here, not demand.`}];
-let VARS=[],VIDX=0,AXS=[0,0,0,0],LASTKEY='',VI=false;
+/* An idea on this page is now PREMISE × ANGLE on top of the four axes. PIDX picks what happens
+   inside, VIDX picks the one structural thing that changes about how it is built. PREMS[0] is
+   always 'none' with zero deltas and a ×1 multiplier, so the default state of this page scores
+   and prices exactly as it did before the premise dimension existed. */
+let VARS=[],VIDX=0,PREMS=[],PIDX=0,AXS=[0,0,0,0],LASTKEY='',VI=false,PI=false;
 const clamp5=v=>Math.max(1,Math.min(5,v));
-function buildVars(w,o,h,p){
+/* Premise and angle deltas are summed and clamped ONCE. Clamping after each in turn would let
+   a premise that pushes a criterion to 5 swallow an angle's +1 and quietly hide the trade-off. */
+function buildVars(w,o,h,p,P){
   const base=scoreIt(w,o,h,p), F=rules(w,o,h,p);
   const tag=MO[o][4];
   return ARCH.filter(a=>!a.ap||a.ap(h)).map(a=>{
-    const S=base.map((v,i)=>clamp5(v+a.dS[i]));
+    const S=base.map((v,i)=>clamp5(v+P.dS[i]+a.dS[i]));
     const V=verdict(S,F);
-    let core=HOW_BASE[h]*PAY_MULT[p]*(0.85+MW[w][2]*0.06)*a.pm;
+    let core=HOW_BASE[h]*PAY_MULT[p]*(0.85+MW[w][2]*0.06)*P.pm*a.pm;
     core=Math.max(500,Math.round(core/500)*500);
-    return {a,S,tot:S.reduce((x,y)=>x+y),V,F,core,
-      title:a.ti(tag),nm:a.nm};});
+    return {a,P,S,tot:S.reduce((x,y)=>x+y),V,F,core,
+      title:P.k==='none'?a.ti(tag):`The ${tag} ${P.tn}`,nm:a.nm};});
 }
 function setVar(i){
   if(i<0)i=VARS.length-1; if(i>=VARS.length)i=0;
   VIDX=i; renderVars(1);
+  document.getElementById('vnav').scrollIntoView({behavior:'smooth',block:'start'});
+}
+/* Switching premise rebuilds the angle set, because every angle's score and price sit on top of
+   the premise's. The angle you were reading is kept — the whole point is comparing like for like. */
+function setPrem(i){
+  if(i<0)i=PREMS.length-1; if(i>=PREMS.length)i=0;
+  PIDX=i;
+  const [w,o,h,p]=AXS;
+  VARS=buildVars(w,o,h,p,PREMS[PIDX]);
+  if(VIDX>=VARS.length)VIDX=0;
+  renderVars(1);
   document.getElementById('vnav').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function gen(silent){
@@ -107,8 +124,10 @@ function gen(silent){
         h=+document.getElementById('sHOW').value,p=+document.getElementById('sPAY').value;
   LAST=[w,o,h,p]; AXS=[w,o,h,p];
   const key=[w,o,h,p].join();
-  VARS=buildVars(w,o,h,p);
-  if(key!==LASTKEY){VIDX=0;LASTKEY=key;}          /* new combination → back to variant 1 */
+  if(key!==LASTKEY){VIDX=0;PIDX=0;LASTKEY=key;}   /* new combination → back to premise 1, angle 1 */
+  PREMS=premFor(h,o);   /* format decides which premises exist; outcome rules out the impossible */
+  if(PIDX>=PREMS.length)PIDX=0;
+  VARS=buildVars(w,o,h,p,PREMS[PIDX]);
   if(VIDX>=VARS.length)VIDX=0;
   renderVars(silent);
 }
@@ -171,13 +190,36 @@ function renderVars(silent){
     <em style="color:var(--f3)">${AX.HOW[h].toLowerCase()}</em>, paid for by
     <em style="color:var(--f4)">${AX.PAY[p].toLowerCase()}</em>.</div></div>`;
 
-  /* variant navigator */
+  /* ---------- the navigator ----------
+     Two rows, because an idea here is two independent choices. The old single row said
+     "Idea 1 of 7", which was a lie — those were seven angles on ONE idea, and it is what made
+     the whole page look like a single combination could only ever produce one business.
+     Premise on top (what happens), angle below (the one structural thing that changes). */
   const vdot=v=>v.V.k==='dead'?'--crit':v.V.k==='live'?'--good':'--warn';
-  html+=`<div class="vnav" id="vnav">
-    <button class="vbtn" onclick="setVar(${VIDX-1})" aria-label="Previous idea">◀</button>
-    <div class="vmid">
-      <div class="vcount">Idea <b>${VIDX+1}</b> of <b>${VARS.length}</b> for this combination
-        · <span style="color:var(--ink-3)">same four axes, different strategic angle</span></div>
+  const kdot=k=>k==='dead'?'--crit':k==='live'?'--good':'--warn';
+  /* What every premise would score AT THE ANGLE CURRENTLY SELECTED, so the premise row is a
+     like-for-like comparison rather than each pill quoting its own best case. */
+  const baseS=scoreIt(w,o,h,p), baseF=rules(w,o,h,p);
+  const pAt=P=>{const s=baseS.map((v,i)=>clamp5(v+P.dS[i]+A.dS[i]));
+    return{tot:s.reduce((x,y)=>x+y),V:verdict(s,baseF)};};
+  const CURP=PREMS[PIDX], total=PREMS.length*VARS.length;
+  html+=`<div class="vnav2" id="vnav">
+    <div class="vhead"><b>${total} ideas</b> for this one combination —
+      ${PREMS.length} premises × ${VARS.length} angles. You are reading
+      <b style="color:var(--f2)">${CURP.nm}</b> × <b style="color:var(--f1)">${A.nm}</b>,
+      number <b>${PIDX*VARS.length+VIDX+1}</b>.</div>
+    <div class="vrow">
+      <div class="vrl">What happens<span>the premise</span></div>
+      <div class="vpills">${PREMS.map((P,i)=>{const q=pAt(P);
+        return `<button class="vpill${i===PIDX?' on':''}" onclick="setPrem(${i})"
+          title="${P.v}"><span class="vd" style="background:var(${kdot(q.V.k)})"></span>${P.nm}
+          <span class="vt">${q.tot}</span></button>`;}).join('')}<button
+        class="vpill vinfo${PI?' on':''}" onclick="PI=!PI;renderVars(1)"
+        title="What a premise is, and where these came from"
+        aria-label="What a premise is, and where these came from">ⓘ</button></div>
+    </div>
+    <div class="vrow">
+      <div class="vrl">How you build it<span>the angle</span></div>
       <div class="vpills">${VARS.map((v,i)=>
         `<button class="vpill${i===VIDX?' on':''}" onclick="setVar(${i})">
           <span class="vd" style="background:var(${vdot(v)})"></span>${v.nm}
@@ -185,8 +227,8 @@ function renderVars(silent){
         class="vpill vinfo${VI?' on':''}" onclick="VI=!VI;renderVars(1)"
         title="Show every angle in full" aria-label="Show every angle in full">ⓘ</button></div>
     </div>
-    <button class="vbtn" onclick="setVar(${VIDX+1})" aria-label="Next idea">▶</button>
   </div>`;
+  if(PI)html+=premPanel(w,o,h,p,WS,HS,OS,pAt);
   if(VI){
     const up=d=>d.map((x,i)=>x>0?CRIT2[i].toLowerCase():null).filter(Boolean);
     const dn=d=>d.map((x,i)=>x<0?CRIT2[i].toLowerCase():null).filter(Boolean);
@@ -258,12 +300,22 @@ function renderVars(silent){
   const payer = p===3||p===4 ? 'their employer pays for it'
     : p===18 ? 'their parents pay for it'
     : `they pay ${inr(core)}`;
+  /* With no premise chosen the card is exactly what it always was: the angle leads. With one
+     chosen the two layer in the order you would actually decide them — what happens inside
+     first, then the one structural thing the angle changes about building it. */
+  const hasP = CURP.k!=='none';
+  const pev = premEv(CURP,h);
   html+=`<div class="ideacard">
    <div class="tt">${title}</div>
-   <div class="st">${A.nm} angle · ${HS} · for ${WS} · paid by ${AX.PAY[p].toLowerCase().replace("l&d","L&D")}</div>
-   <p class="ilead">${A.an(WS,HS,OS)}</p>
+   <div class="st">${hasP?`${CURP.nm} premise · `:''}${A.nm} angle · ${HS} · for ${WS}
+     · paid by ${AX.PAY[p].toLowerCase().replace("l&d","L&D")}</div>
+   <p class="ilead">${hasP?CURP.an(WS,HS,OS):A.an(WS,HS,OS)}</p>
    <div class="ibox"><span class="ik">In practice</span>
-     <p>${A.ex(WS,HS,OS,exc(CUR))}</p></div>
+     <p>${hasP?CURP.ex(WS,HS,OS):A.ex(WS,HS,OS,exc(CUR))}</p>
+     ${pev?`<span class="prov ${pev.k}" style="margin-top:8px;display:block">${pev.t}</span>`:''}</div>
+   ${hasP?`<div class="ibox angle"><span class="ik">Then the ${A.nm.toLowerCase()} angle</span>
+     <p>${A.an(WS,HS,OS)}</p>
+     <p style="margin-top:8px">${A.ex(WS,HS,OS,exc(CUR))}</p></div>`:''}
    <div class="ifacts">
      <div><span class="ik">Who it is for</span>${MW[w][5]}</div>
      <div><span class="ik">What they leave with</span>${OS} — something they can point at.
@@ -271,7 +323,12 @@ function renderVars(silent){
      <div><span class="ik">How it runs</span>${MH[h][7]}</div>
      <div><span class="ik">How you get paid</span>${MP[p][5]}</div>
    </div>
-   <div class="ibox cost"><span class="ik">What it costs you</span><p>${A.gv}</p></div>
+   <div class="ibox cost"><span class="ik">What it costs you</span>
+     ${/* No "The ${nm}" here: one premise is already called "The record", which produced
+          "The the record premise". Premise names lead, angle names follow "the". */''}
+     ${hasP?`<p><b>${CURP.nm} premise:</b> ${CURP.gv}</p>
+       <p style="margin-top:8px"><b>The ${A.nm.toLowerCase()} angle:</b> ${A.gv}</p>`
+      :`<p>${A.gv}</p>`}</div>
    <div class="ipitch">&ldquo;I help ${WS} get ${OS}, through ${aHS}, and ${payer}.&rdquo;
      <span class="ipn">Say it out loud to a stranger. If they do not get it immediately, the
      sentence is wrong before the idea is.</span></div>
@@ -340,11 +397,44 @@ function renderVars(silent){
        <td class="l"><span class="verdict v-${v.V.k==='live'?'live':v.V.k==='dead'?'dead':'hold'}">${v.V.t.split(' —')[0]}</span></td></tr>`).join('')}
      </tbody></table>
    <p class="tiny" style="margin-top:12px">Click any row to switch to that variant. Every part above and
-   below re-renders for it. The rows differ only by strategic angle — the four axes are identical, which
-   is the point: <b style="color:var(--ink-1)">how you build it moves the score as much as what you build.</b></p>
+   below re-renders for it. The rows differ only by strategic angle — the four axes and the premise are
+   identical, which is the point:
+   <b style="color:var(--ink-1)">how you build it moves the score as much as what you build.</b></p>
    <div style="margin-top:16px"><span class="vbadge" style="color:var(${V.c});border:1px solid currentColor">${title} — ${V.t}</span>
    <p style="margin-top:11px;max-width:780px">${V.d}</p></div>
    ${readRow(S)}${HOWTO()}</div>`;
+
+  /* The same table down the other axis. Without this the premise row is just pills you have to
+     click one at a time to compare, which is exactly the problem the angle table already solved. */
+  const pRows=PREMS.map((P,i)=>{
+    const s=baseS.map((v,j)=>clamp5(v+P.dS[j]+A.dS[j]));
+    const pc=Math.max(500,Math.round(HOW_BASE[h]*PAY_MULT[p]*(0.85+MW[w][2]*0.06)*P.pm*A.pm/500)*500);
+    return {P,i,S:s,tot:s.reduce((x,y)=>x+y),V:verdict(s,baseF),core:pc,ev:premEv(P,h)};});
+  const pBest=Math.max(...pRows.map(r=>r.tot));
+  html+=`<h3 style="margin:30px 0 12px">Part 7b · All ${PREMS.length} premises, at the
+    <span style="color:var(--f1)">${A.nm.toLowerCase()}</span> angle</h3>
+   <p class="tiny" style="margin:-6px 0 12px">The table above holds the premise still and moves the
+   angle. This one does the opposite — same four axes, same angle, different thing happening inside.
+   Between them they are the ${total} ideas this one combination can produce.</p>
+   <div class="card"><table><thead><tr><th class="l">Premise</th><th class="l">What happens</th>
+     ${CRIT2.map((c,i)=>`<th>${c}${i<2?'<br><span style="color:var(--crit)">gate</span>':''}</th>`).join('')}
+     <th>Price</th><th>Total</th></tr></thead><tbody>
+     ${pRows.map(r=>`<tr class="${r.i===PIDX?'vrow on':'vrow'}" onclick="setPrem(${r.i})">
+       <td class="l">${r.i===PIDX?'▸ ':''}<b>${r.P.nm}</b>${r.tot===pBest&&PREMS.length>1?' <span class="vbest">best total</span>':''}
+         ${r.ev&&r.ev.k==='weak'?'<span class="pjudg" title="No bank example at this format — my judgement">J</span>':''}</td>
+       <td class="l" style="color:var(--ink-2)">${r.P.v}</td>
+       ${r.S.map((x,j)=>`<td><div class="cell${(j<2&&x===1)?' gate':''}" style="background:${RMP[x-1]};color:${RINK[x-1]}">${x}</div></td>`).join('')}
+       <td class="tot" style="font-weight:500">${inr(r.core)}</td>
+       <td class="tot" style="color:var(${r.V.c})">${r.tot}</td></tr>`).join('')}
+     </tbody></table>
+   <p class="tiny" style="margin-top:12px">Only the premises that fit
+   <b style="color:var(--ink-1)">${HS}</b> appear — ${PREMS.length} of ${PREM.length}. A
+   <span class="pjudg">J</span> means no idea in your bank uses that premise at this format, so its
+   presence here is my judgement that it transfers, not evidence that it does. Click a row to switch.</p>
+   <div class="prov judg" style="margin-top:10px">Same caveat as the angles: the
+   <i>directions</i> are defensible — judging pays better than teaching, a reference is slow and
+   cheap, access is hard to copy. The <i>magnitudes</i> are mine and are not measured. Read the
+   column as a ranking, not as forecasts.</div></div>`;
 
   /* PART 8 — position map, every variant plotted */
   html+=`<h3 style="margin:30px 0 12px">Part 8 · Where the ${VARS.length} variants land</h3>
@@ -412,8 +502,9 @@ function renderVars(silent){
     <p class="tiny" style="margin:-6px 0 12px">Ten sections, each one collapsible. Every number
     carries its provenance: where a market figure is verified you get the source, and where it is
     not, the plan says so and leaves you the arithmetic rather than inventing a total.</p>`;
-  html+=deepPlanFor({w,o,h,p,S,tot,V,pm:A.pm,
-    kicker:`${A.nm} angle`,nm:title,hand:false,blurb:A.an(WS,HS,OS)});
+  html+=deepPlanFor({w,o,h,p,S,tot,V,pm:CURP.pm*A.pm,
+    kicker:hasP?`${CURP.nm} premise · ${A.nm} angle`:`${A.nm} angle`,
+    nm:title,hand:false,blurb:hasP?CURP.an(WS,HS,OS):A.an(WS,HS,OS)});
 
   document.getElementById('cOut').innerHTML=html;
 
@@ -448,4 +539,88 @@ function renderVars(silent){
   document.getElementById('cScatter').innerHTML=s+'</svg>';
   foldOut();   /* innerHTML above destroyed the wrappers — rebuild them */
   if(!silent)document.getElementById('cOut').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ---------- the premise explainer ----------
+   Same shape as the angle panel deliberately: lemonade stand first, then the identical list on
+   the live combination, then every premise in full. The reader learns one pattern and reuses it.
+
+   The difference is that this panel has to carry provenance the angle panel does not need. An
+   angle is a way of building anything; a premise is a claim that a particular kind of business
+   exists, so every card names the bank ideas that already are it, and says plainly when the
+   current format has no bank example behind it. */
+function premPanel(w,o,h,p,WS,HS,OS,pAt){
+  const built=P=>P.ev.filter(n=>TAGS[n]&&TAGS[n][2]===h);
+  let s=`<div class="viexp">
+    <div class="ht-t">What a premise is</div>
+    <p class="tiny" style="margin-bottom:12px">Your four dropdowns fix the <b>shape</b> of the
+    business — who, what result, what format, whose money. They do not fix what actually
+    <b>happens inside</b>, and that is a separate choice. Two businesses can share all four axes
+    and be nothing alike.</p>
+    <p class="tiny" style="margin-bottom:12px"><b style="color:var(--ink-1)">Your own bank proves
+    it.</b> #36 <i>The Roast, Live</i> and #99 <i>Design Court</i> sit on identical axes: mid-level
+    designers, portfolio, ticketed live show, ticket sales. One tears work apart on stage, the
+    other runs a mock trial. Same shape, different premise.</p>
+
+    <p class="tiny" style="margin-bottom:8px"><b style="color:var(--ink-1)">The lemonade stand
+    again.</b> The angles changed one thing about how the stand is run. A premise changes what
+    you are doing there at all.</p>
+    <table class="dtab acmp">
+      <thead><tr><th>Premise</th><th>In a word</th><th>What you are actually doing</th></tr></thead>
+      <tbody>${PREM.map(P=>`<tr>
+        <td class="dl">${P.nm}</td>
+        <td><span class="w1">${P.w1}</span></td>
+        <td>${P.lem}</td></tr>`).join('')}</tbody>
+    </table>
+
+    <p class="tiny" style="margin:14px 0 8px"><b style="color:var(--ink-1)">The ${PREMS.length} that
+    fit ${HS}.</b> Click a row to switch. Scores are at the angle you currently have selected, so
+    the spread is the premise alone.</p>
+    <table class="dtab acmp">
+      <thead><tr><th>Premise</th><th>In a word</th><th>The question it asks</th>
+        <th>Price</th><th>Score</th></tr></thead>
+      <tbody>${PREMS.map((P,i)=>{const q=pAt(P);
+        const pc=Math.max(500,Math.round(HOW_BASE[h]*PAY_MULT[p]*(0.85+MW[w][2]*0.06)*P.pm*VARS[VIDX].a.pm/500)*500);
+        return `<tr class="vrow${i===PIDX?' on':''}" onclick="setPrem(${i})">
+        <td class="dl">${i===PIDX?'▸ ':''}${P.nm}</td>
+        <td><span class="w1">${P.w1}</span></td>
+        <td>${P.q}</td>
+        <td class="anum">×${P.pm}<span class="asub">${inr(pc)}</span></td>
+        <td class="anum" style="color:var(${q.V.c})">${q.tot}</td></tr>`;}).join('')}</tbody>
+    </table>
+
+    <div class="ht-t" style="margin-top:16px">All ${PREMS.length} premises in full</div>
+    <div class="vitab">${PREMS.map((P,i)=>{
+      const b=built(P);
+      return `<div class="viv${i===PIDX?' on':''}">
+        <div class="vivh"><b>${P.nm}</b>
+          <span class="w1">${P.w1}</span>
+          <span class="vivp">price ×${P.pm}</span>
+          <span class="vivt" style="color:var(${P.k==='none'?'--ink-3':b.length?'--good':'--warn'})">
+            ${P.k==='none'?'the default':b.length?`built in your bank at this format`:`no bank example here`}</span></div>
+        <div class="vivd">${P.an(WS,HS,OS)}</div>
+        <div class="vivx"><b>For this idea:</b> ${P.ex(WS,HS,OS)}</div>
+        ${P.gv?`<div class="vivg"><b>Trades away:</b> ${P.gv}</div>`:''}
+        ${P.ev.length?`<div class="vivev"><b>Already in your bank:</b> ${P.ev.map(n=>
+          `<a href="#bank" onclick="mode('report')">#${n}</a>`).join(' ')}
+          ${b.length?`<span class="pok">${b.map(n=>'#'+n).join(', ')} at this exact format</span>`
+            :`<span class="pjudg">J</span> none of them at ${HS} — transfer is my judgement`}</div>`:''}
+      </div>`;}).join('')}</div>
+
+    <p class="tiny" style="margin-top:12px">You see ${PREMS.length} of ${PREM.length} because the
+    format filters them, exactly as it filters the angles. ${PREMS.length}
+    ${PREMS.length===1?'premise':'premises'} × ${VARS.length} angles =
+    <b style="color:var(--ink-1)">${PREMS.length*VARS.length} distinct ideas</b> off these four
+    dropdowns.</p>
+    <div class="prov judg" style="margin-top:10px">Where this list came from, and what it is worth:
+    every premise was mined out of your own 112 ideas, not invented — run <code>npm run premise</code>
+    to see the working. Each had to appear across three or more delivery formats with no single
+    format holding more than 60% of it, or it was cut for being the format axis under a new name.
+    That test killed <i>Contest</i>, <i>Matchmaking</i> and <i>Frontier</i>. What remains is still
+    my reading of which idea belongs to which premise — the arithmetic is checkable, the tagging is
+    editorial. And one dimension below this is deliberately absent: #46 <i>Studio Tour</i> and #72
+    <i>How They Design</i> share the Access premise and differ only in <i>which</i> doors you open.
+    Generating those would mean inventing rooms you can get into. That stays yours.</div>
+  </div>`;
+  return s;
 }
