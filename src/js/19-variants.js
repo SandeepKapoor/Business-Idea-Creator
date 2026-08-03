@@ -101,19 +101,26 @@ const ARCH=[
    always 'none' with zero deltas and a ×1 multiplier, so the default state of this page scores
    and prices exactly as it did before the premise dimension existed. */
 let VARS=[],VIDX=0,PREMS=[],PIDX=0,AXS=[0,0,0,0],LASTKEY='',VI=false,PI=false;
+/* Which sub-problem of the outcome this business is about. -1 = not chosen, which is the default
+   so the page scores exactly as it did before routes existed. See 18b-routes.js. */
+let RTS=[],RIDX=-1;
+const curRoute=()=>RIDX>=0&&RTS[RIDX]?RTS[RIDX]:null;
 const clamp5=v=>Math.max(1,Math.min(5,v));
 /* Premise and angle deltas are summed and clamped ONCE. Clamping after each in turn would let
    a premise that pushes a criterion to 5 swallow an angle's +1 and quietly hide the trade-off. */
-function buildVars(w,o,h,p,P){
-  const base=scoreIt(w,o,h,p), F=rules(w,o,h,p);
+function buildVars(w,o,h,p,P,R){
+  const base=scoreIt(w,o,h,p), F=rules(w,o,h,p), rd=routeD(R);
   const tag=MO[o][4];
   return ARCH.filter(a=>!a.ap||a.ap(h)).map(a=>{
-    const S=base.map((v,i)=>clamp5(v+P.dS[i]+a.dS[i]));
+    /* Route, work and twist all land on the same eight numbers and are clamped together. */
+    const S=base.map((v,i)=>clamp5(v+rd[i]+P.dS[i]+a.dS[i]));
     const V=verdict(S,F);
     let core=HOW_BASE[h]*PAY_MULT[p]*(0.85+MW[w][2]*0.06)*P.pm*a.pm;
     core=Math.max(500,Math.round(core/500)*500);
     return {a,P,S,tot:S.reduce((x,y)=>x+y),V,F,core,
-      title:P.k==='none'?a.ti(tag):`The ${tag} ${P.tn}`,nm:a.nm};});
+      /* A chosen route names the business. It is the most concrete thing on the card, so it
+         outranks both the work and the twist for the title. */
+      title:R?R.nm:(P.k==='none'?a.ti(tag):`The ${tag} ${P.tn}`),nm:a.nm};});
 }
 function setVar(i){
   if(i<0)i=VARS.length-1; if(i>=VARS.length)i=0;
@@ -122,11 +129,20 @@ function setVar(i){
 }
 /* Switching premise rebuilds the angle set, because every angle's score and price sit on top of
    the premise's. The angle you were reading is kept — the whole point is comparing like for like. */
+/* Picking a business. -1 clears it and the page goes back to the four axes alone. */
+function setRoute(i){
+  RIDX=(i===RIDX?-1:i);
+  const [w,o,h,p]=AXS;
+  VARS=buildVars(w,o,h,p,PREMS[PIDX],curRoute());
+  if(VIDX>=VARS.length)VIDX=0;
+  renderVars(1);
+  document.getElementById('rtlist').scrollIntoView({behavior:'smooth',block:'start'});
+}
 function setPrem(i){
   if(i<0)i=PREMS.length-1; if(i>=PREMS.length)i=0;
   PIDX=i;
   const [w,o,h,p]=AXS;
-  VARS=buildVars(w,o,h,p,PREMS[PIDX]);
+  VARS=buildVars(w,o,h,p,PREMS[PIDX],curRoute());
   if(VIDX>=VARS.length)VIDX=0;
   renderVars(1);
   document.getElementById('vnav').scrollIntoView({behavior:'smooth',block:'start'});
@@ -135,10 +151,12 @@ function gen(silent){
   const w=AXPICK.WHO,o=AXPICK.OUT,h=AXPICK.HOW,p=AXPICK.PAY;
   LAST=[w,o,h,p]; AXS=[w,o,h,p];
   const key=[w,o,h,p].join();
-  if(key!==LASTKEY){VIDX=0;PIDX=0;LASTKEY=key;}   /* new combination → back to premise 1, angle 1 */
+  if(key!==LASTKEY){VIDX=0;PIDX=0;RIDX=-1;LASTKEY=key;}  /* new combination → clear all three */
   PREMS=premFor(h,o);   /* format decides which premises exist; outcome rules out the impossible */
+  RTS=routesFor(o);     /* routes come off the outcome alone — the container does not filter them */
   if(PIDX>=PREMS.length)PIDX=0;
-  VARS=buildVars(w,o,h,p,PREMS[PIDX]);
+  if(RIDX>=RTS.length)RIDX=-1;
+  VARS=buildVars(w,o,h,p,PREMS[PIDX],curRoute());
   if(VIDX>=VARS.length)VIDX=0;
   renderVars(silent);
 }
@@ -201,6 +219,43 @@ function renderVars(silent){
     <em style="color:var(--f3)">${AX.HOW[h].toLowerCase()}</em>, paid for by
     <em style="color:var(--f4)">${AX.PAY[p].toLowerCase()}</em>.</div></div>`;
 
+  /* ---------- the businesses ----------
+     Under the statement, before anything structural. These are not variations of one idea the
+     way the work and the twist are: they are different businesses, told apart by which
+     sub-problem of the outcome they attack. "Get hired abroad" is five problems, not one.
+
+     Scored at the work and twist currently selected, so the column is a like-for-like comparison
+     of the businesses themselves rather than each quoting its own best case. */
+  const baseS0=scoreIt(w,o,h,p), baseF0=rules(w,o,h,p);
+  if(RTS.length){
+    const rAt=R=>{const rd=routeD(R);
+      const s=baseS0.map((v,i)=>clamp5(v+rd[i]+PREMS[PIDX].dS[i]+VARS[VIDX].a.dS[i]));
+      return{tot:s.reduce((x,y)=>x+y),V:verdict(s,baseF0)};};
+    const none=rAt(null);
+    html+=`<div class="rtlist" id="rtlist">
+      <div class="rthead"><b>${RTS.length} businesses</b> you could build from these four axes.
+        They are not versions of one idea — each attacks a different part of
+        <em style="color:var(--f2)">${AX.OUT[o].toLowerCase()}</em>. Pick one and the whole page
+        builds for it.</div>
+      <table class="rtab"><tbody>
+        <tr class="rrow${RIDX<0?' on':''}" onclick="setRoute(-1)">
+          <td class="rn">${RIDX<0?icon('chevron','xs')+' ':''}Not chosen</td>
+          <td class="rv">The four axes alone, with no particular subject.</td>
+          <td class="rs" style="color:var(${none.V.c})">${none.tot}</td>
+          <td class="rvd" style="color:var(${none.V.c})">${none.V.t.split(' —')[0]}</td></tr>
+        ${RTS.map((R,i)=>{const q=rAt(R);return `<tr class="rrow${i===RIDX?' on':''}" onclick="setRoute(${i})">
+          <td class="rn">${i===RIDX?icon('chevron','xs')+' ':''}${R.nm}</td>
+          <td class="rv">${R.v}</td>
+          <td class="rs" style="color:var(${q.V.c})">${q.tot}</td>
+          <td class="rvd" style="color:var(${q.V.c})">${q.V.t.split(' —')[0]}</td></tr>`;}).join('')}
+      </tbody></table>
+      <div class="prov judg" style="margin-top:var(--sp-3)">These are my reading of what
+      <i>${AX.OUT[o].toLowerCase()}</i> actually breaks into, not a list mined from anywhere. They
+      are hypotheses in exactly the way the 112 ideas are — the value is that they are different
+      from each other, not that any one of them is right. Nothing here is a market claim.</div>
+    </div>`;
+  }
+
   /* ---------- the navigator ----------
      Two rows, because an idea here is two independent choices. The old single row said
      "Idea 1 of 7", which was a lie — those were seven twists on ONE idea, and it is what made
@@ -219,7 +274,7 @@ function renderVars(silent){
     return{tot:s.reduce((x,y)=>x+y),V:verdict(s,baseF)};};
   const CURP=PREMS[PIDX], total=PREMS.length*VARS.length;
   html+=`<div class="vnav2" id="vnav">
-    <div class="vhead"><b>${total} ideas</b> from this one combination:
+    <div class="vhead">${curRoute()?`Building <b style="color:var(--f2)">${curRoute().nm}</b> — `:''}<b>${total} ideas</b> from this one combination:
       ${PREMS.length} kinds of work × ${VARS.length} twists. You are on
       <b style="color:var(--f2)">${CURP.nm}</b> × <b style="color:var(--f1)">${A.nm}</b>,
       number <b>${PIDX*VARS.length+VIDX+1}</b>.</div>
@@ -322,9 +377,12 @@ function renderVars(silent){
   const pev = premEv(CURP,h);
   html+=`<div class="ideacard">
    <div class="tt">${title}</div>
-   <div class="st">${hasP?`${CURP.nm} work · `:''}${A.nm} twist · ${HS} · for ${WS}
+   <div class="st">${curRoute()?`${AX.OUT[o]} · `:''}${hasP?`${CURP.nm} work · `:''}${A.nm} twist · ${HS} · for ${WS}
      · paid by ${AX.PAY[p].toLowerCase().replace("l&d","L&D")}</div>
-   <p class="ilead">${hasP?CURP.an(WS,HS,OS):A.an(WS,HS,OS)}</p>
+   ${curRoute()?`<p class="ilead">${curRoute().v}</p>
+     <div class="ibox route"><span class="ik">Then how you build it</span>
+       <p>${hasP?CURP.an(WS,HS,OS):A.an(WS,HS,OS)}</p></div>`
+    :`<p class="ilead">${hasP?CURP.an(WS,HS,OS):A.an(WS,HS,OS)}</p>`}
    <div class="ibox"><span class="ik">In practice</span>
      <p>${hasP?CURP.ex(WS,HS,OS):A.ex(WS,HS,OS,exc(CUR))}</p>
      ${pev?`<span class="prov ${pev.k}" style="margin-top:8px;display:block">${pev.t}</span>`:''}</div>

@@ -99,7 +99,7 @@ sandbox.globalThis = sandbox;
 const EXPORTS = ['scoreIt', 'rules', 'verdict', 'buildVars', 'deepPlan', 'priceCheck', 'nearest',
   'readRow', 'HOWTO', 'compFor', 'inr', 'AX', 'CL', 'TAGS', 'HAND', 'FAST', 'ALLC', 'MW', 'MO', 'MH', 'MP',
   'HOW_BASE', 'PAY_MULT', 'BASE_EV', 'SCEN', 'SEG_EV', 'COMP', 'MOTION', 'FIRST', 'ARCH',
-  'PREM', 'premFor', 'premEv', 'aAn', 'cap',
+  'PREM', 'premFor', 'premEv', 'aAn', 'cap', 'ROUTES', 'routesFor', 'routeD',
   'CRIT', 'CRIT2', 'CRIT_GUESS', 'CRIT_DEF', 'BANDS', 'RAMP_L', 'RAMP_D', 'INK_L', 'INK_D',
   'EMPLOYER', 'LEARNER', 'NO_EMPLOYER', 'KIDS', 'ORG_BUYER', 'TRAVEL', 'CONTENT', 'RECUR_H'];
 
@@ -310,6 +310,56 @@ if (QUICK) {
   ok('every format offers at least the default premise', minP >= 1, `saw ${minP}`);
   ok('no format offers more premises than exist', maxP <= A.PREM.length, `saw ${maxP}`);
   notes.push(`premises available per format: ${minP}–${maxP} of ${A.PREM.length}.`);
+}
+
+// --- routes: the sub-problems of each outcome ------------------------------
+// A route is what the business is ABOUT. It is the weakest-sourced dimension on the page — no
+// bank receipts, unlike PREM — so what can be checked is that it is well-formed, that every
+// outcome has real alternatives rather than one route wearing four names, and that choosing one
+// actually changes the page.
+{
+  eq('one route list per outcome', A.ROUTES.length, NO);
+  const thin = [];
+  for (let o = 0; o < NO; o++) {
+    const R = A.routesFor(o);
+    if (R.length < 4) thin.push(`${A.AX.OUT[o]} has ${R.length}`);
+  }
+  ok('every outcome offers at least four different businesses', thin.length === 0, thin.join(', '));
+
+  const bad = [];
+  for (let o = 0; o < NO; o++) {
+    const R = A.routesFor(o);
+    if (new Set(R.map((r) => r.nm)).size !== R.length) bad.push(`${A.AX.OUT[o]}: duplicate name`);
+    if (new Set(R.map((r) => r.v)).size !== R.length) bad.push(`${A.AX.OUT[o]}: duplicate premise`);
+    R.forEach((r) => {
+      if (!r.nm || !r.v) bad.push(`${A.AX.OUT[o]}/${r.nm}: empty field`);
+      Object.entries(r.d).forEach(([k, v]) => {
+        if (!(+k >= 0 && +k < 8)) bad.push(`${r.nm}: delta index ${k}`);
+        if (!Number.isInteger(v) || Math.abs(v) > 2) bad.push(`${r.nm}: delta ${v} out of range`);
+      });
+    });
+  }
+  ok('every route is well formed', bad.length === 0, bad.slice(0, 3).join(' | '));
+
+  // Four routes that all score the same are four names for one idea.
+  const flat = [];
+  for (let o = 0; o < NO; o++) {
+    const sigs = new Set(A.routesFor(o).map((r) => A.routeD(r).join(',')));
+    if (sigs.size < 3) flat.push(`${A.AX.OUT[o]}: only ${sigs.size} distinct score effects`);
+  }
+  ok('the routes for an outcome score differently from each other', flat.length === 0, flat.join(', '));
+
+  // Restraint check: a route with a delta on every axis is a guess, not a reason.
+  const wide = [];
+  for (let o = 0; o < NO; o++) A.routesFor(o).forEach((r) => {
+    if (Object.keys(r.d).length > 3) wide.push(`${r.nm} touches ${Object.keys(r.d).length}`);
+  });
+  ok('no route claims to move more than three of the eight criteria', wide.length === 0,
+    wide.slice(0, 3).join(', '));
+
+  const total = A.ROUTES.reduce((n, r) => n + r.length, 0);
+  notes.push(`${total} routes across ${NO} outcomes, ` +
+    `${Math.min(...A.ROUTES.map((r) => r.length))}–${Math.max(...A.ROUTES.map((r) => r.length))} each.`);
 }
 
 // --- the four facts must move with the work and the twist ------------------

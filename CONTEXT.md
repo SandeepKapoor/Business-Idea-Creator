@@ -28,7 +28,7 @@ validation sprint.
   one `<script>` block, no external assets. **This file is generated. Do not edit it.**
 - **Source**: `src/` — 15 HTML section partials, 11 CSS files, 21 JS files.
 - **Build**: `npm run build` (zero dependencies; `build.js` is ~130 lines of plain Node).
-- **Verify**: `npm run verify` — 107 checks, ~11s. See §16.
+- **Verify**: `npm run verify` — 112 checks, ~11s. See §16.
 - **Picker**: `npm run picker` — 32 behavioural checks on the axis picker. See §4a.
 - **Layout**: `npm run probe` — measures the real layout in headless Chrome. See §13b.
 - **Design scan**: `npm run design` — 16 craft checks on the built artifact. See §13a.
@@ -52,7 +52,7 @@ build.js                  src/ → sandeep-idea-map.html. Zero deps. Concatenati
 sandeep-idea-map.html     BUILD OUTPUT — the deliverable. Never edit.
 CONTEXT.md                this file
 README.md                 workflow, file map, known issues
-tools/verify.js           107-check harness (§16)
+tools/verify.js           112-check harness (§16)
 tools/picker.js           axis-picker behaviour: roving tabindex, arrows, aria (§4a)
 tools/probe.js            real geometry, measured in headless Chrome (§13b)
 tools/design.js           craft-floor mechanics: scales, states, contrast, icons (§13a)
@@ -102,6 +102,7 @@ The JS split maps to this document as follows:
 | `17-evidence.js` | §11 | `SEG_EV`, `COMP`, `FIRST`, `MOTION` |
 | `18-modes.js` | §2 | `mode()`, `openInBuilder`, `fillSel`, `surprise` |
 | `18a-premise.js` | §10 | `PREM`, `premFor`, `premEv` — the fifth dimension |
+| `18b-routes.js` | §10 | `ROUTES`, `routesFor`, `routeD` — what the business is about |
 | `19-variants.js` | §10 | `ARCH`, `buildVars`, `gen`, `renderVars`, `setPrem`, `premPanel` |
 | `20-deep-dive.js` | §11 | `goDeep`, `deepPlan` |
 | `99-boot.js` | §16 | the required bottom call order |
@@ -547,6 +548,38 @@ Each archetype also carries prose: `an()` the angle, `gv` what it trades away,
 
 **Directions are defensible; magnitudes are judgment.** The `.prov.judg` chip in the ⓘ
 panel says exactly that. Keep it.
+
+### Routes (`ROUTES`, `18b-routes.js`) — what the business is ABOUT
+
+The axes fix the shape, the work fixes what you do all day, the twist changes one structural
+thing. **None of them says what the thing is about**, and that is what separates two genuinely
+different businesses at one combination. The work/twist matrix produces variations of one idea;
+this produces different ideas.
+
+**A route is a sub-problem of the OUTCOME.** "Get hired abroad" is not one problem, it is five:
+the portfolio they expect, their interview loop, what the job pays in their currency, the
+paperwork, and going freelance across the border first. 81 routes across the 20 outcomes, 4–5
+each. Because they come off the outcome alone, they hold for all 193,600 combinations — nothing
+filters them by format the way `premFor()` filters the kinds of work.
+
+Rendered as a **list under the statement, before the navigator** — it is the first choice you
+make. Picking one names the business (the route's name beats both the work's and the twist's for
+the card title), leads the card, and applies its score deltas. `RIDX = -1` is the default, so the
+page scores exactly as it did before routes existed.
+
+`d` is a sparse `{criterionIndex: delta}`. Route, work and twist all land on the same eight
+numbers and are **clamped once, together** — clamping in stages hides trade-offs.
+
+**This is the weakest-sourced dimension on the page and the UI says so.** Unlike `PREM`, there
+are no bank receipts: these are my reading of what each outcome breaks into. That is the same
+class of claim as the 112 ideas themselves. No route names a competitor, a market size, or a
+relationship Sandeep has — the reason Access was the one premise I would not generate subjects
+for still holds, and no route invents a room he can get into.
+
+verify.js enforces: one list per outcome; at least four per outcome; unique names and premises
+within an outcome; well-formed deltas in range; at least three distinct score effects per outcome
+(four routes that score alike are four names for one idea); and **no route claims to move more
+than three of the eight criteria** — a route with a delta everywhere is a guess, not a reason.
 
 ### The four facts
 
