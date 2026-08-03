@@ -200,12 +200,13 @@ function renderVars(silent){
      buried the two things worth reading. It is now shaped by kind: the angle leads, the worked
      example and the cost are set off against a rule, the four fixed facts go in a scannable
      grid, and the pitch — the only line you actually say out loud — closes it. */
+  const aHS = `${/^[aeiou]/i.test(HS)?'an':'a'} ${HS}`;   /* "through a cohort", not "through cohort" */
   const payer = p===3||p===4 ? 'their employer pays for it'
     : p===18 ? 'their parents pay for it'
     : `they pay ${inr(core)}`;
   html+=`<div class="ideacard">
    <div class="tt">${title}</div>
-   <div class="st">${A.nm} angle · ${HS} · for ${WS} · paid by ${AX.PAY[p].toLowerCase()}</div>
+   <div class="st">${A.nm} angle · ${HS} · for ${WS} · paid by ${AX.PAY[p].toLowerCase().replace("l&d","L&D")}</div>
    <p class="ilead">${A.an(WS,HS,OS)}</p>
    <div class="ibox"><span class="ik">In practice</span>
      <p>${A.ex(WS,HS,OS,exc(CUR))}</p></div>
@@ -213,11 +214,11 @@ function renderVars(silent){
      <div><span class="ik">Who it is for</span>${MW[w][5]}</div>
      <div><span class="ik">What they leave with</span>${OS} — something they can point at.
        If they cannot, you have not delivered.</div>
-     <div><span class="ik">How it runs</span>${MH[h][7].charAt(0).toUpperCase()+MH[h][7].slice(1)}.</div>
+     <div><span class="ik">How it runs</span>${MH[h][7]}</div>
      <div><span class="ik">How you get paid</span>${MP[p][5]}</div>
    </div>
    <div class="ibox cost"><span class="ik">What it costs you</span><p>${A.gv}</p></div>
-   <div class="ipitch">&ldquo;I help ${WS} get ${OS}, through ${HS}, and ${payer}.&rdquo;
+   <div class="ipitch">&ldquo;I help ${WS} get ${OS}, through ${aHS}, and ${payer}.&rdquo;
      <span class="ipn">Say it out loud to a stranger. If they do not get it immediately, the
      sentence is wrong before the idea is.</span></div>
   </div>`;
