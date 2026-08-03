@@ -1,12 +1,9 @@
 /* builder */
-.bld{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-3)}
 .fld{display:flex;flex-direction:column;gap:var(--sp-1)}
 .fld label{font-size:var(--t-xs);color:var(--ink-3);font-weight:600}
 select,input[type=number]{background:var(--raise);color:var(--ink-1);border:1px solid var(--ring);
   border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);font:inherit;font-size:var(--t-sm);width:100%}
 select:focus,input:focus{outline:2px solid var(--f1);outline-offset:-1px}
-.fld.a label{color:var(--f1)} .fld.b label{color:var(--f2)}
-.fld.c label{color:var(--f3)} .fld.d label{color:var(--f4)}
 .bldbar{display:flex;gap:var(--sp-2);align-items:end;flex-wrap:wrap;margin-top:var(--sp-3)}
 .bldbar .fld{max-width:190px}
 /* The statement is the one line saying what you are looking at, so it leads on type, not on a

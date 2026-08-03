@@ -2,16 +2,8 @@
 <div class="sec" id="engine">
   <h2>2 · The engine</h2>
   <h3>WHO × OUTCOME × HOW × MONEY — click any cell, or hit Roll</h3>
-  <div class="engine">
-    <div class="col c1"><div class="colhead"><div class="k">Axis 1</div><div class="t">WHO</div></div>
-      <div class="colbody" id="cWHO"></div></div>
-    <div class="col c2"><div class="colhead"><div class="k">Axis 2</div><div class="t">OUTCOME they want</div></div>
-      <div class="colbody" id="cOUT"></div></div>
-    <div class="col c3"><div class="colhead"><div class="k">Axis 3</div><div class="t">HOW it's delivered</div></div>
-      <div class="colbody" id="cHOW"></div></div>
-    <div class="col c4"><div class="colhead"><div class="k">Axis 4</div><div class="t">WHO PAYS</div></div>
-      <div class="colbody" id="cPAY"></div></div>
-  </div>
+  <!-- Filled by buildPicker() in 02-axes.js — the same component the workspace uses. -->
+  <div id="engPick"></div>
   <div class="combo">
     <div class="txt" id="comboTxt"></div>
     <button class="rollbtn" onclick="roll()"><svg class="i" aria-hidden="true"><use href="#i-shuffle"/></svg> Roll</button>

@@ -6,20 +6,50 @@
 .bignum{font-size:var(--t-3xl);font-weight:650;letter-spacing:-.03em;line-height:1}
 .arrow{color:var(--ink-3);font-size:var(--t-xl)}
 
-/* engine */
-.engine{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-2)}
-.col{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);overflow:hidden;
-  display:flex;flex-direction:column}
-.colhead{padding:var(--sp-3) var(--sp-3);border-bottom:1px solid var(--grid);background:var(--raise)}
-.colhead .k{font-size:var(--t-xs);color:var(--ink-3)}
-.colhead .t{font-size:var(--t-sm);font-weight:600;margin-top:var(--sp-0)}
-.colbody{padding:var(--sp-2);overflow-y:auto;max-height:330px}
-.opt{padding:var(--sp-1) var(--sp-2);border-radius:var(--r-sm);font-size:var(--t-xs);color:var(--ink-2);cursor:pointer;
-  border:1px solid transparent;line-height:1.35}
+/* ---------- the axis picker ----------
+   One component, two hosts: the report's engine and the workspace, where it replaced four
+   <select> elements. It is a real control now, not a display, so it carries the full state set
+   operate.md asks for — hover, focus, selected — and each column is a radiogroup with a roving
+   tabindex rather than twenty clickable divs. See buildPicker() in 02-axes.js. */
+.axpick{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-2)}
+.col{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);
+  overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--e-1)}
+/* The head is a label, not a card of its own: one hairline, no second fill, or four heads
+   stacked across the row read louder than the twenty options underneath them. */
+.colhead{padding:var(--sp-3) var(--sp-3) var(--sp-2);border-bottom:1px solid var(--grid);
+  background:var(--sunken);display:flex;flex-direction:column;gap:1px}
+.colhead .k{font-size:var(--t-2xs);color:var(--ink-3);letter-spacing:.04em}
+.colhead .t{font-size:var(--t-sm);font-weight:600;color:var(--ink-1);line-height:1.3}
+.c1 .colhead .t{color:var(--f1)} .c2 .colhead .t{color:var(--f2)}
+.c3 .colhead .t{color:var(--f3)} .c4 .colhead .t{color:var(--f4)}
+.colbody{padding:var(--sp-1);overflow-y:auto;max-height:336px;
+  scrollbar-width:thin;scrollbar-color:var(--axis) transparent;
+  /* Same scroll-shadow technique as .tscroll, turned 90 degrees: two `local` gradients in the
+     surface colour mask two `scroll` shadows, so each edge shades only while there is more
+     list past it. A 20-row column that ends flush looks finished when it is not. */
+  background:
+    linear-gradient(var(--surface-1) 30%,transparent) 0 0/100% var(--sp-6) no-repeat local,
+    linear-gradient(transparent,var(--surface-1) 70%) 0 100%/100% var(--sp-6) no-repeat local,
+    radial-gradient(farthest-side at 50% 0,rgba(0,0,0,.28),transparent) 0 0/100% var(--sp-3) no-repeat scroll,
+    radial-gradient(farthest-side at 50% 100%,rgba(0,0,0,.28),transparent) 0 100%/100% var(--sp-3) no-repeat scroll}
+.colbody::-webkit-scrollbar{width:8px}
+.colbody::-webkit-scrollbar-thumb{background:var(--axis);border-radius:var(--r-full)}
+.colbody::-webkit-scrollbar-track{background:transparent}
+
+.opt{padding:var(--sp-1) var(--sp-2);border-radius:var(--r-sm);font-size:var(--t-xs);
+  color:var(--ink-2);cursor:pointer;border:1px solid transparent;line-height:1.4;
+  transition:background var(--dur-1) var(--ease),color var(--dur-1) var(--ease)}
 .opt:hover{background:var(--raise);color:var(--ink-1)}
-.opt.on{background:var(--raise);color:var(--ink-1);border-color:currentColor;font-weight:600}
-.c1 .opt.on{color:var(--f1)} .c2 .opt.on{color:var(--f2)}
-.c3 .opt.on{color:var(--f3)} .c4 .opt.on{color:var(--f4)}
+/* Selection is a tinted fill plus a 1px border in the axis hue and the axis-coloured text —
+   three signals, none of them a heavy bar, so it still reads at a glance in a scrolled column. */
+.opt.on{background:var(--raise);border-color:currentColor;font-weight:600}
+.c1 .opt.on{color:var(--f1);background:var(--tint-f1)}
+.c2 .opt.on{color:var(--f2);background:var(--tint-f2)}
+.c3 .opt.on{color:var(--f3);background:color-mix(in srgb,var(--f3) 12%,transparent)}
+.c4 .opt.on{color:var(--f4);background:color-mix(in srgb,var(--f4) 14%,transparent)}
+
+@media(max-width:900px){.axpick{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.axpick{grid-template-columns:1fr}.colbody{max-height:220px}}
 .combo{margin-top:var(--sp-3);background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);
   padding:var(--sp-4) var(--sp-4);display:flex;gap:var(--sp-4);align-items:center;flex-wrap:wrap}
 .combo .txt{flex:1;min-width:280px;font-size:var(--t-base);line-height:1.5}

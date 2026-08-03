@@ -115,6 +115,22 @@ try {
   process.exit(1);
 }
 
+// --- one shared scope -----------------------------------------------------
+// build.js concatenates all 24 JS files into a single <script>, so two files declaring the same
+// top-level name is a boot-time throw that blanks the page. It has happened: 18-modes.js declared
+// `const PICK` for the workspace's four axes while 10-picks.js already used it for the five
+// recommended ideas. The artifact booting above proves the current build is clean; this names the
+// offender instead of leaving "Identifier X has already been declared" as the only clue.
+{
+  const seen = new Set(), dupes = new Set();
+  for (const m of script.matchAll(/^(?:const|let|var|function)\s+([A-Za-z_$][\w$]*)/gm)) {
+    if (seen.has(m[1])) dupes.add(m[1]); else seen.add(m[1]);
+  }
+  ok('no two source files declare the same top-level name', dupes.size === 0,
+    `clashing: ${[...dupes].join(', ')}`);
+  notes.push(`${seen.size} top-level names share the one script scope.`);
+}
+
 // ================================================================ MECHANICS
 
 // --- shape of the four axes and every index-aligned table --------------

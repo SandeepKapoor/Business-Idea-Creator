@@ -19,24 +19,23 @@
           <label>One of the 112 ideas</label>
           <select id="dSel" onchange="openInBuilder(+this.value)"></select></div>
         <button class="rollbtn" onclick="openInBuilder(+document.getElementById('dSel').value)"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Build it</button>
-        <div class="tiny" style="max-width:250px">Its four axes load behind the scenes. Switch to
-        <b style="color:var(--ink-1)">Build my own</b> to fork them into something else.</div>
+        <div class="tiny" style="max-width:250px">Its four axes load into the picker. Switch to
+        <b style="color:var(--ink-1)">Build my own</b> to see them and change any one.</div>
       </div>
     </div>
 
     <div id="wAxes" hidden>
-      <div class="bld">
-        <div class="fld a"><label>1 · Who</label><select id="sWHO"></select></div>
-        <div class="fld b"><label>2 · Outcome they want</label><select id="sOUT"></select></div>
-        <div class="fld c"><label>3 · How it's delivered</label><select id="sHOW"></select></div>
-        <div class="fld d"><label>4 · Who pays</label><select id="sPAY"></select></div>
-      </div>
+      <!-- The same four-column picker as the report's engine, not four dropdowns. A <select>
+           hides nineteen of twenty options behind a click, which is precisely the space this
+           page exists to let you see. Filled by buildPicker() in 02-axes.js. -->
+      <div id="wPick"></div>
       <div class="bldbar">
         <button class="rollbtn" onclick="gen()"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Build it</button>
         <button class="rollbtn ghost" onclick="surprise()"><svg class="i" aria-hidden="true"><use href="#i-shuffle"/></svg> Surprise me</button>
-        <div class="tiny" style="max-width:300px">193,600 combinations are reachable from here, and
-        each one holds 12–42 different ideas — the work you do × the twist you put on it. Most are
-        garbage, and finding that out in ten seconds is the entire point.</div>
+        <div class="tiny" style="max-width:320px">Change any cell and the page rebuilds. 193,600
+        combinations are reachable from here, and each holds 12–42 different ideas — the work you
+        do × the twist you put on it. Most are garbage, and finding that out in ten seconds is the
+        entire point.</div>
       </div>
     </div>
 
@@ -51,5 +50,5 @@
   </div>
   <div id="cOut"><div class="empty">Pick one of the 112 ideas and hit
     <b style="color:var(--ink-1)">Build it</b> — or switch to
-    <b style="color:var(--ink-1)">Build my own combination</b> and set the four axes yourself.</div></div>
+    <b style="color:var(--ink-1)">Build my own combination</b> and pick the four axes yourself.</div></div>
 </div>

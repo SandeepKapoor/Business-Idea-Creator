@@ -120,8 +120,7 @@ function setPrem(i){
   document.getElementById('vnav').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function gen(silent){
-  const w=+document.getElementById('sWHO').value,o=+document.getElementById('sOUT').value,
-        h=+document.getElementById('sHOW').value,p=+document.getElementById('sPAY').value;
+  const w=AXPICK.WHO,o=AXPICK.OUT,h=AXPICK.HOW,p=AXPICK.PAY;
   LAST=[w,o,h,p]; AXS=[w,o,h,p];
   const key=[w,o,h,p].join();
   if(key!==LASTKEY){VIDX=0;PIDX=0;LASTKEY=key;}   /* new combination → back to premise 1, angle 1 */

@@ -5,8 +5,7 @@
    makes a dense tool worse, not better. Only structure moves. */
 
 @media(max-width:900px){
-  .bld{grid-template-columns:1fr 1fr} .ladder{grid-template-columns:1fr}
-  .engine{grid-template-columns:1fr 1fr} .stuck{grid-template-columns:1fr}
+  .ladder{grid-template-columns:1fr} .stuck{grid-template-columns:1fr}
   .arrow{display:none} .gantt{grid-template-columns:1fr}
   /* The ledger's three-column grid puts a 200px label beside prose; below this the label wants
      its own line rather than a 200px gutter eating the measure. */
@@ -15,7 +14,6 @@
 }
 
 @media(max-width:720px){
-  .bld{grid-template-columns:1fr}
   /* The navigator's row label sits beside its pills on a wide screen and above them on a narrow
      one. Keeping the 116px gutter here would leave the pills a third of the width. */
   .vrow{flex-direction:column;gap:var(--sp-2)}

@@ -28,7 +28,8 @@ validation sprint.
   one `<script>` block, no external assets. **This file is generated. Do not edit it.**
 - **Source**: `src/` — 15 HTML section partials, 11 CSS files, 21 JS files.
 - **Build**: `npm run build` (zero dependencies; `build.js` is ~130 lines of plain Node).
-- **Verify**: `npm run verify` — 100 checks, ~11s. See §16.
+- **Verify**: `npm run verify` — 101 checks, ~11s. See §16.
+- **Picker**: `npm run picker` — 32 behavioural checks on the axis picker. See §4a.
 - **Design scan**: `npm run design` — 16 craft checks on the built artifact. See §13a.
 - **Plain English**: `npm run plain` — scores every sentence the builder renders. See §10.
 - **Premise provenance**: `npm run premise` — how `PREM` was mined out of the 112. See §10.
@@ -50,7 +51,8 @@ build.js                  src/ → sandeep-idea-map.html. Zero deps. Concatenati
 sandeep-idea-map.html     BUILD OUTPUT — the deliverable. Never edit.
 CONTEXT.md                this file
 README.md                 workflow, file map, known issues
-tools/verify.js           100-check harness (§16)
+tools/verify.js           101-check harness (§16)
+tools/picker.js           axis-picker behaviour: roving tabindex, arrows, aria (§4a)
 tools/design.js           craft-floor mechanics: scales, states, contrast, icons (§13a)
 tools/plain.js            sentence-difficulty scan, before/after copy work (§10)
 tools/premise.js          premise extraction + orthogonality test (§10)
@@ -80,7 +82,7 @@ The JS split maps to this document as follows:
 |---|---|---|
 | `00-icons.js` | §13a | `icon(name, mod)` — the only way to draw an icon |
 | `01-theme.js` | §13 | `tog()`, `openM()`, `initLift()` |
-| `02-axes.js` | §4 | `AX`, `renderAx`, `pick`, `roll` |
+| `02-axes.js` | §4 §4a | `AX`, `buildPicker`, `syncPicker`, `axKey`, `renderAx`, `pick`, `roll` |
 | `03-frameworks.js` | §3 | `FW` + renders the grid at parse time |
 | `04-bank.data.js` | §9 | `FAM`, `CL` — all 112 ideas — `FAST` |
 | `05-bank.view.js` | §9 | bank render, family/lens chips, `filt()` |
@@ -626,6 +628,42 @@ Two rules that came out of that pass and are worth keeping:
 switches mode, generates. The banner clears the moment any dropdown differs from
 `TAGS[ORIGIN]`.
 
+
+
+---
+
+## 4a. The axis picker
+
+One component, two hosts: the report's engine (`#engPick`) and the workspace (`#wPick`).
+`buildPicker(hostId, prefix, handler)` writes it once; `syncPicker(prefix, state, scroll)`
+repaints the selection without rebuilding, so a column keeps its scroll position when you click
+in it.
+
+**The workspace used four `<select>` elements.** A select hides nineteen of twenty options behind
+a click, which is exactly the space this page exists to show you — and two different controls for
+one job is the inconsistency `operate.md` warns about.
+
+**A `<select>` is a browser control; twenty divs are not.** Keyboard, selection semantics and
+screen-reader behaviour came free before and now have to be built:
+
+- each column is `role="radiogroup"` with a roving tabindex — one stop per column
+- arrows move *and* select (standard radio behaviour), Home/End jump to the ends
+- `aria-checked` tracks `.on`, and the group is `aria-labelledby` its own head
+- setting state from outside (`openInBuilder`, `surprise`) scrolls the selection into view: in a
+  20-row scroller a selection you cannot see has not been made
+
+`tools/picker.js` tests all of that against a small real DOM — it parses `innerHTML`, which the
+fold harness never needed. 32 checks, in `npm run check`.
+
+### State
+
+`AXPICK` in `18-modes.js` is the single source of truth; `gen()` reads it. It used to be the DOM.
+**Named AXPICK because `10-picks.js` already declares `const PICK`** and build.js concatenates
+every file into one scope, so the clash was a boot-time throw that blanked the page. verify.js
+now checks for duplicate top-level names across the whole script.
+
+Clicking an axis regenerates only when something has already been generated (`if(LAST)gen(1)`) —
+the same rule the income-target field follows, so the panel behaves one way.
 
 ---
 
