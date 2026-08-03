@@ -113,12 +113,18 @@ try {
 ;globalThis.__api={${EXPORTS.join(',')},
   __card:function(w,o,h,p,pi,vi){
     AXS=[w,o,h,p]; ORIGIN=null; VI=false; PI=false;
-    PREMS=premFor(h,o); PIDX=pi; VARS=buildVars(w,o,h,p,PREMS[pi]); VIDX=vi;
+    PREMS=premFor(h,o); if(!RTS.length)RTS=routesFor(o); PIDX=pi; VARS=buildVars(w,o,h,p,PREMS[pi]); VIDX=vi;
     renderVars(1);
     var s=document.getElementById('cOut').innerHTML;
     var i=s.indexOf('<div class="ideacard">'), j=s.indexOf('Part 6 &middot;');
     if(j<0)j=s.indexOf('Part 6 ·');
     return j>i?s.slice(i,j):s.slice(i);
+  },
+  __pitch:function(w,o,h,p,pi,vi,ri){
+    RTS=routesFor(o); RIDX=(ri===undefined?-1:ri);
+    var c=globalThis.__api.__card(w,o,h,p,pi,vi);
+    var i=c.indexOf('<div class="ipitch">');
+    return i<0?'':c.slice(i, c.indexOf('</div>', i));
   },
   __facts:function(w,o,h,p,pi,vi){
     var c=globalThis.__api.__card(w,o,h,p,pi,vi);
@@ -351,6 +357,36 @@ if (QUICK) {
   });
   ok('every route explains itself and names what kills it', bare.length === 0,
     bare.slice(0, 3).join(' | '));
+
+  // Shape check, added after a generator whose regex could not cross an escaped apostrophe
+  // silently dropped one route's pitch phrase into the NEXT route — leaving one entry with five
+  // fields and one with seven. Both still parsed, and nothing noticed.
+  const shape = [];
+  A.ROUTES.forEach((rs, o) => rs.forEach((r) => {
+    if (r.length !== 6) shape.push(`${A.AX.OUT[o]}/${r[0]} has ${r.length} fields, not 6`);
+  }));
+  ok('every route tuple has exactly six fields', shape.length === 0, shape.join(' | '));
+  const noPg = [];
+  for (let o = 0; o < NO; o++) A.routesFor(o).forEach((r) => {
+    if (!r.pg) noPg.push(r.nm);
+    else if (/^[A-Z]/.test(r.pg)) noPg.push(`${r.nm}: pitch phrase must continue "I help them …"`);
+  });
+  ok('every route supplies a pitch phrase that completes the sentence', noPg.length === 0,
+    noPg.slice(0, 3).join(', '));
+
+  // The whole point: the say-it-out-loud line must change with the selection.
+  {
+    const pitches = new Set(), dup = [];
+    const [w, o, h, p] = [0, 7, 0, 0];
+    const PS = A.premFor(h, o), RS = A.routesFor(o);
+    for (let ri = -1; ri < RS.length; ri++) for (let pi = 0; pi < PS.length; pi++) {
+      const card = A.__pitch(w, o, h, p, pi, 0, ri);
+      if (pitches.has(card)) dup.push(`route ${ri}/work ${pi}`); else pitches.add(card);
+    }
+    ok('the pitch differs for every route and every kind of work', dup.length === 0,
+      `${dup.length} repeats — the say-it-out-loud line is the one thing that must be specific`);
+    notes.push(`${pitches.size} distinct pitches at one combination.`);
+  }
   {
     const all = [];
     for (let o = 0; o < NO; o++) A.routesFor(o).forEach((r) => all.push(r.an, r.kl));

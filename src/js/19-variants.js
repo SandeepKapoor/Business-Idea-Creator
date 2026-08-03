@@ -19,6 +19,7 @@ const ARCH=[
  ex:(W,H,O,C)=>`Instead of the ${H} for ${W} in general, you run it only for ${C.s}. Someone who fits that reads your first line and thinks: that is me.`,
  gv:`A smaller top end, on purpose. A tenth of the audience is a tenth of the money — what you buy with that is a message that lands.`,
  f:{who:(W,H,O,C)=>`Not all ${W} — only ${C.s}. Everyone else is deliberately out of scope.`},
+ pp:{who:(W,H,O,C)=>C.s},
  kl:W=>`If you cannot name the sub-group of ${W} in five words, the wedge does not exist yet.`,
  ts:`Interview twenty people from that one slice only. Ten of them describing the same pain in the same words means the wedge is real.`},
 {k:'proof',nm:'Proof engine',pm:1.0,dS:[1,0,0,1,0,0,0,-1],
@@ -30,6 +31,7 @@ const ARCH=[
  ex:(W,H,O,C)=>`Strip the page down to one line: they leave with ${O}. On the last day it exists or it does not, which is exactly why people will pay before it starts.`,
  gv:`Repetitive by about month six. You trade variety in your own work for a promise nobody can argue with.`,
  f:{out:(W,H,O,C)=>`That, and nothing else. Promise one thing and on the last day it exists or it does not.`},
+ pp:{get:(W,H,O,C)=>`get ${O}, and nothing else`},
  kl:W=>`If a buyer cannot tell from the outside whether the thing got made, this is not a proof engine — it is a course with a promise attached.`,
  ts:`Pre-sell it as a dated deliverable with a written refund clause. If the deadline scares you, the scope is wrong, not the idea.`},
 {k:'flagship',nm:'Flagship',pm:3.0,dS:[-1,-1,1,-1,2,1,0,0],
@@ -42,6 +44,7 @@ const ARCH=[
    ?`Rather than ${inr(C.base)} for a seat among many, you charge ${inr(C.core)} to work on ${O} with a handful of ${W} directly.`
    :`Rather than a seat among many, you charge several times as much to work on ${O} with a handful of ${W} directly.`,
  gv:`Far fewer buyers, and each sale takes much longer. Nobody buys at this price on impulse, and most of them will say no.`,
+ pp:{pay:(W,H,O,C)=>`a handful of them pay ${inr(C.core)}`},
  f:{run:(W,H,O,C)=>`A handful of people instead of a room, and far more of your own time on each one.`,
     pay:(W,H,O,C)=>`About ${inr(C.core)} — three times the usual price. Nobody buys at that on impulse, so expect a long conversation before every yes.`},
  kl:W=>`If nobody among ${W} has paid anything like this price in the last year, nothing similar has ever sold. Kill it.`,
@@ -54,6 +57,7 @@ const ARCH=[
  an:(W,H)=>`You stop teaching. You sell deadlines, a group going through the same thing, and someone who notices when one of them goes quiet — they bring their own work.`,
  ex:(W,H,O,C)=>`No lessons, no slides. You publish the dates, put ${W} in one room, and have each of them show their work on a fixed day. They still leave with ${O} — made by them.`,
  gv:`Easy to copy, and it can feel like too little for the money. You give up content nobody needed for the one thing a recorded course cannot do.`,
+ pp:{via:(W,H,O,C,aH)=>`by giving them the deadlines and the room instead of the lessons`},
  f:{run:(W,H,O,C)=>`No lessons and no slides. You publish the dates, and each of them shows their own work on a fixed day.`,
     out:(W,H,O,C)=>`Made by them, on your deadlines. You never teach it.`},
  kl:W=>`If fewer than half the first cohort finish, the container is not tight enough. That is a design failure, not a marketing one.`,
@@ -68,6 +72,9 @@ const ARCH=[
    ?`One small piece at about ${inr(C.core)}, roughly a third of full price. The people who finish it are the ones who later pay ${inr(C.base)} for the whole ${H}.`
    :`One small piece at a fraction of full price. The people who finish it are the ones who come back for the whole ${H}.`,
  gv:`The cheap thing alone will never pay your bills, and you now run two products. It only works if the step up is real and obvious.`,
+ pp:{pay:(W,H,O,C)=>C.core<C.base
+      ?`they pay ${inr(C.core)} to start, and the serious ones pay ${inr(C.base)} for the rest`
+      :`they pay a little to start, and the serious ones pay for the rest later`},
  f:{pay:(W,H,O,C)=>C.core<C.base
       ?`About ${inr(C.core)} for the small first step. The ones who finish it come back for the ${inr(C.base)} version — that second payment is the business.`
       :`A small amount for the first step. The ones who finish it come back for the full version — that second payment is the business.`},
@@ -82,6 +89,7 @@ const ARCH=[
  ex:(W,H,O,C)=>`The usual advice given to ${W} is ${C.y}. You say plainly that this is wrong, and run the ${H} as your evidence.`,
  gv:`Fewer buyers, because you have to win the argument first. In return: attention you could not have bought, and a position nobody can copy without looking like a copy.`,
  f:{who:(W,H,O,C)=>`The part of ${W} who already suspect the usual advice — ${C.y} — is wrong. You lose the rest, and that is the trade.`},
+ pp:{who:(W,H,O,C)=>`the ${W} who already think ${C.y} is wrong`},
  kl:W=>`If you would not say it on the record, with your name on it, you do not believe it enough to build on it.`,
  ts:`Publish the argument first, for free, and see whether it makes anyone angry. The thing to fear is that nobody cares. Someone disagreeing is fine.`},
 {k:'synd',nm:'Syndicate',pm:0.9,dS:[0,-1,-1,-2,2,1,1,-1],ap:h=>![21].includes(h),
@@ -92,6 +100,8 @@ const ARCH=[
  an:(W,H)=>`You stop delivering it. Other people run it to your standard and you take a share — your job becomes deciding who is allowed to use your name.`,
  ex:(W,H,O,C)=>`Train three people to run this ${H} for ${W}, and take a cut of each. You stop teaching and start choosing who may teach.`,
  gv:`By far the slowest to start, and two groups to keep happy instead of one. In return, it runs when you are ill, busy or asleep.`,
+ pp:{via:(W,H,O,C,aH)=>`through ${aH} that other people run to my standard`,
+     pay:(W,H,O,C)=>`I take a share of what each of them collects`},
  f:{run:(W,H,O,C)=>`You are not in the room. Other people run it to your standard, and your job is deciding who is allowed to.`,
     pay:(W,H,O,C)=>`You take a share of what each of them collects, not the whole fee. Two groups to keep happy instead of one.`},
  kl:W=>`If you cannot name three people who would deliver this at your standard, for your cut, you are the syndicate — and that is the version you already have.`,
@@ -273,6 +283,9 @@ function renderVars(silent){
   const pAt=P=>{const s=baseS.map((v,i)=>clamp5(v+P.dS[i]+A.dS[i]));
     return{tot:s.reduce((x,y)=>x+y),V:verdict(s,baseF)};};
   const CURP=PREMS[PIDX], total=PREMS.length*VARS.length;
+  /* Declared here rather than beside the card, because the pitch is assembled before the card
+     is written and needs it. It was further down and threw a temporal-dead-zone error. */
+  const hasP = CURP.k!=='none';
   html+=`<div class="vnav2" id="vnav">
     <div class="vhead">${curRoute()?`Building <b style="color:var(--f2)">${curRoute().nm}</b> — `:''}<b>${total} ideas</b> from this one combination:
       ${PREMS.length} kinds of work × ${VARS.length} twists. You are on
@@ -367,13 +380,29 @@ function renderVars(silent){
      example and the cost are set off against a rule, the four fixed facts go in a scannable
      grid, and the pitch — the only line you actually say out loud — closes it. */
   const aHS = `${/^[aeiou]/i.test(HS)?'an':'a'} ${HS}`;   /* "through a cohort", not "through cohort" */
-  const payer = p===3||p===4 ? 'their employer pays for it'
+  /* ---------- the pitch ----------
+     "I help WHO GET, VIA, and MONEY." It used to read off the four axes alone, so every idea at
+     one combination said exactly the same sentence — useless as a say-it-out-loud test, which is
+     the only job this line has.
+
+     Each of the three decisions owns ONE slot, so they can never fight over the sentence:
+       route  -> what they get     work -> how it is done     twist -> who, and the money
+     One precedence rule, and only because two twists genuinely change delivery: Container only
+     and Syndicate take `via` ahead of the work. Proof engine's `get` yields to a chosen route,
+     because the route is the more specific promise. */
+  const pC = exc(CUR);
+  const pitchWho = A.pp && A.pp.who ? A.pp.who(WS,HS,OS,pC) : WS;
+  const pitchGet = curRoute() ? curRoute().pg
+    : (A.pp && A.pp.get ? A.pp.get(WS,HS,OS,pC) : `get ${OS}`);
+  const pitchVia = A.pp && A.pp.via ? A.pp.via(WS,HS,OS,pC,aHS)
+    : (hasP && CURP.pp && CURP.pp.via ? CURP.pp.via(aHS) : `through ${aHS}`);
+  const pitchPay = A.pp && A.pp.pay ? A.pp.pay(WS,HS,OS,pC)
+    : p===3||p===4 ? 'their employer pays for it'
     : p===18 ? 'their parents pay for it'
     : `they pay ${inr(core)}`;
   /* With no premise chosen the card is exactly what it always was: the angle leads. With one
      chosen the two layer in the order you would actually decide them — what happens inside
      first, then the one structural thing the angle changes about building it. */
-  const hasP = CURP.k!=='none';
   const pev = premEv(CURP,h);
   html+=`<div class="ideacard">
    <div class="tt">${title}</div>
@@ -420,7 +449,7 @@ function renderVars(silent){
      ${hasP?`<p><b>${CURP.nm} work:</b> ${CURP.gv}</p>
        <p style="margin-top:8px"><b>The ${A.nm.toLowerCase()} twist:</b> ${A.gv}</p>`
       :`<p>${A.gv}</p>`}</div>
-   <div class="ipitch">&ldquo;I help ${WS} get ${OS}, through ${aHS}, and ${payer}.&rdquo;
+   <div class="ipitch">&ldquo;I help ${pitchWho} ${pitchGet}, ${pitchVia}, and ${pitchPay}.&rdquo;
      <span class="ipn">Say it out loud to a stranger. If they do not get it immediately, the
      sentence is wrong before the idea is.</span></div>
   </div>`;

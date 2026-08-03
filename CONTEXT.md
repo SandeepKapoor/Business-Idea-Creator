@@ -28,7 +28,7 @@ validation sprint.
   one `<script>` block, no external assets. **This file is generated. Do not edit it.**
 - **Source**: `src/` — 15 HTML section partials, 11 CSS files, 21 JS files.
 - **Build**: `npm run build` (zero dependencies; `build.js` is ~130 lines of plain Node).
-- **Verify**: `npm run verify` — 114 checks, ~11s. See §16.
+- **Verify**: `npm run verify` — 117 checks, ~11s. See §16.
 - **Picker**: `npm run picker` — 32 behavioural checks on the axis picker. See §4a.
 - **Layout**: `npm run probe` — measures the real layout in headless Chrome. See §13b.
 - **Design scan**: `npm run design` — 16 craft checks on the built artifact. See §13a.
@@ -52,7 +52,7 @@ build.js                  src/ → sandeep-idea-map.html. Zero deps. Concatenati
 sandeep-idea-map.html     BUILD OUTPUT — the deliverable. Never edit.
 CONTEXT.md                this file
 README.md                 workflow, file map, known issues
-tools/verify.js           114-check harness (§16)
+tools/verify.js           117-check harness (§16)
 tools/picker.js           axis-picker behaviour: roving tabindex, arrows, aria (§4a)
 tools/probe.js            real geometry, measured in headless Chrome (§13b)
 tools/design.js           craft-floor mechanics: scales, states, contrast, icons (§13a)
@@ -573,6 +573,28 @@ one-liner is a topic, not an idea** — that was the first version and it read a
 nothing behind it. The card now runs: one-liner, *What this business actually is*, *Then how you
 build it*, *In practice*. Their labels descend white → blue → orange; the subject leads so it
 takes full contrast rather than a third accent.
+
+### The pitch
+
+`"I help WHO GET, VIA, and MONEY."` — the say-it-out-loud test, and the only line on the card
+whose whole job is to be specific. It used to read off the four axes alone, so every idea at one
+combination said the same sentence.
+
+**Each of the three decisions owns exactly one slot**, so they can never fight over it:
+
+| slot | owned by | example |
+|---|---|---|
+| `who` | the twist | Wedge substitutes the named slice |
+| `get` | the route | "get their draft edited into something publishable" |
+| `via` | the work | "by taking real work apart, in a cohort" |
+| `pay` | the twist | Ladder: "₹11,500 to start, and the serious ones pay ₹33,000" |
+
+One precedence rule, and only because two twists genuinely change delivery: **Container only and
+Syndicate take `via` ahead of the work.** Proof engine's `get` yields to a chosen route, because
+the route is the more specific promise.
+
+Every route carries `pg`, a phrase that completes "I help them …" — lowercase, no full stop.
+verify.js checks the casing, and that 30 distinct pitches come out of one combination.
 
 Stage 4 now carries three kill criteria — from the combination, the route and the twist. That is
 deliberate: they are three different failure modes and collapsing them loses information.
