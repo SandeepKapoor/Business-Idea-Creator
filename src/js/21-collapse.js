@@ -3,15 +3,15 @@
    inside it, moves the rest of the block into one wrapper, and turns the heading into a real
    button. Three callers use it:
 
-     initFold()   the report's eleven parts          — .sec with an h2
-     foldOut()    the custom builder's output        — h3-delimited runs inside #cOut
-     foldOut()    the deep dive's ten sections       — the h4 inside each .dsec > .dbody
+     initFold()   the report's eleven parts     — .sec with an h2
+     foldOut()    the workspace output          — h3-delimited runs inside #cOut
+     foldOut()    the business case's sections  — the h4 inside each #cOut .dsec > .dbody
 
    The report's parts are static, so they fold once at boot. The other two are rebuilt from
    innerHTML on every render, which destroys the wrappers — so foldOut() runs again after each
    render and makeFold() is idempotent, returning early on anything already folded.
 
-   WHY THE MODE PANELS THEMSELVES ARE NOT FOLDED. mode() shows exactly one of #custom / #deep
+   WHY THE WORKSPACE PANEL ITSELF IS NOT FOLDED. mode() shows or hides #custom
    by toggling `hidden`. Folding the panel too would mean a section could be "open" and still
    invisible — two sources of truth for one question. Their *contents* fold instead, which is
    what actually costs the reader anything.
@@ -19,7 +19,7 @@
    Charts are safe: every chart here is viewBox SVG written with innerHTML, so nothing measures
    layout width and nothing needs redrawing when a block opens. */
 
-const NOFOLD = ['custom', 'deep'];   /* mode panels — see above */
+const NOFOLD = ['custom'];   /* the workspace panel — see above */
 let FOLDSEQ = 0;
 
 /* The folds the global button acts on: only those the current mode is actually showing.
@@ -34,7 +34,7 @@ function foldSet() {
     return panel ? Array.from(panel.querySelectorAll('.fold')) : [];
   }
   return Array.from(document.querySelectorAll('.fold'))
-    .filter((el) => !el.closest('#custom') && !el.closest('#deep'));
+    .filter((el) => !el.closest('#custom'));
 }
 
 /* Turn `el` into a foldable block. `head` becomes the trigger; anything in `keep` stays
@@ -149,7 +149,7 @@ function foldRuns(box, tag) {
 /* Called after every render of the two generated views. */
 function foldOut() {
   foldRuns(document.getElementById('cOut'), 'h3');
-  document.querySelectorAll('#dOut .dsec > .dbody').forEach((b) => {
+  document.querySelectorAll('#cOut .dsec > .dbody').forEach((b) => {
     makeFold(b, b.querySelector(':scope > h4'));
   });
   syncFoldAll();

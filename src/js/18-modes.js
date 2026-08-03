@@ -28,11 +28,10 @@ function mode(m){
   CURMODE=m;
   document.getElementById('tabR').classList.toggle('on',m==='report');
   document.getElementById('tabC').classList.toggle('on',m==='custom');
-  document.getElementById('tabD').classList.toggle('on',m==='deep');
   document.getElementById('navRow').hidden=m!=='report';
   document.getElementById('srcBlock').hidden=m!=='report';
   document.querySelectorAll('.sec').forEach(s=>{
-    const own=(s.id==='custom'||s.id==='deep');
+    const own=(s.id==='custom');
     s.hidden = own ? s.id!==m : m!=='report';});
   syncFoldAll();                  /* the global toggle now counts only the mode on screen */
   window.scrollTo({top:0,behavior:'smooth'});

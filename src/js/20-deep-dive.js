@@ -1,32 +1,44 @@
-/* ================= DEEP DIVE ================= */
+/* ================= THE BUSINESS CASE =================
+   The ten-section plan used to be its own tab, reachable only for the 112 bank ideas. It is now
+   the detail layer of the workspace, so it has to build for an arbitrary combination and for a
+   chosen strategic angle — neither of which has an idea number.
+
+   So the plan is built from a CONTEXT, not from `n`:
+     deepPlan(n)      bank idea -> context -> plan. Unchanged behaviour, and this is the entry
+                      point tools/verify.js exercises across all 112 ideas and three invariants.
+     deepPlanFor(C)   the generalised builder. C carries the axes, the scores, the verdict and a
+                      price multiplier; `n` is optional and only decorates the header and footer.
+   Keep deepPlan(n) intact — it is the tested surface. */
 function fillDeepSel(){
   const s=document.getElementById('dSel');
+  if(!s)return;
   s.innerHTML=CL.map(c=>`<optgroup label="${c.L} · ${c.t.replace(/&amp;/g,'&')}">`+
     c.i.map(x=>`<option value="${x[0]}">#${x[0]} — ${x[1]}</option>`).join('')+
     `</optgroup>`).join('');
   s.value="23";
 }
-function goDeep(){
-  let n=parseInt(document.getElementById('dNum').value,10);
-  const out=document.getElementById('dOut');
-  if(!Number.isInteger(n)||n<1||n>112){
-    out.innerHTML=`<div class="empty">There is no idea #${document.getElementById('dNum').value||'—'}.
-      The bank runs from <b style="color:var(--ink-1)">1</b> to <b style="color:var(--ink-1)">112</b>.</div>`;
-    return;}
-  document.getElementById('dSel').value=String(n);
-  out.innerHTML=deepPlan(n);
-  foldOut();
-  out.scrollIntoView({behavior:'smooth',block:'start'});
+/* One income target for the whole workspace. The old deep tab had its own input; prefer whichever
+   exists, so deepPlan(n) keeps working from the harness and from the merged page alike. */
+function planTarget(){
+  const el=document.getElementById('tgt')||document.getElementById('dTgt');
+  return Math.max(25000,+(el&&el.value)||250000);
 }
-function deepPlan(n){
+function planCtx(n){
   const idea=ALLC.find(c=>c.n===n);
   const raw=CL.flatMap(c=>c.i).find(x=>x[0]===n);
-  const t=TAGS[n], [w,o,h,p]=t;
-  const S=idea.s, tot=idea.tot, V=verdict(S,idea.hand?[]:rules(w,o,h,p)), F=rules(w,o,h,p);
+  const [w,o,h,p]=TAGS[n];
+  return {w,o,h,p,n,S:idea.s,tot:idea.tot,pm:1,
+    V:verdict(idea.s,idea.hand?[]:rules(w,o,h,p)),
+    kicker:idea.cl,nm:idea.nm,hand:idea.hand,blurb:raw[2]};
+}
+function deepPlan(n){ return deepPlanFor(planCtx(n)); }
+function deepPlanFor(C){
+  const {w,o,h,p}=C, n=C.n;
+  const S=C.S, tot=C.tot, V=C.V, F=rules(w,o,h,p);
   const WS=MW[w][4], HS=MH[h][6].toLowerCase(), OS=MO[o][5];
-  const target=Math.max(25000,+document.getElementById('dTgt').value||250000);
+  const target=planTarget();
 
-  let core=HOW_BASE[h]*PAY_MULT[p]*(0.85+MW[w][2]*0.06);
+  let core=HOW_BASE[h]*PAY_MULT[p]*(0.85+MW[w][2]*0.06)*(C.pm||1);
   core=Math.max(500,Math.round(core/500)*500);
   const eF=core>=500000?0.08:core>=100000?0.2:0.4;
   const entry=Math.max(500,Math.round(core*eF/500)*500), prem=Math.round(core*2.6/500)*500;
@@ -38,10 +50,10 @@ function deepPlan(n){
   const RAMPX=ramp(), INKX=rink();
 
   let H=`<div class="dhead">
-    <div class="dh-l"><span class="cl">${idea.cl}</span>
-      <span class="dh-n">#${n}</span>
-      <span class="dh-t">${idea.nm}</span>
-      ${idea.hand?'<span class="hand">HAND-SCORED</span>':'<span class="hand" style="color:var(--ink-3)">DERIVED SCORE</span>'}</div>
+    <div class="dh-l"><span class="cl">${C.kicker}</span>
+      ${n?`<span class="dh-n">#${n}</span>`:''}
+      <span class="dh-t">${C.nm}</span>
+      ${C.hand?'<span class="hand">HAND-SCORED</span>':'<span class="hand" style="color:var(--ink-3)">DERIVED SCORE</span>'}</div>
     <div class="dh-r"><span class="vbadge" style="color:var(${V.c});border:1px solid currentColor">${V.t}</span>
       <span class="dh-tot">${tot}<span>/40</span></span></div>
   </div>`;
@@ -49,7 +61,7 @@ function deepPlan(n){
   /* 1 · thesis */
   H+=`<div class="dsec"><div class="dnum">01</div><div class="dbody">
     <h4>The thesis</h4>
-    <p class="dlead">${raw[2]}</p>
+    <p class="dlead">${C.blurb}</p>
     <div class="dgrid4">
       <div><span class="dk">Who</span>${AX.WHO[w]}</div>
       <div><span class="dk">Outcome they buy</span>${OS}</div>
@@ -283,10 +295,12 @@ function deepPlan(n){
   </div></div>`;
 
   H+=`<div class="dfoot">
-    <button class="chip" onclick="openInBuilder(${n})">⚙ open #${n} in the builder — 4–7 variant angles</button>
-    <button class="chip" onclick="mode('report');openFold('score',1)">← back to all 112 scored</button>
+    ${n?`<button class="chip" onclick="mode('report');openFold('score',1)">← back to all 112 scored</button>
     <span class="tiny">Want this written out properly, with me doing fresh research on the gaps above?
-    Ask me for <b style="color:var(--ink-1)">"go deep on ${n}"</b> in chat.</span>
+    Ask me for <b style="color:var(--ink-1)">&ldquo;go deep on ${n}&rdquo;</b> in chat.</span>`
+    :`<span class="tiny">Every number above carries its provenance. Where a market figure is verified
+    you get the source; where it is not, the plan says so and leaves you the arithmetic rather than
+    inventing a total.</span>`}
   </div>`;
   return H;
 }

@@ -11,6 +11,7 @@
    provenance note rendered under the cards. */
 const ARCH=[
 {k:'wedge',nm:'Wedge',pm:1.3,dS:[1,1,1,1,-1,1,0,0],
+ df:`Who you sell to — one narrow slice, not everyone`,
  ti:t=>`The ${t} Wedge`,
  an:(W,H)=>`Same ${H}, same promise — but built for one narrow slice of ${W} rather than all of them. Fewer people to sell to, and far more precise about what you say to each one.`,
  ex:(W,H,O,C)=>`Instead of the ${H} for ${W} in general, you run it only for ${C.s}. Someone who fits that reads your first line and thinks: that is me.`,
@@ -18,6 +19,7 @@ const ARCH=[
  kl:W=>`If you cannot name the sub-group of ${W} in five words, the wedge does not exist yet.`,
  ts:`Interview twenty people from that one slice only. Ten of them describing the same pain in the same words means the wedge is real.`},
 {k:'proof',nm:'Proof engine',pm:1.0,dS:[1,0,0,1,0,0,0,-1],
+ df:`What you promise — one finished thing, and nothing else`,
  ti:t=>`The ${t} Proof Engine`,
  an:(W,H,O)=>`You promise one finished thing — ${O} — and nothing else at all. The ${H} stops being the product and becomes the machine that gets it done.`,
  ex:(W,H,O,C)=>`Strip the page down to one line: they leave with ${O}. On the last day it exists or it does not, which is exactly why people will pay before it starts.`,
@@ -25,6 +27,7 @@ const ARCH=[
  kl:W=>`If a buyer cannot tell from the outside whether the artefact got produced, this is not a proof engine — it is a course with a promise attached.`,
  ts:`Pre-sell it as a dated deliverable with a written refund clause. If the deadline scares you, the scope is wrong, not the idea.`},
 {k:'flagship',nm:'Flagship',pm:3.0,dS:[-1,-1,1,-1,2,1,0,0],
+ df:`The price — far higher, far fewer people, much more of your time`,
  ti:t=>`The ${t} Flagship`,
  an:(W,H)=>`The expensive version: far fewer people, much more of your own time, and a price only serious buyers will accept. The ${H} is unchanged — what they are buying is access to you.`,
  ex:(W,H,O,C)=>C.core>C.base
@@ -34,6 +37,7 @@ const ARCH=[
  kl:W=>`If nobody among ${W} has paid a comparable price for anything in the last year, the flagship has no precedent to lean on. Kill it.`,
  ts:`Do not build it. Sell three seats by hand, on calls, at full price. If three is hard, thirty is impossible.`},
 {k:'container',nm:'Container only',pm:0.7,dS:[0,0,-1,2,-1,-1,1,1],ap:h=>[0,1,3,5].includes(h),
+ df:`What you deliver — deadlines and a group, instead of teaching`,
  ti:t=>`The ${t} Container`,
  an:(W,H)=>`You stop teaching. You sell deadlines, a group going through the same thing, and someone who notices when one of them goes quiet — they bring their own work.`,
  ex:(W,H,O,C)=>`No lessons, no slides. You publish the dates, put ${W} in one room, and have each of them show their work on a fixed day. They still leave with ${O} — made by them.`,
@@ -41,6 +45,7 @@ const ARCH=[
  kl:W=>`If fewer than half the first cohort finish, the container is not tight enough. That is a design failure, not a marketing one.`,
  ts:`Run one free cohort of eight people with nothing but a calendar and a call link. Measure completion, not satisfaction.`},
 {k:'ladder',nm:'Ladder',pm:0.35,dS:[-1,2,0,1,1,-1,0,-1],ap:h=>![19,21].includes(h),
+ df:`The way in — a cheap first step that leads to the real thing`,
  ti:t=>`The ${t} Ladder`,
  an:(W,H)=>`You start with something cheap and genuinely useful. Its job is not the money — it is to find out who is serious, and make the expensive step feel obvious.`,
  ex:(W,H,O,C)=>C.core<C.base
@@ -50,6 +55,7 @@ const ARCH=[
  kl:W=>`If under 10% of entry buyers climb to the next rung within 90 days, the ladder has no second rung — it is just a cheap product.`,
  ts:`Sell only the bottom rung to thirty people, then count how many ask, unprompted, what comes next.`},
 {k:'anti',nm:'Contrarian',pm:1.6,dS:[-1,1,1,1,-1,2,0,1],
+ df:`How you sell it — a public argument, not a list of features`,
  ti:t=>`The Anti-${t} Play`,
  an:(W,H)=>`You disagree in public, under your own name, with the thing everyone in this market repeats. The ${H} then becomes the proof that you were right.`,
  ex:(W,H,O,C)=>`The usual advice given to ${W} is ${C.y}. You say plainly that this is wrong, and run the ${H} as your evidence.`,
@@ -57,6 +63,7 @@ const ARCH=[
  kl:W=>`If you would not say it on the record, with your name on it, you do not believe it enough to build on it.`,
  ts:`Publish the argument first, for free, and see whether it makes anyone angry. Indifference is the failure mode here, not disagreement.`},
 {k:'synd',nm:'Syndicate',pm:0.9,dS:[0,-1,-1,-2,2,1,1,-1],ap:h=>![21].includes(h),
+ df:`Who delivers it — other people, to your standard, for a cut`,
  ti:t=>`The ${t} Syndicate`,
  an:(W,H)=>`You stop delivering it. Other people run it to your standard and you take a share — your job becomes deciding who is allowed to use your name.`,
  ex:(W,H,O,C)=>`Train three people to run this ${H} for ${W}, and take a cut of each. You stop teaching and start choosing who may teach.`,
@@ -170,6 +177,21 @@ function renderVars(silent){
     const up=d=>d.map((x,i)=>x>0?CRIT2[i].toLowerCase():null).filter(Boolean);
     const dn=d=>d.map((x,i)=>x<0?CRIT2[i].toLowerCase():null).filter(Boolean);
     html+=`<div class="viexp">
+      <div class="ht-t">What is different between them</div>
+      <p class="tiny" style="margin-bottom:10px">Your four dropdowns fix <b>what</b> the business is.
+      Every angle below keeps those four the same and changes exactly <b>one</b> thing about how you
+      build it — and that single change moves both the price and the score.</p>
+      <table class="dtab acmp">
+        <thead><tr><th>Angle</th><th>The one thing it changes</th><th>Price</th><th>Score</th></tr></thead>
+        <tbody>${VARS.map((v,i)=>`<tr class="vrow${i===VIDX?' on':''}" onclick="setVar(${i})">
+          <td class="dl">${i===VIDX?'▸ ':''}${v.nm}</td>
+          <td>${v.a.df}</td>
+          <td class="anum">×${v.a.pm}<span class="asub">${inr(v.core)}</span></td>
+          <td class="anum" style="color:var(${v.V.c})">${v.tot}</td></tr>`).join('')}</tbody>
+      </table>
+      <p class="tiny" style="margin-bottom:16px">Click a row to switch to it. Prices are for the
+      same combination, so the spread you see is the angle alone.</p>
+
       <div class="ht-t">All ${VARS.length} angles in full</div>
       <div class="vitab">${VARS.map((v,i)=>`
         <div class="viv${i===VIDX?' on':''}">
@@ -348,6 +370,18 @@ function renderVars(silent){
       `<a href="#bank" onclick="mode('report')"><b style="color:var(--ink-1)">#${n.n}</b> ${n.nm}</a>`).join('')}</div>
     <p class="tiny" style="margin-top:9px">Matched by overlap, not by judgment — read them for prior art
     before you assume this is new.</p>`;}
+
+  /* PART 10 — the full business case, for the angle currently selected.
+     This is what used to be a separate tab, available only for the 112 bank ideas and only at
+     their implied angle. Built from the variant's own scores and price multiplier, so the money
+     here matches the money on the card above rather than quietly reverting to the ×1 version. */
+  html+=`<h3 style="margin:30px 0 12px">Part 10 · The full business case for
+    <span style="color:var(--f1)">${title}</span></h3>
+    <p class="tiny" style="margin:-6px 0 12px">Ten sections, each one collapsible. Every number
+    carries its provenance: where a market figure is verified you get the source, and where it is
+    not, the plan says so and leaves you the arithmetic rather than inventing a total.</p>`;
+  html+=deepPlanFor({w,o,h,p,S,tot,V,pm:A.pm,
+    kicker:`${A.nm} angle`,nm:title,hand:false,blurb:A.an(WS,HS,OS)});
 
   document.getElementById('cOut').innerHTML=html;
 

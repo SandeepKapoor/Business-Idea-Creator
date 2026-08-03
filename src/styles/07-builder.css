@@ -66,3 +66,12 @@ tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
 .prov{display:inline-block;font-size:12px;line-height:1.35;margin-top:6px;padding:2px 7px;
   border-radius:4px;border:1px solid currentColor;letter-spacing:.01em}
 .prov.ok{color:var(--good)} .prov.weak{color:var(--warn)} .prov.judg{color:var(--f4)}
+/* divider between the two ways into the workspace */
+.bldsplit{border-top:1px solid var(--grid);margin:16px 0 4px}
+/* the at-a-glance comparison at the top of the ⓘ panel */
+.viexp table.dtab{margin:2px 0 6px;font-variant-numeric:tabular-nums}
+.viexp table.dtab td{font-size:13px;padding:9px 14px 9px 0;vertical-align:top}
+.viexp table.dtab td.dl{color:var(--ink-1);font-weight:600;white-space:nowrap;padding-right:18px}
+.viexp table.dtab th{font-size:12px;padding-bottom:7px}
+.acmp .anum{white-space:nowrap;font-weight:600;color:var(--ink-1)}
+.acmp .asub{display:block;font-size:12px;font-weight:400;color:var(--ink-3)}

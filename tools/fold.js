@@ -11,8 +11,10 @@
  * :not(.class), ':scope > a > b' child chains, and closest(). It is not a general CSS engine.
  * If you add a new selector to the module, teach match()/qs() about it or the test will lie.
  *
- * The fixture mirrors the real section inventory: 13 .sec blocks, two of which (custom, deep)
- * are mode panels that must be left alone, and one of which (stuck) has no h3.
+ * The fixture mirrors the real section inventory: 12 .sec blocks, one of which (custom) is the
+ * workspace panel and must be left alone, and one of which (stuck) has no h3. The workspace's
+ * generated output holds both the h3 runs and the business case's .dsec blocks, so the test also
+ * covers a fold nested inside a fold.
  *
  *   node tools/fold.js
  */
@@ -97,7 +99,7 @@ const document={
 const nav=mk('div',doc,'navRow');
 const foldBar=mk('div',doc,'foldBar');
 const foldBtn=mk('button',foldBar,'foldAll');
-const SECS=[['custom',1],['deep',1],['stuck',0,false],['engine',0],['fw',0],['bank',0],
+const SECS=[['custom',1],['stuck',0,false],['engine',0],['fw',0],['bank',0],
   ['obs',0],['conv',0],['score',0],['map',0],['sprint',0],['pos',0],['evid',0]];
 const bodies={};
 for(const [id,isMode,hasH3=true] of SECS){
@@ -107,7 +109,8 @@ for(const [id,isMode,hasH3=true] of SECS){
   bodies[id]=[mk('div',s,null,'card'),mk('p',s)];   // the content that must end up wrapped
   if(!isMode){const a=mk('a',nav);a.setAttribute('href','#'+id);a.getAttribute=k=>k==='href'?'#'+id:null;}
 }
-// generated output lives inside the two mode panels
+// All generated output now lives in one panel: the workspace. The business-case sections sit
+// under the last h3, so they end up nested inside that group — a fold within a fold.
 const cOut=mk('div',byId.custom,'cOut');
 mk('div',cOut,null,'stmt');                    // content before the first h3 must stay put
 mk('div',cOut,null,'ideacard');
@@ -116,11 +119,11 @@ for(const t of ['Part 6','Part 7','Part 8']){
   const h=mk('h3',cOut);h.appendChild(new Txt(t));H3.push(h);
   mk('div',cOut,null,'card'); mk('p',cOut);
 }
-const dOut=mk('div',byId.deep,'dOut');
-mk('div',dOut,null,'dhead');
+const h10=mk('h3',cOut);h10.appendChild(new Txt('Part 10'));H3.push(h10);
+mk('div',cOut,null,'dhead');
 const DB=[];
 for(let i=0;i<3;i++){
-  const ds=mk('div',dOut,null,'dsec');
+  const ds=mk('div',cOut,null,'dsec');
   mk('div',ds,null,'dnum').appendChild(new Txt('0'+(i+1)));
   const db=mk('div',ds,null,'dbody');DB.push(db);
   mk('h4',db).appendChild(new Txt('Section '+(i+1)));
@@ -138,8 +141,7 @@ const ok=(n,c,d)=>{c?pass++:fail.push(d?`${n} — ${d}`:n)};
 F.initFold();
 const folds=document.querySelectorAll('.sec.fold');
 ok('11 report parts became foldable',folds.length===11,`got ${folds.length}`);
-ok('custom and deep were left alone',
-  !byId.custom.classList.contains('fold')&&!byId.deep.classList.contains('fold'));
+ok('the workspace panel itself was left alone',!byId.custom.classList.contains('fold'));
 ok('every part starts closed',folds.every(s=>s.classList.contains('shut')));
 ok('every part has a secbody wrapper',folds.every(s=>qs(s,':scope > .secbody').length===1));
 ok('the original content moved inside the wrapper',
@@ -185,7 +187,7 @@ ok('and scrolls to it',byId.pos.scrolled>0);
 F.openFold('evid',1);
 ok('openFold opens the appendix',!byId.evid.classList.contains('shut'));
 ok('openFold on an unknown id is harmless',(F.openFold('nope',1),true));
-ok('openFold on a mode panel is a no-op',(F.openFold('custom',0),!byId.custom.classList.contains('fold')));
+ok('openFold on the workspace panel is a no-op',(F.openFold('custom',0),!byId.custom.classList.contains('fold')));
 
 // ===== generated output ========================================================
 sb.CURMODE='custom';
@@ -194,23 +196,25 @@ ok('global bar hides when the mode has nothing to fold',byId.foldBar.hidden===tr
 
 F.foldOut();
 const groups=qs(cOut,'.gsec');
-ok('builder output folds into one group per h3',groups.length===3,`got ${groups.length}`);
+ok('workspace output folds into one group per h3',groups.length===4,`got ${groups.length}`);
 ok('content before the first heading is left alone',
   cOut.children.filter(c=>c.classList.contains('stmt')||c.classList.contains('ideacard')).length===2);
 ok('each group owns its heading plus the content that followed it',
-  groups.every(g=>qs(g,':scope > .foldhd').length===1 &&
-                  qs(g,':scope > .secbody')[0].children.length===2));
+  groups.every(g=>qs(g,':scope > .foldhd').length===1) &&
+  qs(groups[0],':scope > .secbody')[0].children.length===2);
+ok('the business case lands inside the last group, not loose in the output',
+  qs(groups[3],':scope > .secbody')[0].children.filter(c=>c.classList.contains('dsec')).length===3);
 ok('the h3 heading became the trigger',groups.every(g=>qs(g,':scope > .foldhd > button.sfold').length===1));
 ok('builder groups start closed',groups.every(g=>g.classList.contains('shut')));
-ok('deep-dive sections fold on their h4',DB.every(b=>b.classList.contains('fold')));
+ok('business-case sections fold on their h4',DB.every(b=>b.classList.contains('fold')));
 ok('the dnum stays outside the fold',
   DB.every(b=>b.parentNode.children.some(c=>c.classList.contains('dnum'))));
-ok('deep-dive body wraps everything below the h4',
+ok('business-case body wraps everything below the h4',
   DB.every(b=>qs(b,':scope > .secbody')[0].children.length===2));
 
 // idempotency: a re-render calls foldOut again over already-folded nodes
 F.foldOut();
-ok('folding twice does not double-wrap',qs(cOut,'.gsec').length===3 &&
+ok('folding twice does not double-wrap',qs(cOut,'.gsec').length===4 &&
   qs(groups[0],':scope > .secbody').length===1);
 
 // scope: the global control must not reach into a mode that is off screen.
@@ -220,11 +224,9 @@ sb.CURMODE='custom';
 F.foldAll(true);
 ok('expand all in custom mode opens the builder groups',groups.every(g=>!g.classList.contains('shut')));
 ok('and leaves the report parts alone',document.querySelectorAll('.sec.fold:not(.shut)').length===0);
-ok('and leaves the deep dive alone',DB.every(b=>b.classList.contains('shut')));
-ok('the count is scoped to the mode on screen',byId.foldAll.innerHTML.includes('3 of 3'));
-sb.CURMODE='deep';
-F.syncFoldAll();
-ok('switching mode re-scopes the count',byId.foldAll.innerHTML.includes('0 of 3'));
+ok('nested business-case sections open with their parent group',
+  DB.every(b=>!b.classList.contains('shut')));
+ok('the count is scoped to the mode on screen',byId.foldAll.innerHTML.includes('7 of 7'));
 sb.CURMODE='report';
 F.syncFoldAll();
 ok('back in the report the count is the eleven parts',byId.foldAll.innerHTML.includes('0 of 11'));
