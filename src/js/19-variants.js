@@ -11,6 +11,8 @@
    provenance note rendered under the cards. */
 const ARCH=[
 {k:'wedge',nm:'Wedge',pm:1.3,dS:[1,1,1,1,-1,1,0,0],
+ w1:`WHO`,
+ lem:`Same stand, same lemonade — but it is parked outside one gym, and it is only for people finishing a workout.`,
  df:`Who you sell to — one narrow slice, not everyone`,
  ti:t=>`The ${t} Wedge`,
  an:(W,H)=>`Same ${H}, same promise — but built for one narrow slice of ${W} rather than all of them. Fewer people to sell to, and far more precise about what you say to each one.`,
@@ -19,6 +21,8 @@ const ARCH=[
  kl:W=>`If you cannot name the sub-group of ${W} in five words, the wedge does not exist yet.`,
  ts:`Interview twenty people from that one slice only. Ten of them describing the same pain in the same words means the wedge is real.`},
 {k:'proof',nm:'Proof engine',pm:1.0,dS:[1,0,0,1,0,0,0,-1],
+ w1:`WHAT`,
+ lem:`Same stand — but the sign promises one thing: the best lemonade in town. No smoothies, no coffee, no snacks.`,
  df:`What you promise — one finished thing, and nothing else`,
  ti:t=>`The ${t} Proof Engine`,
  an:(W,H,O)=>`You promise one finished thing — ${O} — and nothing else at all. The ${H} stops being the product and becomes the machine that gets it done.`,
@@ -27,6 +31,8 @@ const ARCH=[
  kl:W=>`If a buyer cannot tell from the outside whether the artefact got produced, this is not a proof engine — it is a course with a promise attached.`,
  ts:`Pre-sell it as a dated deliverable with a written refund clause. If the deadline scares you, the scope is wrong, not the idea.`},
 {k:'flagship',nm:'Flagship',pm:3.0,dS:[-1,-1,1,-1,2,1,0,0],
+ w1:`PRICE`,
+ lem:`Same lemonade — but ₹1,000 a glass, pressed in front of you, ten glasses a day and no more.`,
  df:`The price — far higher, far fewer people, much more of your time`,
  ti:t=>`The ${t} Flagship`,
  an:(W,H)=>`The expensive version: far fewer people, much more of your own time, and a price only serious buyers will accept. The ${H} is unchanged — what they are buying is access to you.`,
@@ -37,6 +43,8 @@ const ARCH=[
  kl:W=>`If nobody among ${W} has paid a comparable price for anything in the last year, the flagship has no precedent to lean on. Kill it.`,
  ts:`Do not build it. Sell three seats by hand, on calls, at full price. If three is hard, thirty is impossible.`},
 {k:'container',nm:'Container only',pm:0.7,dS:[0,0,-1,2,-1,-1,1,1],ap:h=>[0,1,3,5].includes(h),
+ w1:`DELIVERY`,
+ lem:`Same lemonade — but you do not buy a cup. You join a 30-day challenge with dates, a group, and someone who notices if you skip.`,
  df:`What you deliver — deadlines and a group, instead of teaching`,
  ti:t=>`The ${t} Container`,
  an:(W,H)=>`You stop teaching. You sell deadlines, a group going through the same thing, and someone who notices when one of them goes quiet — they bring their own work.`,
@@ -45,6 +53,8 @@ const ARCH=[
  kl:W=>`If fewer than half the first cohort finish, the container is not tight enough. That is a design failure, not a marketing one.`,
  ts:`Run one free cohort of eight people with nothing but a calendar and a call link. Measure completion, not satisfaction.`},
 {k:'ladder',nm:'Ladder',pm:0.35,dS:[-1,2,0,1,1,-1,0,-1],ap:h=>![19,21].includes(h),
+ w1:`STEPS`,
+ lem:`Same lemonade — but a ₹20 taster first. The people who come back buy the ₹200 jug, and later the party order.`,
  df:`The way in — a cheap first step that leads to the real thing`,
  ti:t=>`The ${t} Ladder`,
  an:(W,H)=>`You start with something cheap and genuinely useful. Its job is not the money — it is to find out who is serious, and make the expensive step feel obvious.`,
@@ -55,6 +65,8 @@ const ARCH=[
  kl:W=>`If under 10% of entry buyers climb to the next rung within 90 days, the ladder has no second rung — it is just a cheap product.`,
  ts:`Sell only the bottom rung to thirty people, then count how many ask, unprompted, what comes next.`},
 {k:'anti',nm:'Contrarian',pm:1.6,dS:[-1,1,1,1,-1,2,0,1],
+ w1:`MESSAGE`,
+ lem:`Same lemonade — but the sign reads: cold-pressed juice is a con. People stop to argue, and some of them stay.`,
  df:`How you sell it — a public argument, not a list of features`,
  ti:t=>`The Anti-${t} Play`,
  an:(W,H)=>`You disagree in public, under your own name, with the thing everyone in this market repeats. The ${H} then becomes the proof that you were right.`,
@@ -63,6 +75,8 @@ const ARCH=[
  kl:W=>`If you would not say it on the record, with your name on it, you do not believe it enough to build on it.`,
  ts:`Publish the argument first, for free, and see whether it makes anyone angry. Indifference is the failure mode here, not disagreement.`},
 {k:'synd',nm:'Syndicate',pm:0.9,dS:[0,-1,-1,-2,2,1,1,-1],ap:h=>![21].includes(h),
+ w1:`TEAM`,
+ lem:`Same lemonade — but three other people run stands using your recipe and your name, and you take a cut of each.`,
  df:`Who delivers it — other people, to your standard, for a cut`,
  ti:t=>`The ${t} Syndicate`,
  an:(W,H)=>`You stop delivering it. Other people run it to your standard and you take a share — your job becomes deciding who is allowed to use your name.`,
@@ -178,24 +192,42 @@ function renderVars(silent){
     const dn=d=>d.map((x,i)=>x<0?CRIT2[i].toLowerCase():null).filter(Boolean);
     html+=`<div class="viexp">
       <div class="ht-t">What is different between them</div>
-      <p class="tiny" style="margin-bottom:10px">Your four dropdowns fix <b>what</b> the business is.
-      Every angle below keeps those four the same and changes exactly <b>one</b> thing about how you
-      build it — and that single change moves both the price and the score.</p>
+      <p class="tiny" style="margin-bottom:12px">Your four dropdowns fix <b>what</b> the business is.
+      Every angle keeps those four the same and changes exactly <b>one</b> thing about how you build
+      it. Each one has a word to remember it by.</p>
+
+      <p class="tiny" style="margin-bottom:8px"><b style="color:var(--ink-1)">Start with a lemonade
+      stand.</b> Anyone can walk up and buy a cup. Watch each angle change one thing about it —
+      and leave everything else alone.</p>
       <table class="dtab acmp">
-        <thead><tr><th>Angle</th><th>The one thing it changes</th><th>Price</th><th>Score</th></tr></thead>
+        <thead><tr><th>Angle</th><th>In a word</th><th>The same stand, one thing changed</th></tr></thead>
+        <tbody>${VARS.map((v)=>`<tr>
+          <td class="dl">${v.nm}</td>
+          <td><span class="w1">${v.a.w1}</span></td>
+          <td>${v.a.lem}</td></tr>`).join('')}</tbody>
+      </table>
+
+      <p class="tiny" style="margin:14px 0 8px"><b style="color:var(--ink-1)">Now the same seven, on
+      your idea.</b> Click a row to switch to it. The prices are all for this one combination, so the
+      spread you see is the angle alone.</p>
+      <table class="dtab acmp">
+        <thead><tr><th>Angle</th><th>In a word</th><th>The one thing it changes</th>
+          <th>Price</th><th>Score</th></tr></thead>
         <tbody>${VARS.map((v,i)=>`<tr class="vrow${i===VIDX?' on':''}" onclick="setVar(${i})">
           <td class="dl">${i===VIDX?'▸ ':''}${v.nm}</td>
+          <td><span class="w1">${v.a.w1}</span></td>
           <td>${v.a.df}</td>
           <td class="anum">×${v.a.pm}<span class="asub">${inr(v.core)}</span></td>
           <td class="anum" style="color:var(${v.V.c})">${v.tot}</td></tr>`).join('')}</tbody>
       </table>
-      <p class="tiny" style="margin-bottom:16px">Click a row to switch to it. Prices are for the
-      same combination, so the spread you see is the angle alone.</p>
+      <p class="tiny" style="margin-bottom:16px">Same seven angles, same one-word tags — first on a
+      lemonade stand, then on the business you are actually building.</p>
 
       <div class="ht-t">All ${VARS.length} angles in full</div>
       <div class="vitab">${VARS.map((v,i)=>`
         <div class="viv${i===VIDX?' on':''}">
           <div class="vivh"><b>${v.nm}</b>
+            <span class="w1">${v.a.w1}</span>
             <span class="vivp">price ×${v.a.pm} · ${inr(v.core)}</span>
             <span class="vivt" style="color:var(${vdot(v)})">${v.tot}/40 · ${v.V.t.split(' —')[0]}</span></div>
           <div class="vivd">${v.a.an(WS,HS,OS)}</div>

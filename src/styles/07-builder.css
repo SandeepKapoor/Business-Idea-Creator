@@ -82,3 +82,6 @@ tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
   font:inherit;font-size:13px;font-weight:600;color:var(--ink-3);white-space:nowrap}
 .wtab:hover{color:var(--ink-1)}
 .wtab.on{background:var(--f1);color:#fff}
+/* the one word to remember an angle by */
+.w1{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--f2);
+  border:1px solid currentColor;border-radius:4px;padding:1px 6px;white-space:nowrap}
