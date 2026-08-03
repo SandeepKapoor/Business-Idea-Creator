@@ -46,7 +46,8 @@ function drawHeat(){
     return op==='gte'?v>=val:op==='lte'?v<=val:v===val;});
   if(ci>=0)rows=[...rows].sort((a,b)=>b.s[ci]-a.s[ci]||b.tot-a.tot);
 
-  let h='<div class="heatscroll"><table><thead><tr><th class="l">Candidate</th>'+
+  let h='<div class="heatscroll"><table class="stab">'+scols(['tot','ver'])+
+    '<thead><tr><th class="l">Candidate</th>'+
     CRIT.map((c,i)=>`<th${ci>=0&&i!==ci?' class="dimcol"':''}>${c}${i<2?'<br><span style="color:var(--crit)">gate</span>':''}${ci===i?`<br><span style="color:var(--f1)">${icon('chevron','xs down')} sorted</span>`:''}</th>`).join('')+
     `<th${ci>=0?' class="dimcol"':''}>Total</th><th class="l">Verdict</th></tr></thead><tbody>`;
   rows.forEach(c=>{

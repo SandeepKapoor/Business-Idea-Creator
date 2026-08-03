@@ -29,7 +29,7 @@ validation sprint.
 - **Source**: `src/` — 15 HTML section partials, 11 CSS files, 21 JS files.
 - **Build**: `npm run build` (zero dependencies; `build.js` is ~130 lines of plain Node).
 - **Verify**: `npm run verify` — 100 checks, ~11s. See §16.
-- **Design scan**: `npm run design` — 15 craft checks on the built CSS. See §13a.
+- **Design scan**: `npm run design` — 16 craft checks on the built artifact. See §13a.
 - **Plain English**: `npm run plain` — scores every sentence the builder renders. See §10.
 - **Premise provenance**: `npm run premise` — how `PREM` was mined out of the 112. See §10.
 - **Runs by**: opening the built file in a browser. `open sandeep-idea-map.html`.
@@ -677,6 +677,25 @@ Both fixed and both are hard gates now.
 
 **Only move step 3 of the light ramp.** Steps 1 and 2 are load-bearing for a second invariant —
 the lightest cell must stay separable from the card surface — and lightening them broke it.
+
+### Score tables
+
+Three tables share one grid — the bank heatmap, Part 7 (twists), Part 7b (kinds of work):
+`label · 8 scores · 1–2 numbers · sometimes a verdict`. All three declare it through
+`scols(tail)` in `06-scorecard.data.js` and carry `class="stab"`, which is `table-layout:fixed`.
+
+**Auto layout cannot do this job.** The eight criteria are equal in meaning and must be equal in
+width, but their labels are wildly unequal in length — "Works anywhere" against "How soon you get
+paid". Auto layout sized each column by its header text, collapsed the numeral cells to ~14px,
+and handed the slack to the label column, which has `white-space:nowrap` and took all of it. The
+header row and the body rows ended up in different horizontal bands. This appeared the moment the
+criteria were renamed to plain English, because the old labels happened to be short.
+
+Part 7b also dropped its "What you do" column — a full sentence in a twelfth column at 960px is
+hopeless. The sentence sits under the name in the label cell instead.
+
+`npm run design` boots the artifact, renders all three, and fails if any colgroup, header row and
+body row disagree. Verified by breaking one on purpose.
 
 ### Two harness lessons
 

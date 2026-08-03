@@ -1,11 +1,37 @@
-/* heatmap */
+/* ---------- score tables ----------
+   Three tables share this grid: the bank heatmap, Part 7 (twists) and Part 7b (kinds of work).
+   One label column, eight score columns, then one or two numbers and sometimes a verdict.
+
+   WHY table-layout IS FIXED. The eight criteria are equal in meaning and must be equal in width.
+   Their LABELS are not remotely equal in length — "Works anywhere" against "How soon you get
+   paid" — so auto layout sized each column by its header text, let the numeral cells collapse to
+   about 14px, and handed the slack to the label column, which has white-space:nowrap and took
+   all of it. The header row and the body rows ended up in different horizontal bands. Widths are
+   declared once in a colgroup by scols() in 06-scorecard.data.js; only .c-lab is auto, so it
+   absorbs whatever is left. */
 table{border-collapse:separate;border-spacing:2px;width:100%;font-size:var(--t-xs)}
-th{font-weight:600;color:var(--ink-3);text-align:center;font-size:var(--t-xs);padding:0 var(--sp-0) var(--sp-1);vertical-align:bottom;line-height:1.25}
+table.stab{table-layout:fixed}
+.c-sc{width:58px} .c-tot{width:46px} .c-price{width:78px} .c-ver{width:124px}
+.stab .c-lab{width:auto}
+@media(max-width:720px){.c-sc{width:44px} .c-ver{width:96px} .c-price{width:66px}}
+
+th{font-weight:600;color:var(--ink-3);text-align:center;font-size:var(--t-2xs);
+  padding:0 var(--sp-0) var(--sp-1);vertical-align:bottom;line-height:1.3;
+  hyphens:auto;overflow-wrap:break-word}
 th.l,td.l{text-align:left}
 td{padding:0}
+/* nowrap is right for the heatmap's one-line candidate names and wrong for Part 7b, where the
+   label cell now carries a name and a description stacked. */
 td.l{color:var(--ink-1);font-size:var(--t-xs);padding-right:var(--sp-2);white-space:nowrap}
-.cell{height:34px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
-  font-variant-numeric:tabular-nums;font-weight:600;font-size:var(--t-xs)}
+.stab td.l{white-space:normal;line-height:1.4;padding-right:var(--sp-3)}
+.subl{display:block;font-size:var(--t-2xs);color:var(--ink-3);font-weight:400;line-height:1.4;
+  margin-top:1px}
+/* The chip fills its column, which is what makes eight of them read as one row of a grid. */
+.cell{height:32px;width:100%;border-radius:var(--r-sm);display:flex;align-items:center;
+  justify-content:center;font-variant-numeric:tabular-nums;font-weight:600;font-size:var(--t-xs)}
+td.tot{text-align:center;color:var(--ink-1);font-weight:700;font-size:var(--t-sm);
+  font-variant-numeric:tabular-nums}
+td.tot.num{font-weight:600;font-size:var(--t-xs);color:var(--ink-2)}
 .gate{outline:2px solid var(--crit);outline-offset:-2px}
 .dimcol{opacity:.26;transition:opacity var(--dur-1) var(--ease)}
 tr:hover .dimcol{opacity:.55}
@@ -32,7 +58,6 @@ td.l .hand{font-size:var(--t-xs);color:var(--f4);border:1px solid currentColor;b
   padding:0 var(--sp-0);margin-left:var(--sp-1);letter-spacing:.04em;vertical-align:middle}
 td.l .cl{font-size:var(--t-xs);color:var(--ink-3);border:1px solid var(--ring);border-radius:var(--r-xs);
   padding:0 var(--sp-1);margin-right:var(--sp-1);font-weight:700}
-td.tot{font-variant-numeric:tabular-nums;font-weight:700;text-align:center;color:var(--ink-1)}
 .verdict{font-size:var(--t-xs);padding:var(--sp-0) var(--sp-2);border-radius:var(--r-sm);white-space:nowrap;font-weight:600}
 .v-live{color:var(--good);border:1px solid currentColor}
 .v-dead{color:var(--crit);border:1px solid currentColor}
@@ -66,7 +91,8 @@ svg{display:block;width:100%;height:auto;overflow:visible}
     radial-gradient(farthest-side at 0 50%,rgba(0,0,0,.28),transparent) 0 0/var(--sp-4) 100% no-repeat scroll,
     radial-gradient(farthest-side at 100% 50%,rgba(0,0,0,.28),transparent) 100% 0/var(--sp-4) 100% no-repeat scroll;
   scrollbar-width:thin;scrollbar-color:var(--axis) transparent}
-.tscroll table{min-width:640px}
+/* 8x58 + 46 + 124 + the label column + border-spacing. Below this it scrolls rather than squeezes. */
+.tscroll table{min-width:820px}
 .tscroll::-webkit-scrollbar{height:8px}
 .tscroll::-webkit-scrollbar-thumb{background:var(--axis);border-radius:var(--r-full)}
 .tscroll::-webkit-scrollbar-track{background:transparent}

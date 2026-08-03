@@ -391,7 +391,8 @@ function renderVars(silent){
   const RMP=ramp(), RINK=rink();
   const best=Math.max(...VARS.map(v=>v.tot));
   html+=`<h3 style="margin:30px 0 12px">Part 7 · All ${VARS.length} twists, side by side</h3>
-   <div class="card"><div class="tscroll"><table><thead><tr><th class="l">Twist</th>
+   <div class="card"><div class="tscroll"><table class="stab">${scols(['tot','ver'])}
+     <thead><tr><th class="l">Twist</th>
      ${CRIT2.map((c,i)=>`<th>${c}${i<2?'<br><span style="color:var(--crit)">gate</span>':''}</th>`).join('')}
      <th>Total</th><th class="l">Verdict</th></tr></thead><tbody>
      ${VARS.map((v,i)=>`<tr class="${i===VIDX?'vrow on':'vrow'}" onclick="setVar(${i})">
@@ -420,15 +421,16 @@ function renderVars(silent){
    <p class="tiny" style="margin:-6px 0 12px">The table above keeps the work and changes the twist.
    This one keeps the twist and changes the work. Together they are the ${total} ideas you can get
    out of these four dropdowns.</p>
-   <div class="card"><div class="tscroll"><table><thead><tr><th class="l">The work</th><th class="l">What you do</th>
+   <div class="card"><div class="tscroll"><table class="stab">${scols(['price','tot'])}
+     <thead><tr><th class="l">The work</th>
      ${CRIT2.map((c,i)=>`<th>${c}${i<2?'<br><span style="color:var(--crit)">gate</span>':''}</th>`).join('')}
      <th>Price</th><th>Total</th></tr></thead><tbody>
      ${pRows.map(r=>`<tr class="${r.i===PIDX?'vrow on':'vrow'}" onclick="setPrem(${r.i})">
        <td class="l">${r.i===PIDX?icon('chevron','xs')+' ':''}<b>${r.P.nm}</b>${r.tot===pBest&&PREMS.length>1?' <span class="vbest">best total</span>':''}
-         ${r.ev&&r.ev.k==='weak'?'<span class="pjudg" title="No bank example at this format — my judgement">J</span>':''}</td>
-       <td class="l" style="color:var(--ink-2)">${r.P.v}</td>
+         ${r.ev&&r.ev.k==='weak'?'<span class="pjudg" title="No bank example at this format — my judgement">J</span>':''}
+         <span class="subl">${r.P.v}</span></td>
        ${r.S.map((x,j)=>`<td><div class="cell${(j<2&&x===1)?' gate':''}" style="background:${RMP[x-1]};color:${RINK[x-1]}">${x}</div></td>`).join('')}
-       <td class="tot" style="font-weight:500">${inr(r.core)}</td>
+       <td class="tot num">${inr(r.core)}</td>
        <td class="tot" style="color:var(${r.V.c})">${r.tot}</td></tr>`).join('')}
      </tbody></table></div>
    <p class="tiny" style="margin-top:12px">Only the ${PREMS.length} of ${PREM.length} that fit

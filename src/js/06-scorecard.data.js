@@ -32,6 +32,19 @@ const INK_L =["#0b0b0b","#0b0b0b","#ffffff","#ffffff","#ffffff"];
 const RAMP_D=["#184f95","#256abf","#3987e5","#6da7ec","#9ec5f4"];
 const INK_D =["#ffffff","#ffffff","#0b0b0b","#0b0b0b","#0b0b0b"];
 const isDark=()=>document.documentElement.dataset.theme!=='light';
+/* Column geometry for every score table on the page. Auto layout cannot do this job: the eight
+   criteria are equal in meaning and must be equal in width, but their LABELS are wildly unequal
+   in length ("Works anywhere" against "How soon you get paid"), so auto layout sized the columns
+   by header text and let the numerals collapse to 14px while the label column ate the rest.
+   table-layout:fixed plus an explicit colgroup makes the grid deterministic. Only the label
+   column is auto, so it absorbs whatever is left over.
+
+   tail: extra columns after the eight scores, in order, as [class, width]. */
+function scols(tail){
+  return '<colgroup><col class="c-lab">' +
+    '<col class="c-sc">'.repeat(8) +
+    tail.map(t=>`<col class="c-${t}">`).join('') + '</colgroup>';
+}
 const ramp=()=>isDark()?RAMP_D:RAMP_L;
 const rink=()=>isDark()?INK_D:INK_L;
 /* Every idea in the bank, tagged with its position on the four axes: [who, outcome, how, money].

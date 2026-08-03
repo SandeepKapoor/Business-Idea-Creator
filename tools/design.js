@@ -126,6 +126,58 @@ check('no unicode glyphs standing in for icons', glyphHits,
     'dead weight in a file that ships as one document');
 }
 
+/* ---------- table geometry ----------
+   The three score tables are declared in three places — the heatmap in 08, Part 7 and Part 7b in
+   19 — and all three must agree with the colgroup scols() emits. When they disagreed, the header
+   row and the body rows laid out in different horizontal bands and nothing reported it. These
+   tables only exist after render, so this boots the artifact rather than reading the source. */
+{
+  const bad = [];
+  try {
+    const vm2 = require('vm');
+    const store = {};
+    const El = (id) => ({ id, value: '250000', innerHTML: '', textContent: '', dataset: {}, style: {},
+      classList: { add() {}, remove() {}, toggle() {}, contains() { return false; } },
+      children: [], childNodes: [], hidden: false, scrollIntoView() {}, appendChild() {},
+      insertBefore() {}, setAttribute() {}, addEventListener() {}, querySelector() { return null; },
+      querySelectorAll() { return []; }, closest() { return null; }, getAttribute() { return ''; } });
+    const doc = { documentElement: { dataset: { theme: 'dark' } },
+      getElementById(id) { return store[id] || (store[id] = El(id)); },
+      querySelectorAll() { return []; }, querySelector() { return null; },
+      createElement(t) { return El(t); }, body: El('b'), addEventListener() {} };
+    const sb = { document: doc, console, location: { hash: '' }, Math, JSON, Date,
+      requestAnimationFrame() {}, setTimeout() {}, matchMedia() { return { matches: false, addEventListener() {} }; } };
+    sb.window = sb; sb.globalThis = sb;
+    vm2.createContext(sb);
+    vm2.runInContext(`${js}
+;globalThis.__t={renderVars,buildVars,premFor,drawHeat,
+  set AXSv(v){AXS=v},set VARSv(v){VARS=v},set VIDXv(v){VIDX=v},set PREMSv(v){PREMS=v},
+  set PIDXv(v){PIDX=v},set VIv(v){VI=v},set PIv(v){PI=v},set ORIGINv(v){ORIGIN=v}};`,
+      sb, { timeout: 60000 });
+    const T = sb.__t;
+    const [w, o, h, p] = [2, 8, 5, 4];
+    const PS = T.premFor(h, o);
+    T.PREMSv = PS; T.AXSv = [w, o, h, p]; T.ORIGINv = null; T.VIv = false; T.PIv = false; T.PIDXv = 0;
+    const V = T.buildVars(w, o, h, p, PS[0]); T.VARSv = V; T.VIDXv = 0;
+    T.renderVars(1); T.drawHeat();
+    const blob = Object.values(store).map((e) => e.innerHTML).join('\n');
+    const tables = [...blob.matchAll(/<table class="stab">([\s\S]*?)<\/table>/g)];
+    if (!tables.length) bad.push('no <table class="stab"> rendered at all');
+    tables.forEach((t, i) => {
+      const b = t[1];
+      const cols = (b.match(/<col\b/g) || []).length;
+      const ths = (b.match(/<th\b/g) || []).length;
+      const rows = [...b.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/g)]
+        .map((r) => (r[1].match(/<td\b/g) || []).length).filter((n) => n > 0);
+      if (ths !== cols) bad.push(`table ${i + 1}: ${cols} <col> but ${ths} <th>`);
+      const off = [...new Set(rows)].filter((n) => n !== cols);
+      if (off.length) bad.push(`table ${i + 1}: ${cols} <col> but rows with ${off.join('/')} <td>`);
+    });
+  } catch (e) { bad.push(`could not render: ${e.message}`); }
+  check('every score table\'s colgroup, header and rows agree', bad,
+    'a mismatch lays out silently and wrongly — this is how Part 7 broke');
+}
+
 check('no gradient text', [...css.matchAll(/background-clip\s*:\s*text|-webkit-text-fill-color/g)].map((m) => m[0]));
 check('no zero-blur block shadows', [...css.matchAll(/box-shadow\s*:\s*[^;}]*?\d+px\s+\d+px\s+0(?:px)?\s/g)].map((m) => m[0].trim()));
 
