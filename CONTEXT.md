@@ -28,7 +28,8 @@ validation sprint.
   one `<script>` block, no external assets. **This file is generated. Do not edit it.**
 - **Source**: `src/` — 15 HTML section partials, 11 CSS files, 21 JS files.
 - **Build**: `npm run build` (zero dependencies; `build.js` is ~130 lines of plain Node).
-- **Verify**: `npm run verify` — 99 checks, ~11s. See §16.
+- **Verify**: `npm run verify` — 100 checks, ~11s. See §16.
+- **Design scan**: `npm run design` — 15 craft checks on the built CSS. See §13a.
 - **Plain English**: `npm run plain` — scores every sentence the builder renders. See §10.
 - **Premise provenance**: `npm run premise` — how `PREM` was mined out of the 112. See §10.
 - **Runs by**: opening the built file in a browser. `open sandeep-idea-map.html`.
@@ -49,7 +50,8 @@ build.js                  src/ → sandeep-idea-map.html. Zero deps. Concatenati
 sandeep-idea-map.html     BUILD OUTPUT — the deliverable. Never edit.
 CONTEXT.md                this file
 README.md                 workflow, file map, known issues
-tools/verify.js           99-check harness (§16)
+tools/verify.js           100-check harness (§16)
+tools/design.js           craft-floor mechanics: scales, states, contrast, icons (§13a)
 tools/plain.js            sentence-difficulty scan, before/after copy work (§10)
 tools/premise.js          premise extraction + orthogonality test (§10)
 src/index.html            shell: <head>, section includes, <!--@css--> / <!--@js--> markers
@@ -76,7 +78,8 @@ The JS split maps to this document as follows:
 
 | File | §  | Holds |
 |---|---|---|
-| `01-theme.js` | §13 | `tog()`, `openM()` |
+| `00-icons.js` | §13a | `icon(name, mod)` — the only way to draw an icon |
+| `01-theme.js` | §13 | `tog()`, `openM()`, `initLift()` |
 | `02-axes.js` | §4 | `AX`, `renderAx`, `pick`, `roll` |
 | `03-frameworks.js` | §3 | `FW` + renders the grid at parse time |
 | `04-bank.data.js` | §9 | `FAM`, `CL` — all 112 ideas — `FAST` |
@@ -622,6 +625,65 @@ Two rules that came out of that pass and are worth keeping:
 `openInBuilder(n)` loads bank idea `n`: sets the 4 selects from `TAGS[n]`, sets `ORIGIN`,
 switches mode, generates. The banner clears the moment any dropdown differs from
 `TAGS[ORIGIN]`.
+
+
+---
+
+## 13a. The design system
+
+`npm run design` is the mechanical half of what the impeccable skill calls for. Its own
+`detect.mjs` is not installed (it wants PRODUCT.md / DESIGN.md scaffolding), so tools/design.js
+implements the same checks against craft-floor's rules and this project's tokens. **It runs
+inside `npm run check`.** What it proves: scales, banned devices, contrast, states, icon
+integrity. What it cannot prove, in craft-floor's own words: "hierarchy or rhythm".
+
+### Tokens (`01-tokens.css`)
+
+Before this file the stylesheet carried **97 off-scale spacing values, 10 font sizes including
+three half-pixel ones, and 7 radii**. That is not a system.
+
+| Scale | Values |
+|---|---|
+| space | `--sp-0..10` = 2 4 8 12 16 20 24 32 40 56 80 |
+| type | `--t-2xs..3xl` = 11 12 13 15 16 18 21 26 32 |
+| radius | `--r-xs/sm/md/lg/full` = 3 6 10 14 999 |
+| elevation | `--e-1/2/3` — offset + soft blur, never a zero-offset halo |
+| motion | `--dur-1/2/3` = 120/180/260ms, `--ease` |
+
+Add a value to a scale before using it. The scan fails on anything off-ramp.
+
+### What was removed, and why
+
+- **The coloured `border-left`.** Sixteen instances across seven components — the same device
+  reused until it meant nothing. craft-floor refuses it by name. Replaced *by kind*: a callout
+  with a state gets a tint wash and a 1px tinted border; an aside inside prose gets a 1px neutral
+  rule with the colour moved to its label; a structural container gets no rule at all.
+- **Unicode glyphs as icons.** ▶ ▼ ◀ ⓘ ★ ✓ ✕ ⚡ ⟳ ▸ 💡 ⚙ ⚖ ◐ 📄 — fifteen fonts' idea of an icon.
+  Now one authored sprite (`sections/00-icons.html`), 1.5 stroke on a 16 grid, drawn only through
+  `icon()`. The scan checks both directions: no dangling `<use>`, no unused symbol.
+- **The h2 eyebrow.** `h2` rendered at 14px grey *above* a 22px `h3` — craft-floor's one outright
+  ban. `h2` is now the section heading and the `h3` beneath it is a deck. This also made the open
+  and collapsed states agree, which they never did.
+- **Eight button shapes** (`.rollbtn .tab .chip .vpill .wtab .themebtn .foldall .nav a`) at four
+  heights and five radii. One geometry now, differing only by role: filled primary, outline
+  secondary, toggle pill, segmented switch.
+
+### Contrast
+
+Every ink/surface pair and all ten score-cell pairs are measured, not chosen. `--ink-3` was
+`#898781`, failing AA on `--raise` (4.38:1) and on the whole light theme (3.18:1). Score-cell
+step 3 cleared neither white nor black ink and had been failing since the ramp was written.
+Both fixed and both are hard gates now.
+
+**Only move step 3 of the light ramp.** Steps 1 and 2 are load-bearing for a second invariant —
+the lightest cell must stay separable from the card surface — and lightening them broke it.
+
+### Two harness lessons
+
+INVARIANT 4 and INVARIANT 10 both pinned **literal strings** (criterion names, ramp hex values).
+A copy rewrite and a measured contrast fix each failed an invariant they had not violated. Both
+now assert the *property* — which indices are guesses, which pairs clear AA. **Pin behaviour, not
+spelling.**
 
 ---
 

@@ -18,7 +18,7 @@
         <div class="fld" style="flex:1;min-width:250px;max-width:460px">
           <label>One of the 112 ideas</label>
           <select id="dSel" onchange="openInBuilder(+this.value)"></select></div>
-        <button class="rollbtn" onclick="openInBuilder(+document.getElementById('dSel').value)">⚡ Build it</button>
+        <button class="rollbtn" onclick="openInBuilder(+document.getElementById('dSel').value)"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Build it</button>
         <div class="tiny" style="max-width:250px">Its four axes load behind the scenes. Switch to
         <b style="color:var(--ink-1)">Build my own</b> to fork them into something else.</div>
       </div>
@@ -32,8 +32,8 @@
         <div class="fld d"><label>4 · Who pays</label><select id="sPAY"></select></div>
       </div>
       <div class="bldbar">
-        <button class="rollbtn" onclick="gen()">⚡ Build it</button>
-        <button class="rollbtn ghost" onclick="surprise()">⟳ Surprise me</button>
+        <button class="rollbtn" onclick="gen()"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Build it</button>
+        <button class="rollbtn ghost" onclick="surprise()"><svg class="i" aria-hidden="true"><use href="#i-shuffle"/></svg> Surprise me</button>
         <div class="tiny" style="max-width:300px">193,600 combinations are reachable from here, and
         each one holds 12–42 different ideas — the work you do × the twist you put on it. Most are
         garbage, and finding that out in ten seconds is the entire point.</div>

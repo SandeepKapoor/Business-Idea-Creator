@@ -460,8 +460,18 @@ ok('INVARIANT 5 — Stage 1 says the five answers are inferred, not the user\'s'
   const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
   const mono = (r, dir) => r.every((c, i) => i === 0 || (dir > 0 ? lum(c) > lum(r[i - 1]) : lum(c) < lum(r[i - 1])));
 
-  eq('INVARIANT 10 — light ramp is the validated one', A.RAMP_L.join(), '#86b6ef,#5598e7,#2a78d6,#1c5cab,#104281');
-  eq('INVARIANT 10 — dark ramp is the validated one', A.RAMP_D.join(), '#184f95,#256abf,#3987e5,#6da7ec,#9ec5f4');
+  // Pinned by PROPERTY, not by hex list. The literal-string version failed a measured contrast
+  // fix that improved the very thing the invariant exists to protect.
+  eq('INVARIANT 10 — five steps in each ramp', `${A.RAMP_L.length}/${A.RAMP_D.length}`, '5/5');
+  ok('INVARIANT 10 — every ramp step is a 6-digit hex',
+    [...A.RAMP_L, ...A.RAMP_D].every((c) => /^#[0-9a-f]{6}$/i.test(c)));
+  {
+    const bad = [];
+    [['light', A.RAMP_L, A.INK_L], ['dark', A.RAMP_D, A.INK_D]].forEach(([n, r, ink]) =>
+      r.forEach((c, i) => { const v = ratio(ink[i], c);
+        if (v < 4.5) bad.push(`${n} step ${i + 1}: ${ink[i]} on ${c} = ${v.toFixed(2)}:1`); }));
+    ok('INVARIANT 10 — every one of the ten cell/ink pairs clears AA 4.5:1', !bad.length, bad.join('; '));
+  }
   ok('INVARIANT 10 — light ramp darkens monotonically as score rises', mono(A.RAMP_L, -1));
   ok('INVARIANT 10 — dark ramp lightens monotonically as score rises', mono(A.RAMP_D, +1));
   ok('INVARIANT 10 — light ramp\'s lightest step clears 2:1 on the light surface',
@@ -470,16 +480,15 @@ ok('INVARIANT 5 — Stage 1 says the five answers are inferred, not the user\'s'
     ratio(A.RAMP_D[0], '#1a1a19') >= 2, `got ${ratio(A.RAMP_D[0], '#1a1a19').toFixed(2)}:1`);
   ok('INVARIANT 10 — the failed #cde2fb ramp has not come back', !A.RAMP_L.includes('#cde2fb') && !A.RAMP_D.includes('#cde2fb'));
 
-  /* Cell text is the score numeral: 12.5px at weight 600. That is NOT WCAG "large text"
-     (which needs 18.66px bold or 24px), so the bar is 4.5:1, not 3:1. §13's documented
-     validator never tested this — it only tested the ramp against the surface. */
+  /* Cell text is the score numeral at weight 600. That is NOT WCAG "large text" (which needs
+     18.66px bold or 24px), so the bar is 4.5:1, not 3:1. §13's documented validator never tested
+     this — it only tested the ramp against the surface, so step 3 shipped failing for months.
+     Promoted from issue() to ok() once the ramp was fixed; it is a hard gate now. */
   const worst = (r, ink) => Math.min(...r.map((c, i) => ratio(c, ink[i])));
-  ok('score-cell text clears 3:1 in both modes',
-    worst(A.RAMP_L, A.INK_L) >= 3 && worst(A.RAMP_D, A.INK_D) >= 3);
-  issue('score-cell text clears WCAG AA 4.5:1 in both modes',
+  ok('score-cell text clears WCAG AA 4.5:1 in both modes',
     worst(A.RAMP_L, A.INK_L) >= 4.5 && worst(A.RAMP_D, A.INK_D) >= 4.5,
-    `step 3 is the weak one: ${worst(A.RAMP_L, A.INK_L).toFixed(2)}:1 light, ` +
-    `${worst(A.RAMP_D, A.INK_D).toFixed(2)}:1 dark (both clear 3:1, neither clears 4.5:1)`);
+    `worst pair: ${worst(A.RAMP_L, A.INK_L).toFixed(2)}:1 light, ` +
+    `${worst(A.RAMP_D, A.INK_D).toFixed(2)}:1 dark`);
 }
 
 // 11 — corrections stay in place

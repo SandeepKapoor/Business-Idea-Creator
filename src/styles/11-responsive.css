@@ -1,6 +1,42 @@
 [hidden]{display:none !important}
+
+/* layout.md: "Make responsive behavior structural: reorder, collapse, reflow, or reveal based on
+   what remains important." Nothing here scales type — operate.md is explicit that a fluid ramp
+   makes a dense tool worse, not better. Only structure moves. */
+
 @media(max-width:900px){
   .bld{grid-template-columns:1fr 1fr} .ladder{grid-template-columns:1fr}
   .engine{grid-template-columns:1fr 1fr} .stuck{grid-template-columns:1fr}
   .arrow{display:none} .gantt{grid-template-columns:1fr}
+  /* The ledger's three-column grid puts a 200px label beside prose; below this the label wants
+     its own line rather than a 200px gutter eating the measure. */
+  .evrow{grid-template-columns:1fr auto;gap:var(--sp-1) var(--sp-3)}
+  .evrow .ev{grid-column:1 / -1}
+}
+
+@media(max-width:720px){
+  .bld{grid-template-columns:1fr}
+  /* The navigator's row label sits beside its pills on a wide screen and above them on a narrow
+     one. Keeping the 116px gutter here would leave the pills a third of the width. */
+  .vrow{flex-direction:column;gap:var(--sp-2)}
+  .vrl{flex:none}
+  .vrl span{display:inline;margin-left:var(--sp-2)}
+  /* Two ideas per row is the floor at which the four facts still read as a grid. */
+  .ifacts,.dgrid4{grid-template-columns:1fr}
+  .vitab{grid-template-columns:1fr}
+  .ipitch,.ilead,.ibox{max-width:none}
+  /* A full-bleed scroller has nothing to bleed into once the card padding drops. */
+  .tscroll{margin:0 calc(-1 * var(--sp-4));padding:0 var(--sp-4)}
+  .card,.ideacard,.stmt{padding:var(--sp-4)}
+  .wrap{padding-left:var(--sp-4);padding-right:var(--sp-4)}
+}
+
+@media(max-width:560px){
+  /* Below this the segmented switch is wider than the screen; it wraps rather than clipping. */
+  .tabs,.wseg{display:flex;flex-wrap:wrap;width:100%}
+  .tab,.wtab{flex:1 1 auto;justify-content:center}
+  .bldbar{gap:var(--sp-2)}
+  .bldbar .fld{max-width:none;flex:1 1 100%}
+  .q5{grid-template-columns:1fr}
+  .q5 .qa{text-align:left}
 }

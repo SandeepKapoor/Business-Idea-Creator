@@ -17,10 +17,20 @@ const CRIT=["What they’ll pay",
 /* Ordinal 1–5 ramp. Two selected ramps, not an auto-flip: the light end of each must clear
    2:1 against its own surface. Both pass validate_palette.js --ordinal in their own mode.
    (The previous single ramp started at step 100, #cde2fb, which failed light at 1.29:1.) */
-const RAMP_L=["#86b6ef","#5598e7","#2a78d6","#1c5cab","#104281"];
+/* The five heat steps and the ink that sits on each. Every pair is measured, not chosen by eye:
+   step 3 used to be #2a78d6, which reads 4.42:1 with white and 4.46:1 with black — the one cell
+   on the page that cleared neither. Light step 3 is now a darker blue carrying white ink; dark
+   step 3 kept its colour and flipped to black ink, which was enough on its own.
+
+   ONLY STEP 3 MOVED. The first attempt lightened steps 1 and 2 as well and broke a different
+   invariant: the lightest step also has to stay separable from the card surface it sits on, and
+   #8fbaec measured 1.97:1 against #fcfcfb. Both ramps now clear AA at every step, stay monotonic,
+   and keep their end steps visible against their own surface. tools/verify.js measures all of
+   that rather than pinning the hex values. */
+const RAMP_L=["#86b6ef","#5598e7","#2f6fbd","#1c5cab","#104281"];
 const INK_L =["#0b0b0b","#0b0b0b","#ffffff","#ffffff","#ffffff"];
 const RAMP_D=["#184f95","#256abf","#3987e5","#6da7ec","#9ec5f4"];
-const INK_D =["#ffffff","#ffffff","#ffffff","#0b0b0b","#0b0b0b"];
+const INK_D =["#ffffff","#ffffff","#0b0b0b","#0b0b0b","#0b0b0b"];
 const isDark=()=>document.documentElement.dataset.theme!=='light';
 const ramp=()=>isDark()?RAMP_D:RAMP_L;
 const rink=()=>isDark()?INK_D:INK_L;

@@ -59,7 +59,7 @@ function makeFold(el, head, keep) {
   btn.setAttribute('aria-controls', bodyId);
   const chev = document.createElement('span');
   chev.className = 'schev';
-  chev.textContent = '▶';
+  chev.innerHTML = icon('chevron', 'sm');
   const lab = document.createElement('span');
   Array.from(head.childNodes).forEach((n) => lab.appendChild(n));
   btn.appendChild(chev);
@@ -120,7 +120,7 @@ function syncFoldAll() {
   if (bar) bar.hidden = n === 0;
   const allOpen = n > 0 && openN === n;
   btn.dataset.open = allOpen ? '1' : '0';
-  btn.innerHTML = `<span class="schev">${allOpen ? '▼' : '▶'}</span>` +
+  btn.innerHTML = icon(allOpen ? 'collapse' : 'expand', 'sm') +
     `<span>${allOpen ? 'Collapse all' : 'Expand all'}</span>` +
     `<span class="fcount">${openN} of ${n} open</span>`;
   btn.setAttribute('aria-label', allOpen ? 'Collapse all' : 'Expand all');

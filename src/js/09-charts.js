@@ -23,7 +23,7 @@ function drawScatter(){
   [0,25,50,75,100].forEach(v=>{
     s+=`<line x1="${X(v)}" y1="${P.t}" x2="${X(v)}" y2="${H-P.b}" stroke="${v===50?axis:grid}" stroke-width="${v===50?2:1}"/>`;
     s+=`<line x1="${P.l}" y1="${Y(v)}" x2="${W-P.r}" y2="${Y(v)}" stroke="${v===50?axis:grid}" stroke-width="${v===50?2:1}"/>`;});
-  s+=`<text class="qlab" x="${X(52)}" y="${P.t+16}">★ build here — fast money, high ceiling</text>`;
+  s+=`<text class="qlab" x="${X(52)}" y="${P.t+16}">build here — fast money, gets big</text>`;
   s+=`<text class="qlab" x="${P.l+8}" y="${P.t+16}">slow, but the ceiling is real</text>`;
   s+=`<text class="qlab" x="${P.l+8}" y="${H-P.b-10}">avoid — slow and capped</text>`;
   s+=`<text class="qlab" x="${X(52)}" y="${H-P.b-10}">cash now, no ceiling — use as runway</text>`;

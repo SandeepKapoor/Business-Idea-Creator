@@ -1,113 +1,125 @@
 /* builder */
-.bld{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.fld{display:flex;flex-direction:column;gap:6px}
-.fld label{font-size:12.5px;color:var(--ink-3);font-weight:600}
+.bld{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-3)}
+.fld{display:flex;flex-direction:column;gap:var(--sp-1)}
+.fld label{font-size:var(--t-xs);color:var(--ink-3);font-weight:600}
 select,input[type=number]{background:var(--raise);color:var(--ink-1);border:1px solid var(--ring);
-  border-radius:8px;padding:10px 11px;font:inherit;font-size:13px;width:100%}
+  border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);font:inherit;font-size:var(--t-sm);width:100%}
 select:focus,input:focus{outline:2px solid var(--f1);outline-offset:-1px}
 .fld.a label{color:var(--f1)} .fld.b label{color:var(--f2)}
 .fld.c label{color:var(--f3)} .fld.d label{color:var(--f4)}
-.bldbar{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-top:14px}
+.bldbar{display:flex;gap:var(--sp-2);align-items:end;flex-wrap:wrap;margin-top:var(--sp-3)}
 .bldbar .fld{max-width:190px}
-.stmt{background:var(--surface-1);border:1px solid var(--ring);border-left:3px solid var(--f1);
-  border-radius:0 12px 12px 0;padding:22px 24px;margin-bottom:14px}
-.stmt .lb{font-size:12.5px;color:var(--ink-3);margin-bottom:9px}
-.stmt .sx{font-size:22px;line-height:1.4;letter-spacing:-.011em;color:var(--ink-1)}
+/* The statement is the one line saying what you are looking at, so it leads on type, not on a
+   coloured edge. The four axis words inside it already carry the four axis colours. */
+.stmt{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-5) var(--sp-6);margin-bottom:var(--sp-3);box-shadow:var(--e-1)}
+.stmt .lb{font-size:var(--t-xs);color:var(--ink-3);margin-bottom:var(--sp-2)}
+.stmt .sx{font-size:var(--t-xl);line-height:1.4;letter-spacing:-.011em;color:var(--ink-1)}
 .stmt .sx em{font-style:normal;font-weight:600}
-.ideacard{background:var(--surface-1);border:1px solid var(--ring);border-radius:12px;padding:22px 24px;margin-bottom:14px}
+.ideacard{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-5) var(--sp-6);margin-bottom:var(--sp-3)}
 /* variant navigator */
-.vnav{display:flex;gap:12px;align-items:center;background:var(--surface-1);
-  border:1px solid var(--ring);border-radius:12px;padding:12px 14px;margin-bottom:13px}
-.vbtn{background:var(--raise);color:var(--ink-2);border:1px solid var(--ring);border-radius:9px;
-  width:38px;height:38px;cursor:pointer;font:inherit;font-size:13px;flex-shrink:0}
+.vnav{display:flex;gap:var(--sp-3);align-items:center;background:var(--surface-1);
+  border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-3);margin-bottom:var(--sp-3)}
+.vbtn{background:var(--raise);color:var(--ink-2);border:1px solid var(--ring);border-radius:var(--r-md);
+  width:38px;height:38px;cursor:pointer;font:inherit;font-size:var(--t-sm);flex-shrink:0}
 .vbtn:hover{color:var(--ink-1);border-color:var(--f1)}
 .vmid{flex:1;min-width:0}
-.vcount{font-size:12px;color:var(--ink-2);margin-bottom:8px}
+.vcount{font-size:var(--t-xs);color:var(--ink-2);margin-bottom:var(--sp-2)}
 .vcount b{color:var(--ink-1)}
 /* Two-dimensional navigator: premise on top, angle below. Labelled rows rather than two
    anonymous pill strips — without the labels the second row reads as an overflow of the first,
    which is the exact confusion this replaced. */
-.vnav2{background:var(--surface-1);border:1px solid var(--ring);border-radius:12px;
-  padding:13px 15px;margin-bottom:13px}
-.vhead{font-size:12px;color:var(--ink-2);margin-bottom:11px;line-height:1.5}
+.vnav2{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);
+  padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-3)}
+.vhead{font-size:var(--t-xs);color:var(--ink-2);margin-bottom:var(--sp-3);line-height:1.5}
 .vhead b{color:var(--ink-1)}
-.vrow{display:flex;gap:14px;align-items:flex-start;padding:9px 0}
+.vrow{display:flex;gap:var(--sp-3);align-items:flex-start;padding:var(--sp-2) 0}
 .vrow+.vrow{border-top:1px solid var(--ring)}
-.vrl{flex:0 0 116px;font-size:12.5px;font-weight:600;color:var(--ink-1);line-height:1.3;
-  padding-top:5px}
-.vrl span{display:block;font-size:11px;font-weight:400;color:var(--ink-3);margin-top:2px}
+.vrl{flex:0 0 116px;font-size:var(--t-xs);font-weight:600;color:var(--ink-1);line-height:1.3;
+  padding-top:var(--sp-1)}
+.vrl span{display:block;font-size:var(--t-2xs);font-weight:400;color:var(--ink-3);margin-top:var(--sp-0)}
 .vrow .vpills{flex:1;min-width:0}
-.vpills{display:flex;flex-wrap:wrap;gap:6px}
-.vpill{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--ink-2);
-  border:1px solid var(--ring);border-radius:20px;padding:5px 11px;font:inherit;font-size:12px;
-  cursor:pointer}
-.vpill:hover{color:var(--ink-1)}
-.vpill.on{background:var(--raise);color:var(--ink-1);border-color:var(--f1);font-weight:650}
+.vpills{display:flex;flex-wrap:wrap;gap:var(--sp-1)}
+.vpill{display:inline-flex;align-items:center;gap:var(--sp-2);background:transparent;
+  color:var(--ink-2);border:1px solid var(--ring);border-radius:var(--r-full);
+  padding:var(--sp-1) var(--sp-3);font:inherit;font-size:var(--t-xs);line-height:1.7;
+  cursor:pointer;
+  transition:color var(--dur-1) var(--ease),background var(--dur-1) var(--ease),
+    border-color var(--dur-1) var(--ease)}
+.vpill:hover{color:var(--ink-1);border-color:var(--ring-2);background:var(--raise)}
+.vpill.on{background:var(--raise);color:var(--ink-1);border-color:var(--f1);font-weight:650;
+  box-shadow:var(--e-1)}
 .vpill .vd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .vpill .vt{font-variant-numeric:tabular-nums;color:var(--ink-3);font-weight:600}
 .vpill.on .vt{color:var(--f1)}
-.vpill.vinfo{padding:5px 9px;font-size:13px;color:var(--f2);border-color:var(--ring)}
+.vpill.vinfo{padding:var(--sp-1) var(--sp-2);font-size:var(--t-sm);color:var(--f2);border-color:var(--ring)}
 .vpill.vinfo:hover{border-color:var(--f2)}
 .vpill.vinfo.on{background:var(--f2);color:#fff;border-color:var(--f2)}
-.viexp{background:var(--surface-1);border:1px solid var(--f2);border-radius:12px;
-  padding:18px 20px;margin:-6px 0 13px}
-.viexp p{font-size:13px}
-.viexp .vd{width:8px;height:8px;border-radius:50%;margin:0 1px 0 5px}
-.vitab{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:9px}
-.viv{border:1px solid var(--ring);border-radius:10px;padding:13px 14px;background:var(--plane)}
+.viexp{background:var(--surface-1);border:1px solid var(--f2);border-radius:var(--r-md);
+  padding:var(--sp-4) var(--sp-5);margin:calc(-1 * var(--sp-1)) 0 var(--sp-3)}
+.viexp p{font-size:var(--t-sm)}
+.viexp .vd{width:8px;height:8px;border-radius:50%;margin:0 1px 0 var(--sp-1)}
+.vitab{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--sp-2)}
+.viv{border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-3);background:var(--plane)}
 .viv.on{border-color:var(--f1);background:var(--raise)}
-.vivh{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap;margin-bottom:7px}
-.vivh b{font-size:14px;color:var(--ink-1)}
-.vivp{font-size:12px;color:var(--ink-3);border:1px solid var(--ring);border-radius:3px;padding:1px 5px}
-.vivt{font-size:12.5px;font-weight:700;margin-left:auto;white-space:nowrap}
-.vivd{font-size:12.5px;color:var(--ink-2);line-height:1.5;margin-bottom:7px}
+.vivh{display:flex;gap:var(--sp-2);align-items:baseline;flex-wrap:wrap;margin-bottom:var(--sp-2)}
+.vivh b{font-size:var(--t-sm);color:var(--ink-1)}
+.vivp{font-size:var(--t-xs);color:var(--ink-3);border:1px solid var(--ring);border-radius:var(--r-xs);padding:1px var(--sp-1)}
+.vivt{font-size:var(--t-xs);font-weight:700;margin-left:auto;white-space:nowrap}
+.vivd{font-size:var(--t-xs);color:var(--ink-2);line-height:1.5;margin-bottom:var(--sp-2)}
 /* the everyday parallel — set apart, so it reads as an aside rather than more instruction */
-.vivx{font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:8px;
-  border-left:2px solid var(--f2);padding-left:11px}
+.vivx{font-size:var(--t-xs);color:var(--ink-2);line-height:1.55;margin-bottom:var(--sp-2);
+  border-left:1px solid var(--grid);padding-left:var(--sp-4)}
 .vivx b{color:var(--ink-1)}
-.vivg{font-size:12px;color:var(--ink-3);line-height:1.5;margin-bottom:8px}
+.vivg{font-size:var(--t-xs);color:var(--ink-3);line-height:1.5;margin-bottom:var(--sp-2)}
 .vivg b{color:var(--ink-2)}
 /* Bank receipts on a premise card. A premise is a claim that a kind of business exists, so it
    has to show its evidence; the angles need no equivalent because an angle is a way of building
    anything. .pjudg marks the cases with no receipt at this format — deliberately not styled to
    look like a warning, because judgement is allowed here, it just has to announce itself. */
-.vivev{font-size:12px;color:var(--ink-3);line-height:1.6;margin-top:8px;
-  border-top:1px solid var(--ring);padding-top:8px}
+.vivev{font-size:var(--t-xs);color:var(--ink-3);line-height:1.6;margin-top:var(--sp-2);
+  border-top:1px solid var(--ring);padding-top:var(--sp-2)}
 .vivev b{color:var(--ink-2)}
 .vivev a{color:var(--f1);text-decoration:none;font-variant-numeric:tabular-nums}
 .vivev a:hover{text-decoration:underline}
 .pok{color:var(--good)}
-.pjudg{display:inline-block;font-size:10.5px;font-weight:700;color:var(--warn);
-  border:1px solid currentColor;border-radius:3px;padding:0 4px;line-height:1.5;
+.pjudg{display:inline-block;font-size:var(--t-2xs);font-weight:700;color:var(--warn);
+  border:1px solid currentColor;border-radius:var(--r-xs);padding:0 var(--sp-1);line-height:1.5;
   vertical-align:1px}
-.vivs{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;line-height:1.4}
+.vivs{display:flex;gap:var(--sp-3);flex-wrap:wrap;font-size:var(--t-xs);line-height:1.4}
 .vplus{color:var(--good)} .vminus{color:var(--crit)}
 tr.vrow{cursor:pointer}
 tr.vrow:hover td{background:var(--raise)}
 tr.vrow.on td{background:var(--raise)}
 tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
-.vbest{font-size:12px;color:var(--good);border:1px solid currentColor;border-radius:3px;
-  padding:0 4px;letter-spacing:.04em;font-weight:700;vertical-align:middle}
+.vbest{font-size:var(--t-xs);color:var(--good);border:1px solid currentColor;border-radius:var(--r-xs);
+  padding:0 var(--sp-1);letter-spacing:.04em;font-weight:700;vertical-align:middle}
 /* provenance chips — every generated number declares where it came from */
-.prov{display:inline-block;font-size:12px;line-height:1.35;margin-top:6px;padding:2px 7px;
-  border-radius:4px;border:1px solid currentColor;letter-spacing:.01em}
+.prov{display:inline-block;font-size:var(--t-xs);line-height:1.35;margin-top:var(--sp-1);padding:var(--sp-0) var(--sp-2);
+  border-radius:var(--r-xs);border:1px solid currentColor;letter-spacing:.01em}
 .prov.ok{color:var(--good)} .prov.weak{color:var(--warn)} .prov.judg{color:var(--f4)}
 /* divider between the two ways into the workspace */
-.bldsplit{border-top:1px solid var(--grid);margin:16px 0 4px}
+.bldsplit{border-top:1px solid var(--grid);margin:var(--sp-4) 0 var(--sp-1)}
 /* the at-a-glance comparison at the top of the ⓘ panel */
-.viexp table.dtab{margin:2px 0 6px;font-variant-numeric:tabular-nums}
-.viexp table.dtab td{font-size:13px;padding:9px 14px 9px 0;vertical-align:top}
-.viexp table.dtab td.dl{color:var(--ink-1);font-weight:600;white-space:nowrap;padding-right:18px}
-.viexp table.dtab th{font-size:12px;padding-bottom:7px}
+.viexp table.dtab{margin:var(--sp-0) 0 var(--sp-1);font-variant-numeric:tabular-nums}
+.viexp table.dtab td{font-size:var(--t-sm);padding:var(--sp-2) var(--sp-3) var(--sp-2) 0;vertical-align:top}
+.viexp table.dtab td.dl{color:var(--ink-1);font-weight:600;white-space:nowrap;padding-right:var(--sp-4)}
+.viexp table.dtab th{font-size:var(--t-xs);padding-bottom:var(--sp-2)}
 .acmp .anum{white-space:nowrap;font-weight:600;color:var(--ink-1)}
-.acmp .asub{display:block;font-size:12px;font-weight:400;color:var(--ink-3)}
+.acmp .asub{display:block;font-size:var(--t-xs);font-weight:400;color:var(--ink-3)}
 /* which way into the workspace — a segmented control, never two editors at once */
-.wseg{display:inline-flex;gap:2px;background:var(--plane);border:1px solid var(--ring);
-  border-radius:9px;padding:3px;margin-bottom:16px}
-.wtab{background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;
-  font:inherit;font-size:13px;font-weight:600;color:var(--ink-3);white-space:nowrap}
+.wseg{display:inline-flex;gap:var(--sp-0);background:var(--sunken);border:1px solid var(--ring);
+  border-radius:var(--r-md);padding:var(--sp-0);margin-bottom:var(--sp-5)}
+/* Identical mechanics to .tab in the header — same segmented shape, same selected treatment —
+   because they do the same job. Two different-looking switches for the same idea is the
+   inconsistency operate.md warns about. */
+.wtab{background:none;border:1px solid transparent;border-radius:var(--r-sm);
+  padding:var(--sp-2) var(--sp-3);cursor:pointer;font:inherit;font-size:var(--t-sm);
+  font-weight:600;color:var(--ink-3);white-space:nowrap;line-height:1.5;
+  transition:color var(--dur-1) var(--ease),background var(--dur-1) var(--ease)}
 .wtab:hover{color:var(--ink-1)}
-.wtab.on{background:var(--f1);color:#fff}
+.wtab.on{background:var(--surface-1);border-color:var(--ring);color:var(--ink-1);
+  box-shadow:var(--e-1)}
 /* the one word to remember an angle by */
-.w1{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--f2);
-  border:1px solid currentColor;border-radius:4px;padding:1px 6px;white-space:nowrap}
+.w1{display:inline-block;font-size:var(--t-2xs);font-weight:700;letter-spacing:.06em;color:var(--f2);
+  border:1px solid currentColor;border-radius:var(--r-xs);padding:1px var(--sp-1);white-space:nowrap}

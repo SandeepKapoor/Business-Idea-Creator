@@ -2,24 +2,60 @@
 /* Inter first, then the platform UI face. The artifact is one self-contained file: no stylesheet
    link, no import rule, no remote url() — all three enforced by tools/verify.js — so a webfont
    cannot be fetched. It renders in Inter wherever Inter is installed, and falls back elsewhere.
-   (Do not write the import keyword literally here; that invariant is a plain substring check.) */
-body{margin:0;background:var(--plane);color:var(--ink-1);
-  font:16px/1.5 "Inter","Inter Display","Inter var",-apple-system,BlinkMacSystemFont,
-    "Segoe UI",Roboto,system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-.wrap{max-width:960px;margin:0 auto;padding:0 22px 120px}
-/* Type scale in the shape Airbnb uses: 32 / 22 / 18 / 16 / 14 / 12, weight 600 for headings
-   rather than bold, and tracking at or just below zero — never the wide tracking that exists
-   only to make uppercase legible. */
-h1{font-size:32px;line-height:1.15;margin:0 0 8px;letter-spacing:-.022em;font-weight:600}
-h2{font-size:14px;color:var(--ink-3);margin:0 0 4px;font-weight:600;letter-spacing:0}
-h3{font-size:22px;line-height:1.3;margin:0 0 14px;letter-spacing:-.011em;font-weight:600}
-h4{font-size:18px;line-height:1.35;font-weight:600;letter-spacing:-.008em}
-p{color:var(--ink-2);margin:0 0 10px}
-.mono{font-variant-numeric:tabular-nums}
-.sec{margin-top:56px}
-.card{background:var(--surface-1);border:1px solid var(--ring);border-radius:12px;padding:20px}
-.grid{display:grid;gap:12px}
-.tiny{font-size:13px;color:var(--ink-3);line-height:1.5}
-hr{border:0;border-top:1px solid var(--grid);margin:34px 0}
+   (Do not write the import keyword literally here; that invariant is a plain substring check.)
 
+   operate.md: "One family is often right. A well-tuned sans carries headings, buttons, labels,
+   body, data." There is no display face here and there should not be one. */
+body{margin:0;background:var(--plane);color:var(--ink-1);
+  font:var(--t-base)/1.5 "Inter","Inter Display","Inter var",-apple-system,BlinkMacSystemFont,
+    "Segoe UI",Roboto,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility}
+.wrap{max-width:960px;margin:0 auto;padding:0 var(--sp-6) var(--sp-10)}
+
+/* TYPE ROLES — six steps, ratio ~1.2, no half-pixels. The old ramp contained 12.5 / 13.5 / 14.5,
+   which is not a scale, it is three separate arguments with the browser.
+
+   THE SECTION HEADING WAS UPSIDE DOWN. h2 rendered at 14px in --ink-3 above a 22px h3, which is
+   the eyebrow craft-floor bans outright: "no brief earns it back. The heading carries its own
+   weight." It also disagreed with the collapsed state, where h2 already led. So h2 is now the
+   section heading at full size and the h3 beneath it is supporting text — one hierarchy, the
+   same open or shut.
+
+   Light text on a dark plane needs compensating on all three axes (typeset.md): slightly more
+   line-height and tracking than the same face wants on white. */
+h1{font-size:var(--t-3xl);line-height:1.12;margin:0 0 var(--sp-2);letter-spacing:-.024em;font-weight:600}
+h2{font-size:var(--t-xl);line-height:1.25;margin:0 0 var(--sp-2);letter-spacing:-.014em;
+  font-weight:600;color:var(--ink-1)}
+h3{font-size:var(--t-xl);line-height:1.3;margin:0 0 var(--sp-3);letter-spacing:-.014em;font-weight:600}
+h4{font-size:var(--t-lg);line-height:1.35;font-weight:600;letter-spacing:-.01em;margin:0 0 var(--sp-2)}
+/* The line under a section heading is a deck, not a second heading. */
+.sec>h3{font-size:var(--t-md);line-height:1.5;font-weight:400;letter-spacing:0;
+  color:var(--ink-3);margin:0 0 var(--sp-4);max-width:70ch}
+p{color:var(--ink-2);margin:0 0 var(--sp-3);max-width:72ch}
+.mono{font-variant-numeric:tabular-nums}
+/* Every figure here is read against another figure in the column above or below it. */
+table,.tp,.tot,.mv,.anum,.vt,.fcount,.dnum{font-variant-numeric:tabular-nums}
+
+/* RHYTHM — layout.md: "more space above a heading than below it", and deliberate contrast
+   between tight and generous intervals rather than one value repeated everywhere. */
+.sec{margin-top:var(--sp-9)}
+.card{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-5);box-shadow:var(--e-1)}
+.grid{display:grid;gap:var(--sp-3)}
+.tiny{font-size:var(--t-sm);color:var(--ink-3);line-height:1.55;max-width:78ch}
+hr{border:0;border-top:1px solid var(--grid);margin:var(--sp-7) 0}
+
+/* ICONS — one sprite, one stroke weight, three sizes. vertical-align rather than flex, so an
+   icon can sit inside running text without shifting the line box. */
+.i{width:16px;height:16px;flex:none;display:inline-block;vertical-align:-3px}
+.i-sm{width:13px;height:13px;vertical-align:-2px}
+.i-xs{width:11px;height:11px;vertical-align:-1px}
+.i-up{transform:rotate(-90deg)}
+.i-down{transform:rotate(90deg)}
+
+/* FOCUS — one ring, everywhere, on :focus-visible only, so it appears for keyboard and assistive
+   tech and never on a mouse click. operate.md lists focus as non-optional; before this, twelve
+   interactive components had no focus state at all. */
+:where(a,button,select,input,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--f1);outline-offset:2px;border-radius:var(--r-xs)}

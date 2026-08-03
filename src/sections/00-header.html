@@ -2,10 +2,13 @@
   <div class="topbar">
     <h1 class="brand">Business Idea Map</h1>
     <div class="tabs">
-      <button class="tab on" id="tabR" onclick="mode('report')">📄 The full report</button>
-      <button class="tab" id="tabC" onclick="mode('custom')">⚙ Idea workspace →</button>
+      <button class="tab on" id="tabR" onclick="mode('report')">
+        <svg class="i i-sm" aria-hidden="true"><use href="#i-doc"/></svg>The full report</button>
+      <button class="tab" id="tabC" onclick="mode('custom')">
+        <svg class="i i-sm" aria-hidden="true"><use href="#i-sliders"/></svg>Idea workspace</button>
     </div>
-    <button class="themebtn" onclick="tog()">◐ light / dark</button>
+    <button class="themebtn" onclick="tog()" aria-label="Switch between light and dark">
+      <svg class="i i-sm" aria-hidden="true"><use href="#i-contrast"/></svg>Light / dark</button>
   </div>
 
   <div class="nav" id="navRow">
@@ -14,11 +17,12 @@
     <a href="#obs">What the bank reveals</a><a href="#conv">Convergence</a>
     <a href="#score">Scorecard + gates</a><a href="#map">Speed × ceiling</a>
     <a href="#sprint">2-week sprint</a><a href="#pos">My position</a>
-    <a href="#evid" style="border-color:var(--f2);color:var(--f2)">⚖ Evidence ledger</a>
+    <a href="#evid" class="nav-ev">
+      <svg class="i i-xs" aria-hidden="true"><use href="#i-scale"/></svg>Evidence ledger</a>
   </div>
 
   <div class="foldbar" id="foldBar">
     <button class="foldall" id="foldAll" type="button"
-            onclick="foldAll(this.dataset.open!=='1')">▶ Expand all</button>
+            onclick="foldAll(this.dataset.open!=='1')"><svg class="i i-sm" aria-hidden="true"><use href="#i-expand"/></svg><span>Expand all</span></button>
   </div>
 </header>

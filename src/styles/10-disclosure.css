@@ -1,81 +1,88 @@
 /* collapsed section — a pill that expands in place */
 .expand>summary{list-style:none}
 .expand>summary::-webkit-details-marker{display:none}
-summary.trig{display:flex;align-items:center;gap:13px;background:var(--surface-1);
-  border:1px solid var(--ring);border-radius:12px;padding:14px 18px;cursor:pointer;
+summary.trig{display:flex;align-items:center;gap:var(--sp-3);background:var(--surface-1);
+  border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);cursor:pointer;
   font:inherit;text-align:left;max-width:820px;user-select:none}
 summary.trig:hover{border-color:var(--f2)}
-.trig .ti{font-size:19px;line-height:1.2}
+.trig .ti{display:inline-flex;align-items:center;color:var(--f2)}
 .trig .tw{flex:1}
-.trig .tl{font-size:14.5px;font-weight:650;color:var(--ink-1);display:block}
+.trig .tl{font-size:var(--t-md);font-weight:650;color:var(--ink-1);display:block}
 summary.trig:hover .tl{color:var(--f2)}
-.trig .tchev{font-size:12px;color:var(--f2);align-self:center;display:inline-block;
-  transition:transform .18s}
+.trig .tchev{color:var(--ink-3);align-self:center;display:inline-flex;align-items:center;
+  transition:transform var(--dur-2) var(--ease),color var(--dur-1) var(--ease)}
+summary.trig:hover .tchev{color:var(--f2)}
 .expand[open]>summary .tchev{transform:rotate(90deg)}
-.expand[open]>summary.trig{border-color:var(--f2);border-radius:12px 12px 0 0;
+.expand[open]>summary.trig{border-color:var(--f2);border-radius:var(--r-md) var(--r-md) 0 0;
   border-bottom-color:var(--grid)}
-.expbody{border:1px solid var(--f2);border-top:0;border-radius:0 0 12px 12px;
-  padding:20px 18px 18px;max-width:820px}
+.expbody{border:1px solid var(--f2);border-top:0;border-radius:0 0 var(--r-md) var(--r-md);
+  padding:var(--sp-5) var(--sp-4) var(--sp-4);max-width:820px}
 @media(min-width:1100px){summary.trig,.expbody{max-width:none}}
 
 /* how-to-read block */
-.howto{margin-top:18px;border-top:1px solid var(--grid);padding-top:14px}
-.howto>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px;
-  font-size:12.5px;color:var(--ink-3);font-weight:600;
-  padding:5px 0;user-select:none}
+.howto{margin-top:var(--sp-4);border-top:1px solid var(--grid);padding-top:var(--sp-3)}
+.howto>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:var(--sp-2);
+  font-size:var(--t-xs);color:var(--ink-3);font-weight:600;
+  padding:var(--sp-1) 0;user-select:none}
 .howto>summary::-webkit-details-marker{display:none}
 .howto>summary:hover{color:var(--ink-1)}
-.howto>summary .chev{display:inline-block;transition:transform .18s;font-size:12px;color:var(--f1)}
+.howto>summary .chev{display:inline-flex;align-items:center;color:var(--ink-3);
+  transition:transform var(--dur-2) var(--ease),color var(--dur-1) var(--ease)}
+.howto>summary:hover .chev{color:var(--f1)}
 .howto[open]>summary .chev{transform:rotate(90deg)}
-.howto>summary .hint{margin-left:auto;text-transform:none;letter-spacing:0;font-size:12.5px;
+.howto>summary .hint{margin-left:auto;text-transform:none;letter-spacing:0;font-size:var(--t-xs);
   color:var(--ink-3);font-weight:400}
 .howto[open]>summary .hint{opacity:0}
-.ht-body{padding-top:12px}
-.ht-t{font-size:12.5px;color:var(--ink-3);
-  font-weight:600;margin-bottom:10px}
-.ht-gate{background:var(--plane);border:1px solid var(--ring);border-left:3px solid var(--crit);
-  border-radius:0 9px 9px 0;padding:13px 15px;font-size:13px;color:var(--ink-2);margin-bottom:14px}
+.ht-body{padding-top:var(--sp-3)}
+.ht-t{font-size:var(--t-xs);color:var(--ink-3);
+  font-weight:600;margin-bottom:var(--sp-2)}
+.ht-gate{background:var(--tint-crit);border:1px solid color-mix(in srgb,var(--crit) 30%,transparent);
+  border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);font-size:var(--t-sm);
+  color:var(--ink-2);margin-bottom:var(--sp-3)}
 .ht-gate b{color:var(--ink-1)}
-.ht-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 14px;margin-bottom:14px}
-.ht-c{padding:8px 0;border-bottom:1px solid var(--grid)}
-.ht-c .cn{font-size:12.5px;font-weight:650;color:var(--ink-1);display:flex;gap:6px;align-items:center}
-.ht-c .cg{font-size:12px;color:var(--crit);border:1px solid currentColor;border-radius:3px;
-  padding:0 4px;letter-spacing:.06em;font-weight:700}
-.ht-c .cd{font-size:12px;color:var(--ink-3);line-height:1.45;margin-top:2px}
+.ht-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:var(--sp-0) var(--sp-3);margin-bottom:var(--sp-3)}
+.ht-c{padding:var(--sp-2) 0;border-bottom:1px solid var(--grid)}
+.ht-c .cn{font-size:var(--t-xs);font-weight:650;color:var(--ink-1);display:flex;gap:var(--sp-1);align-items:center}
+.ht-c .cg{font-size:var(--t-xs);color:var(--crit);border:1px solid currentColor;border-radius:var(--r-xs);
+  padding:0 var(--sp-1);letter-spacing:.06em;font-weight:700}
+.ht-c .cd{font-size:var(--t-xs);color:var(--ink-3);line-height:1.45;margin-top:var(--sp-0)}
 .ht-c .cd b{color:var(--ink-2);font-weight:600}
-.ht-bands{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12.5px;align-items:center}
-.ht-bands .bb{font-size:12px;font-weight:700;padding:3px 8px;border-radius:5px;
+.ht-bands{display:grid;grid-template-columns:auto 1fr;gap:var(--sp-1) var(--sp-3);font-size:var(--t-xs);align-items:center}
+.ht-bands .bb{font-size:var(--t-xs);font-weight:700;padding:var(--sp-0) var(--sp-2);border-radius:var(--r-sm);
   border:1px solid currentColor;text-align:center;white-space:nowrap}
 .ht-bands .bd{color:var(--ink-2)}
-.readrow{background:var(--plane);border:1px solid var(--ring);border-radius:10px;
-  padding:15px 17px;margin-top:14px}
-.readrow .rt{font-size:12.5px;color:var(--ink-3);
-  font-weight:600;margin-bottom:9px}
-.readrow ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--ink-2);line-height:1.75}
+.readrow{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-md);
+  padding:var(--sp-4) var(--sp-4);margin-top:var(--sp-3)}
+.readrow .rt{font-size:var(--t-xs);color:var(--ink-3);
+  font-weight:600;margin-bottom:var(--sp-2)}
+.readrow ul{margin:0;padding-left:var(--sp-4);font-size:var(--t-sm);color:var(--ink-2);line-height:1.75}
 .readrow ul li b{color:var(--ink-1)}
 
 /* ---- collapsible report parts ----
    Closed, the parts stack as a contents list: no big gaps, a rule between each.
    Open, the part gets its normal breathing room back. */
-.sec.fold{margin-top:0;border-top:1px solid var(--grid);padding:16px 0 4px}
-.sec.fold:not(.shut){padding-bottom:38px}
-.sec.fold>h2{margin:0 0 4px}
-/* Closed, the part title leads and the subtitle drops to a quiet second line. At its open
-   size (20px, bold, full-contrast) it shouted louder than the title it describes, which made
-   eleven closed parts a wall rather than a list. Open, both go back to their normal weights. */
-.sec.fold.shut{padding:11px 0}
+.sec.fold{margin-top:0;border-top:1px solid var(--grid);padding:var(--sp-4) 0 var(--sp-1)}
+.sec.fold:not(.shut){padding-bottom:var(--sp-8)}
+.sec.fold>h2{margin:0 0 var(--sp-1)}
+/* Closed, a part is one line of a contents list: the title leads and the deck follows quietly
+   beneath it, indented to clear the chevron. This used to need a size override because the open
+   h3 was 22px and bold; now that .sec>h3 is a deck at every state, the closed rule only has to
+   handle spacing. One hierarchy, open or shut. */
+.sec.fold.shut{padding:var(--sp-3) 0}
 .sec.fold.shut>h2{margin:0}
-.sec.fold.shut>h2 .sfold{color:var(--ink-1)}
-.sec.fold.shut>h3{font-size:13px;font-weight:400;letter-spacing:0;color:var(--ink-3);
-  margin:2px 0 0 18px;line-height:1.45}
+.sec.fold.shut>h3{margin:var(--sp-0) 0 0 var(--sp-5)}
 /* The trigger inherits the heading it replaces — h2 in the report, h3 in the builder output,
-   h4 in the deep dive — so one control works at three type sizes without overriding any. */
-.sfold{display:flex;align-items:baseline;gap:9px;width:100%;background:none;border:0;padding:0;
-  cursor:pointer;text-align:left;font:inherit;color:inherit;letter-spacing:inherit}
+   h4 in the deep dive — so one control works at three type sizes without overriding any.
+   center, not baseline: the chevron is now a drawn glyph on a 16-unit box with no baseline of
+   its own, and baseline alignment left it sitting low against every heading size. */
+.sfold{display:flex;align-items:center;gap:var(--sp-2);width:100%;background:none;border:0;
+  padding:0;cursor:pointer;text-align:left;font:inherit;color:inherit;letter-spacing:inherit;
+  transition:color var(--dur-1) var(--ease)}
 .sfold:hover{color:var(--f2)}
-.sfold:focus-visible{outline:2px solid var(--f2);outline-offset:3px;border-radius:3px}
-.schev{display:inline-block;font-size:10px;color:var(--f2);transition:transform .18s;
-  letter-spacing:0;flex:none}
+.sfold:focus-visible{outline:2px solid var(--f1);outline-offset:3px;border-radius:var(--r-xs)}
+.schev{display:inline-flex;align-items:center;color:var(--ink-3);flex:none;
+  transition:transform var(--dur-2) var(--ease),color var(--dur-1) var(--ease)}
+.sfold:hover .schev{color:var(--f2)}
 .fold:not(.shut)>.foldhd>.sfold>.schev{transform:rotate(90deg)}
 .foldhd{margin-bottom:0}
 h3.foldh3{cursor:pointer}
@@ -83,15 +90,16 @@ h3.foldh3:hover{color:var(--f2)}
 .fold.shut>.secbody{display:none}
 
 /* generated output — the builder's h3 runs and the deep dive's h4 sections */
-.gsec{border-top:1px solid var(--grid);padding:14px 0 2px;margin-top:14px}
-.gsec:not(.shut){padding-bottom:8px}
+.gsec{border-top:1px solid var(--grid);padding:var(--sp-3) 0 var(--sp-0);margin-top:var(--sp-3)}
+.gsec:not(.shut){padding-bottom:var(--sp-2)}
 .gsec>.foldhd{margin:0}
 .dbody.fold.shut>.foldhd{margin-bottom:0}
 
 /* the one global control */
-.foldbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}
-.foldall{display:inline-flex;align-items:center;gap:9px;background:var(--surface-1);
-  border:1px solid var(--f2);color:var(--f2);border-radius:8px;padding:7px 13px;
-  cursor:pointer;font:inherit;font-size:12px;font-weight:600}
-.foldall:hover{background:var(--raise)}
+.foldbar{display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap;margin-top:var(--sp-3)}
+.foldall{display:inline-flex;align-items:center;gap:var(--sp-2);background:var(--surface-1);
+  border:1px solid var(--f2);color:var(--f2);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);
+  cursor:pointer;font:inherit;font-size:var(--t-xs);font-weight:600}
+.foldall:hover{background:var(--raise);border-color:var(--f2)}
+.foldall:active{transform:translateY(.5px)}
 .foldall .fcount{color:var(--ink-3);font-weight:400;font-variant-numeric:tabular-nums}

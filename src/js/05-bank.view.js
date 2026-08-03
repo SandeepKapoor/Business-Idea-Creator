@@ -4,7 +4,7 @@ document.getElementById('famFilters').innerHTML=Object.keys(FAM).map(k=>
  `<button class="chip" data-fam="${k}">${FAM[k].t.split(' ')[0]} ${FAM[k].t.split(' ').slice(1,3).join(' ')}</button>`).join('');
 document.getElementById('bankBody').innerHTML=CL.map(c=>`
  <details class="cluster" data-fam="${c.f}" style="--fam:var(${FAM[c.f].v})">
-  <summary class="chead"><span class="cchev">▶</span><span class="cletter">${c.L}</span>
+  <summary class="chead"><span class="cchev">${icon('chevron')}</span><span class="cletter">${c.L}</span>
    <span class="ctitle">${c.t}</span><span class="cwhat">${c.w}</span>
    <span class="cq">${c.q}</span><span class="cmatch"></span>
    <span class="count">${c.i.length} ideas</span></summary>

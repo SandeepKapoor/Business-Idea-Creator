@@ -181,7 +181,7 @@ function renderVars(silent){
       </div>
       <div class="tiny" style="margin-top:10px">These four dropdowns are my reading of that idea's axes.
       Change any one to fork it — the banner disappears once you do.${diff}</div></div>
-      <button class="chip oback" onclick="backToTable()">← back to the table</button></div>`;
+      <button class="chip oback" onclick="backToTable()">${icon('arrow-left','sm')} back to the table</button></div>`;
   }
   /* statement */
   html+=`<div class="stmt"><div class="lb">${ORIGIN?`Bank idea #${ORIGIN}`:'Your combination'} · #${w+1}·${o+1}·${h+1}·${p+1} of 193,600</div>
@@ -220,7 +220,7 @@ function renderVars(silent){
           <span class="vt">${q.tot}</span></button>`;}).join('')}<button
         class="vpill vinfo${PI?' on':''}" onclick="PI=!PI;renderVars(1)"
         title="What the work means, and where this list came from"
-        aria-label="What the work means, and where this list came from">ⓘ</button></div>
+        aria-label="What the work means, and where this list came from">${icon('info','sm')}</button></div>
     </div>
     <div class="vrow">
       <div class="vrl">The twist<span>one thing you change</span></div>
@@ -229,7 +229,7 @@ function renderVars(silent){
           <span class="vd" style="background:var(${vdot(v)})"></span>${v.nm}
           <span class="vt">${v.tot}</span></button>`).join('')}<button
         class="vpill vinfo${VI?' on':''}" onclick="VI=!VI;renderVars(1)"
-        title="Show every twist in full" aria-label="Show every twist in full">ⓘ</button></div>
+        title="Show every twist in full" aria-label="Show every twist in full">${icon('info','sm')}</button></div>
     </div>
   </div>`;
   if(PI)html+=premPanel(w,o,h,p,WS,HS,OS,pAt);
@@ -260,7 +260,7 @@ function renderVars(silent){
         <thead><tr><th>Twist</th><th>In a word</th><th>The one thing it changes</th>
           <th>Price</th><th>Score</th></tr></thead>
         <tbody>${VARS.map((v,i)=>`<tr class="vrow${i===VIDX?' on':''}" onclick="setVar(${i})">
-          <td class="dl">${i===VIDX?'▸ ':''}${v.nm}</td>
+          <td class="dl">${i===VIDX?icon('chevron','xs')+' ':''}${v.nm}</td>
           <td><span class="w1">${v.a.w1}</span></td>
           <td>${v.a.df}</td>
           <td class="anum">×${v.a.pm}<span class="asub">${inr(v.core)}</span></td>
@@ -280,8 +280,8 @@ function renderVars(silent){
           <div class="vivx"><b>For this idea:</b> ${v.a.ex(WS,HS,OS,exc(v))}</div>
           <div class="vivg"><b>Trades away:</b> ${v.a.gv}</div>
           <div class="vivs">
-            <span class="vplus">▲ ${up(v.a.dS).join(', ')||'nothing'}</span>
-            <span class="vminus">▼ ${dn(v.a.dS).join(', ')||'nothing'}</span></div>
+            <span class="vplus">${icon('chevron','xs up')} ${up(v.a.dS).join(', ')||'nothing'}</span>
+            <span class="vminus">${icon('chevron','xs down')} ${dn(v.a.dS).join(', ')||'nothing'}</span></div>
         </div>`).join('')}</div>
       <p class="tiny" style="margin-top:12px">Only the twists that fit your format show up.
       <b>Container only</b> needs a teaching format. <b>Ladder</b> and <b>Syndicate</b> do not work for
@@ -391,15 +391,15 @@ function renderVars(silent){
   const RMP=ramp(), RINK=rink();
   const best=Math.max(...VARS.map(v=>v.tot));
   html+=`<h3 style="margin:30px 0 12px">Part 7 · All ${VARS.length} twists, side by side</h3>
-   <div class="card"><table><thead><tr><th class="l">Twist</th>
+   <div class="card"><div class="tscroll"><table><thead><tr><th class="l">Twist</th>
      ${CRIT2.map((c,i)=>`<th>${c}${i<2?'<br><span style="color:var(--crit)">gate</span>':''}</th>`).join('')}
      <th>Total</th><th class="l">Verdict</th></tr></thead><tbody>
      ${VARS.map((v,i)=>`<tr class="${i===VIDX?'vrow on':'vrow'}" onclick="setVar(${i})">
-       <td class="l">${i===VIDX?'▸ ':''}<b>${v.nm}</b>${v.tot===best&&VARS.length>1?' <span class="vbest">best total</span>':''}</td>
+       <td class="l">${i===VIDX?icon('chevron','xs')+' ':''}<b>${v.nm}</b>${v.tot===best&&VARS.length>1?' <span class="vbest">best total</span>':''}</td>
        ${v.S.map((x,j)=>`<td><div class="cell${(j<2&&x===1)?' gate':''}" style="background:${RMP[x-1]};color:${RINK[x-1]}">${x}</div></td>`).join('')}
        <td class="tot">${v.tot}</td>
        <td class="l"><span class="verdict v-${v.V.k==='live'?'live':v.V.k==='dead'?'dead':'hold'}">${v.V.t.split(' —')[0]}</span></td></tr>`).join('')}
-     </tbody></table>
+     </tbody></table></div>
    <p class="tiny" style="margin-top:12px">Click any row to switch. Everything above and below rebuilds
    for it. Every row here has the same four axes and the same work — only the twist changes, which is
    the point: <b style="color:var(--ink-1)">how you build it moves the score as much as what you
@@ -420,17 +420,17 @@ function renderVars(silent){
    <p class="tiny" style="margin:-6px 0 12px">The table above keeps the work and changes the twist.
    This one keeps the twist and changes the work. Together they are the ${total} ideas you can get
    out of these four dropdowns.</p>
-   <div class="card"><table><thead><tr><th class="l">The work</th><th class="l">What you do</th>
+   <div class="card"><div class="tscroll"><table><thead><tr><th class="l">The work</th><th class="l">What you do</th>
      ${CRIT2.map((c,i)=>`<th>${c}${i<2?'<br><span style="color:var(--crit)">gate</span>':''}</th>`).join('')}
      <th>Price</th><th>Total</th></tr></thead><tbody>
      ${pRows.map(r=>`<tr class="${r.i===PIDX?'vrow on':'vrow'}" onclick="setPrem(${r.i})">
-       <td class="l">${r.i===PIDX?'▸ ':''}<b>${r.P.nm}</b>${r.tot===pBest&&PREMS.length>1?' <span class="vbest">best total</span>':''}
+       <td class="l">${r.i===PIDX?icon('chevron','xs')+' ':''}<b>${r.P.nm}</b>${r.tot===pBest&&PREMS.length>1?' <span class="vbest">best total</span>':''}
          ${r.ev&&r.ev.k==='weak'?'<span class="pjudg" title="No bank example at this format — my judgement">J</span>':''}</td>
        <td class="l" style="color:var(--ink-2)">${r.P.v}</td>
        ${r.S.map((x,j)=>`<td><div class="cell${(j<2&&x===1)?' gate':''}" style="background:${RMP[x-1]};color:${RINK[x-1]}">${x}</div></td>`).join('')}
        <td class="tot" style="font-weight:500">${inr(r.core)}</td>
        <td class="tot" style="color:var(${r.V.c})">${r.tot}</td></tr>`).join('')}
-     </tbody></table>
+     </tbody></table></div>
    <p class="tiny" style="margin-top:12px">Only the ${PREMS.length} of ${PREM.length} that fit
    <b style="color:var(--ink-1)">${HS}</b> show up. A <span class="pjudg">J</span> means nothing in
    your bank does that work at this format — I think it would still work, and that is a guess, not
@@ -522,7 +522,7 @@ function renderVars(silent){
   [0,25,50,75,100].forEach(v=>{
     s+=`<line x1="${X(v)}" y1="${P.t}" x2="${X(v)}" y2="${H-P.b}" stroke="${v===50?axis:grid}" stroke-width="${v===50?2:1}"/>`;
     s+=`<line x1="${P.l}" y1="${Y(v)}" x2="${W-P.r}" y2="${Y(v)}" stroke="${v===50?axis:grid}" stroke-width="${v===50?2:1}"/>`;});
-  s+=`<text class="qlab" x="${X(52)}" y="${P.t+16}">★ fast money, gets big</text>`;
+  s+=`<text class="qlab" x="${X(52)}" y="${P.t+16}">fast money, gets big</text>`;
   s+=`<text class="qlab" x="${P.l+8}" y="${H-P.b-10}">slow and capped — avoid</text>`;
   s+=`<text class="axlab" x="${(P.l+W-P.r)/2}" y="${H-14}" text-anchor="middle">Speed to first rupee →</text>`;
   s+=`<text class="axlab" transform="rotate(-90 18 ${(P.t+H-P.b)/2})" x="18" y="${(P.t+H-P.b)/2}" text-anchor="middle">Revenue ceiling →</text>`;
@@ -585,7 +585,7 @@ function premPanel(w,o,h,p,WS,HS,OS,pAt){
       <tbody>${PREMS.map((P,i)=>{const q=pAt(P);
         const pc=Math.max(500,Math.round(HOW_BASE[h]*PAY_MULT[p]*(0.85+MW[w][2]*0.06)*P.pm*VARS[VIDX].a.pm/500)*500);
         return `<tr class="vrow${i===PIDX?' on':''}" onclick="setPrem(${i})">
-        <td class="dl">${i===PIDX?'▸ ':''}${P.nm}</td>
+        <td class="dl">${i===PIDX?icon('chevron','xs')+' ':''}${P.nm}</td>
         <td><span class="w1">${P.w1}</span></td>
         <td>${P.q}</td>
         <td class="anum">×${P.pm}<span class="asub">${inr(pc)}</span></td>

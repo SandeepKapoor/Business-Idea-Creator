@@ -96,7 +96,7 @@ function deepPlanFor(C){
   /* 3 · market size, with the chain exposed */
   H+=`<div class="dsec"><div class="dnum">03</div><div class="dbody">
     <h4>Market size — the arithmetic, with the top number labelled</h4>
-    <div class="flag ${seg.v?'ok':'warn'}"><div class="ic">${seg.v?'✓':'!'}</div>
+    <div class="flag ${seg.v?'ok':'warn'}"><div class="ic">${icon(seg.v?'check':'alert')}</div>
       <div><b>${seg.v?'Verified anchor for this segment':'No verified anchor for this segment'}</b><br>
       <span style="color:var(--ink-2)">${seg.txt}</span></div></div>`;
   if(seg.v&&seg.pool){
@@ -194,7 +194,7 @@ function deepPlanFor(C){
   const mn=Math.min(...S), diffuse=mn>=3;
   H+=`<div class="dsec"><div class="dnum">06</div><div class="dbody">
     <h4>The riskiest assumption</h4>
-    <div class="flag ${diffuse?'warn':'bad'}"><div class="ic">${diffuse?'!':'▲'}</div><div>
+    <div class="flag ${diffuse?'warn':'bad'}"><div class="ic">${icon('alert')}</div><div>
       ${diffuse
         ? `<b>No single axis is weak — the lowest score here is ${mn} of 5.</b><br>
            <span style="color:var(--ink-2)">So there is no one flaw to point at, which is a better
@@ -295,7 +295,7 @@ function deepPlanFor(C){
   </div></div>`;
 
   H+=`<div class="dfoot">
-    ${n?`<button class="chip" onclick="mode('report');openFold('score',1)">← back to all 112 scored</button>
+    ${n?`<button class="chip" onclick="mode('report');openFold('score',1)">${icon('arrow-left','sm')} back to all 112 scored</button>
     <span class="tiny">Want this written out properly, with me doing fresh research on the gaps above?
     Ask me for <b style="color:var(--ink-1)">&ldquo;go deep on ${n}&rdquo;</b> in chat.</span>`
     :`<span class="tiny">Every number above says where it came from. Where a market figure is checked

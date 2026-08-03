@@ -1,33 +1,43 @@
 /* podium */
-.pick{display:flex;gap:14px;background:var(--surface-1);border:1px solid var(--ring);
-  border-radius:11px;padding:16px;margin-bottom:9px;border-left:3px solid var(--f1)}
-.rank{font-size:26px;font-weight:750;color:var(--f1);line-height:1;min-width:34px}
-.pick .pt{font-weight:650;font-size:15.5px;margin-bottom:5px}
-.pick .pw{font-size:13px;color:var(--ink-2)}
+.pick{display:flex;gap:var(--sp-4);background:var(--surface-1);border:1px solid var(--ring);
+  border-radius:var(--r-md);padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-2);
+  box-shadow:var(--e-1)}
+.rank{font-size:var(--t-2xl);font-weight:750;color:var(--f1);line-height:1;min-width:34px}
+.pick .pt{font-weight:650;font-size:var(--t-md);margin-bottom:var(--sp-1)}
+.pick .pw{font-size:var(--t-sm);color:var(--ink-2)}
 .pick .pw b{color:var(--ink-1)}
-.dead{border-left:3px solid var(--crit);background:var(--surface-1);border:1px solid var(--ring);
-  border-radius:11px;padding:16px;margin-bottom:9px}
-.dead .dt{font-weight:650;color:var(--crit);margin-bottom:4px;font-size:14.5px}
-.dead .dd{font-size:13px;color:var(--ink-2)}
+.dead{background:var(--tint-crit);border:1px solid color-mix(in srgb,var(--crit) 26%,transparent);
+  border-radius:var(--r-md);padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-2)}
+.dead .dt{display:flex;align-items:center;gap:var(--sp-2);font-weight:650;color:var(--crit);
+  margin-bottom:var(--sp-1);font-size:var(--t-md)}
+.dead .dd{font-size:var(--t-sm);color:var(--ink-2)}
 
 /* tree */
-.tree{font-size:13px;line-height:1.9;color:var(--ink-2);white-space:pre;overflow-x:auto;
-  background:var(--surface-1);border:1px solid var(--ring);border-radius:11px;padding:18px;
+.tree{font-size:var(--t-sm);line-height:1.9;color:var(--ink-2);white-space:pre;overflow-x:auto;
+  background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-4);
   font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .tree b{color:var(--ink-1)}
 .tree .a{color:var(--f1)} .tree .b{color:var(--f2)} .tree .c{color:var(--f3)}
 
-.action{background:var(--surface-1);border:1px solid var(--ring);border-left:3px solid var(--good);
-  border-radius:0 12px 12px 0;padding:20px}
-.legendrow{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
-.lg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2)}
-.sw{width:11px;height:11px;border-radius:3px}
+.action{background:var(--tint-good);border:1px solid color-mix(in srgb,var(--good) 28%,transparent);
+  border-radius:var(--r-md);padding:var(--sp-5) var(--sp-6)}
+.legendrow{display:flex;gap:var(--sp-3);flex-wrap:wrap;margin-bottom:var(--sp-3)}
+.lg{display:flex;align-items:center;gap:var(--sp-1);font-size:var(--t-xs);color:var(--ink-2)}
+.sw{width:11px;height:11px;border-radius:var(--r-xs)}
 a{color:var(--f1)}
 
 /* tabs */
-.tabs{display:flex;gap:8px;margin-top:22px}
-.tab{background:var(--surface-1);border:1px solid var(--ring);color:var(--ink-2);
-  border-radius:9px;padding:11px 18px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.tabs{display:inline-flex;gap:var(--sp-0);margin-top:var(--sp-5);background:var(--sunken);
+  border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-0)}
+/* Mode switch. Reads as a switch, not two buttons: the selected one is the raised surface, the
+   other is flat. A solid accent fill here competed with the primary action further down the
+   page, so selection is carried by surface and weight instead. */
+.tab{display:inline-flex;align-items:center;gap:var(--sp-2);background:transparent;
+  border:1px solid transparent;color:var(--ink-3);border-radius:var(--r-sm);
+  padding:var(--sp-2) var(--sp-3);font:inherit;font-size:var(--t-sm);font-weight:600;
+  line-height:1.5;cursor:pointer;white-space:nowrap;
+  transition:color var(--dur-1) var(--ease),background var(--dur-1) var(--ease)}
 .tab:hover{color:var(--ink-1)}
-.tab.on{background:var(--f1);border-color:var(--f1);color:#fff}
+.tab.on{background:var(--surface-1);border-color:var(--ring);color:var(--ink-1);
+  box-shadow:var(--e-1)}
 

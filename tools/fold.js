@@ -131,7 +131,11 @@ for(let i=0;i<3;i++){
 }
 
 // ---- run the real module ------------------------------------------------------
-const src=fs.readFileSync(R+'/src/js/21-collapse.js','utf8');
+/* 21-collapse.js draws the chevron through icon(), which lives in 00-icons.js. Load the real one
+   rather than stubbing it: a stub would let a broken icon() ship as long as fold behaviour held,
+   and the two are one file apart. */
+const src=fs.readFileSync(R+'/src/js/00-icons.js','utf8')+'\n'+
+          fs.readFileSync(R+'/src/js/21-collapse.js','utf8');
 const sb={document,location:{hash:''},console};sb.globalThis=sb;
 vm.createContext(sb);vm.runInContext(src+'\n;globalThis.__f={initFold,foldAll,setFold,openFold,toggleFold,foldOut,syncFoldAll};',sb);
 const F=sb.__f;

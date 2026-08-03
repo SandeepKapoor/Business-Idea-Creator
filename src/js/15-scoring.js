@@ -29,7 +29,7 @@ const BANDS=[
 ["BUILD","--good","32–40. Top 4% of 193,600, both gates clear. Take money for it this fortnight."]];
 function HOWTO(){
   return `<details class="howto">
-   <summary><span class="chev">▶</span>How to read this table
+   <summary><span class="chev">${icon('chevron','sm')}</span>How to read this table
      <span class="hint">what "gate" means, what each column measures, and the verdict bands</span></summary>
    <div class="ht-body">
    <div class="ht-gate"><b>A gate is pass/fail, not a score.</b> Only the first two columns are gates.
