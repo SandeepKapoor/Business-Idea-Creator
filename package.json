@@ -9,12 +9,13 @@
     "serve": "node tools/serve.js",
     "dev": "node tools/serve.js 3007",
     "verify": "node tools/verify.js",
-    "check": "node build.js && node tools/verify.js && node tools/fold.js && node tools/picker.js && node tools/design.js",
+    "check": "node build.js && node tools/verify.js && node tools/fold.js && node tools/picker.js && node tools/design.js && node tools/probe.js",
     "open": "node build.js && open sandeep-idea-map.html",
     "fold": "node tools/fold.js",
     "premise": "node tools/premise.js",
     "plain": "node tools/plain.js",
     "picker": "node tools/picker.js",
+    "probe": "node tools/probe.js --report",
     "design": "node tools/design.js"
   },
   "engines": {

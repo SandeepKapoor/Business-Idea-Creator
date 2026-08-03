@@ -126,6 +126,38 @@ check('no unicode glyphs standing in for icons', glyphHits,
     'dead weight in a file that ships as one document');
 }
 
+/* A class used on both a <tr> and a <div> is a live grenade: a bare `.x{display:flex}` written
+   for the div silently reassigns the row's display and it drops out of the table's column model.
+   That is exactly what .vrow did to Parts 7 and 7b. Cheap to check statically, and it does not
+   need a browser the way tools/probe.js does. */
+{
+  const onTr = new Set();
+  for (const m of html.matchAll(/<tr[^>]*class="([^"]*)"/g))
+    m[1].split(/[\s$]+/).filter((c) => /^[a-z][\w-]*$/i.test(c)).forEach((c) => onTr.add(c));
+  for (const m of js.matchAll(/<tr\s+class="([^"]*)"/g))
+    m[1].replace(/\$\{[^}]*\}/g, ' ').split(/\s+/)
+      .filter((c) => /^[a-z][\w-]*$/i.test(c)).forEach((c) => onTr.add(c));
+  // Also the ternary form: class="${cond?'vrow on':'vrow'}"
+  for (const m of js.matchAll(/<tr\s+class="\$\{[^}]*\}"/g))
+    for (const q of m[0].matchAll(/'([a-z][\w-]*(?: [a-z][\w-]*)*)'/gi))
+      q[1].split(' ').forEach((c) => onTr.add(c));
+  const bad = [];
+  for (const c of onTr) {
+    const re = new RegExp(`(^|[,}])\\s*\\.${c}\\s*(?:[,{])`, 'm');
+    const rule = new RegExp(`\\.${c}\\s*\\{([^}]*)\\}`, 'g');
+    for (const r of css.matchAll(rule)) {
+      // Only the bare, unqualified selector is dangerous; `tr.vrow{...}` is deliberate.
+      const at = css.lastIndexOf('}', r.index) + 1;
+      const sel = css.slice(at, r.index + `.${c}`.length).trim();
+      if (/^\.${c}$/.test(sel) === false && !new RegExp(`(^|[\\s,])\\.${c}$`).test(sel)) continue;
+      if (/display\s*:\s*(flex|grid|block|inline)/.test(r[1]))
+        bad.push(`.${c} sets display on a class that is also on a <tr>: {${r[1].trim().slice(0, 60)}}`);
+    }
+  }
+  check('no class sets display on both a <tr> and a <div>', bad,
+    'a flex row leaves the table column model and the header detaches from the body');
+}
+
 /* ---------- table geometry ----------
    The three score tables are declared in three places — the heatmap in 08, Part 7 and Part 7b in
    19 — and all three must agree with the colgroup scols() emits. When they disagreed, the header

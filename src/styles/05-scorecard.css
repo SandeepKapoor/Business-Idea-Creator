@@ -11,9 +11,14 @@
    absorbs whatever is left. */
 table{border-collapse:separate;border-spacing:2px;width:100%;font-size:var(--t-xs)}
 table.stab{table-layout:fixed}
-.c-sc{width:58px} .c-tot{width:46px} .c-price{width:78px} .c-ver{width:124px}
+.c-sc{width:58px} .c-tot{width:46px} .c-price{width:78px} .c-ver{width:142px}
 .stab .c-lab{width:auto}
-@media(max-width:720px){.c-sc{width:44px} .c-ver{width:96px} .c-price{width:66px}}
+@media(max-width:720px){
+  .c-sc{width:44px} .c-ver{width:96px} .c-price{width:66px}
+  /* The columns shrank, so the floors can too — otherwise both tables scroll further than the
+     content actually needs. */
+  .heatscroll table{min-width:680px} .tscroll table{min-width:660px}
+}
 
 th{font-weight:600;color:var(--ink-3);text-align:center;font-size:var(--t-2xs);
   padding:0 var(--sp-0) var(--sp-1);vertical-align:bottom;line-height:1.3;
@@ -37,7 +42,11 @@ td.tot.num{font-weight:600;font-size:var(--t-xs);color:var(--ink-2)}
 tr:hover .dimcol{opacity:.55}
 .heatscroll{max-height:580px;overflow:auto;border:1px solid var(--ring);border-radius:var(--r-md);
   background:var(--surface-1)}
-.heatscroll table{border-spacing:2px;margin:0}
+/* The floor the scroller needs. Without it, table-layout:fixed honours the eight declared score
+   columns first and squeezes the auto label column to whatever is left — 10px at a 760px
+   viewport, 0px at 520px. A fixed table does not scroll unless something makes it too wide to
+   fit, so the min-width IS the scroll trigger. Measured by tools/probe.js at four widths. */
+.heatscroll table{border-spacing:2px;margin:0;min-width:860px}
 .heatscroll thead th{position:sticky;top:0;z-index:3;background:var(--surface-1);
   padding:var(--sp-2) var(--sp-0) var(--sp-2);box-shadow:0 1px 0 var(--grid)}
 .heatscroll th.l,.heatscroll td.l{position:sticky;left:0;z-index:2;background:var(--surface-1)}

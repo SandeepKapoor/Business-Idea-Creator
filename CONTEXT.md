@@ -30,6 +30,7 @@ validation sprint.
 - **Build**: `npm run build` (zero dependencies; `build.js` is ~130 lines of plain Node).
 - **Verify**: `npm run verify` — 101 checks, ~11s. See §16.
 - **Picker**: `npm run picker` — 32 behavioural checks on the axis picker. See §4a.
+- **Layout**: `npm run probe` — measures the real layout in headless Chrome. See §13b.
 - **Design scan**: `npm run design` — 16 craft checks on the built artifact. See §13a.
 - **Plain English**: `npm run plain` — scores every sentence the builder renders. See §10.
 - **Premise provenance**: `npm run premise` — how `PREM` was mined out of the 112. See §10.
@@ -53,6 +54,7 @@ CONTEXT.md                this file
 README.md                 workflow, file map, known issues
 tools/verify.js           101-check harness (§16)
 tools/picker.js           axis-picker behaviour: roving tabindex, arrows, aria (§4a)
+tools/probe.js            real geometry, measured in headless Chrome (§13b)
 tools/design.js           craft-floor mechanics: scales, states, contrast, icons (§13a)
 tools/plain.js            sentence-difficulty scan, before/after copy work (§10)
 tools/premise.js          premise extraction + orthogonality test (§10)
@@ -629,6 +631,50 @@ switches mode, generates. The banner clears the moment any dropdown differs from
 `TAGS[ORIGIN]`.
 
 
+
+
+---
+
+## 13b. Measuring the layout
+
+**`npm run probe` renders the artifact in headless Chrome and measures it.** Zero dependencies:
+it drives whatever Chrome is installed via `--headless --dump-dom`, having appended a measuring
+script to a *copy* of the artifact that writes its findings into a `<pre>`. No CDP client.
+
+It exists because **three harnesses passed while the page was visibly broken.** verify.js proves
+the engine is right, design.js proves the CSS obeys the scales, picker.js proves the controls
+behave — and not one of them lays anything out.
+
+It asserts, for all three score tables and at any `--width`:
+
+- every `<tr>` computes to `display:table-row` and every `<td>` to `table-cell`
+- each header cell shares an x and a width with the body cell beneath it
+- the eight score cells are equal width and at least 28px
+- the label column is not crushed, and no cell content spills past its column
+
+`--report` prints the measured geometry, `--shot out.png` saves a screenshot. Note that
+`--screenshot` renders at scroll 0, so to capture something below the fold you must move the
+content (negative `margin-top`), not the viewport.
+
+### The bug it found
+
+Part 7 laid out with its header row and body row in different horizontal bands. Two rounds of
+work went into the colgroup and `table-layout:fixed` — **and the colgroup was never the problem.**
+The probe's first run said it in one line:
+
+```
+Part 7:   "tr":"flex",      "td":"block"
+heatmap:  "tr":"table-row", "td":"table-cell"
+```
+
+`.vrow` was **both** the two-row navigator's flex row and the score tables' clickable `<tr>`.
+`.vrow{display:flex}`, written for the div, matched the rows too — and a flex row shrink-wraps
+its children and takes no part in the table's column model. The `<thead>` had no such class, so
+it laid out on the colgroup while the `<tbody>` collapsed to the width of a numeral.
+
+**Never name a class that lands on both a `<div>` and a `<tr>`.** design.js now checks for it
+statically, the probe checks the computed display, and both were verified by reintroducing the
+bug on purpose.
 
 ---
 

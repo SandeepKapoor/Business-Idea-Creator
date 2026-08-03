@@ -211,7 +211,7 @@ function renderVars(silent){
       ${PREMS.length} kinds of work × ${VARS.length} twists. You are on
       <b style="color:var(--f2)">${CURP.nm}</b> × <b style="color:var(--f1)">${A.nm}</b>,
       number <b>${PIDX*VARS.length+VIDX+1}</b>.</div>
-    <div class="vrow">
+    <div class="nrow">
       <div class="vrl">The work<span>what you actually do</span></div>
       <div class="vpills">${PREMS.map((P,i)=>{const q=pAt(P);
         return `<button class="vpill${i===PIDX?' on':''}" onclick="setPrem(${i})"
@@ -221,7 +221,7 @@ function renderVars(silent){
         title="What the work means, and where this list came from"
         aria-label="What the work means, and where this list came from">${icon('info','sm')}</button></div>
     </div>
-    <div class="vrow">
+    <div class="nrow">
       <div class="vrl">The twist<span>one thing you change</span></div>
       <div class="vpills">${VARS.map((v,i)=>
         `<button class="vpill${i===VIDX?' on':''}" onclick="setVar(${i})">
@@ -441,9 +441,9 @@ function renderVars(silent){
    hard to copy. <b>How far</b> it moves is my guess. Use the column to rank, not to predict.</div></div>`;
 
   /* PART 8 — position map, every variant plotted */
-  html+=`<h3 style="margin:30px 0 12px">Part 8 · Where the ${VARS.length} variants land</h3>
+  html+=`<h3 style="margin:30px 0 12px">Part 8 · Where the ${VARS.length} twists land</h3>
    <div class="mapwrap"><div id="cScatter"></div></div>
-   <p class="tiny" style="margin-top:10px">Every variant is plotted. The filled marker is the one you
+   <p class="tiny" style="margin-top:10px">Every twist is plotted. The filled marker is the one you
    are reading; the hollow ones are its siblings, so you can see the spread a single combination covers.
    Small grey dots are the twenty-four benchmarks from the main report — useful for checking whether you
    have found something better than the bank, or merely something different.</p>`;
