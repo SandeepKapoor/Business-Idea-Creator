@@ -28,7 +28,7 @@ validation sprint.
   one `<script>` block, no external assets. **This file is generated. Do not edit it.**
 - **Source**: `src/` — 15 HTML section partials, 11 CSS files, 21 JS files.
 - **Build**: `npm run build` (zero dependencies; `build.js` is ~130 lines of plain Node).
-- **Verify**: `npm run verify` — 112 checks, ~11s. See §16.
+- **Verify**: `npm run verify` — 114 checks, ~11s. See §16.
 - **Picker**: `npm run picker` — 32 behavioural checks on the axis picker. See §4a.
 - **Layout**: `npm run probe` — measures the real layout in headless Chrome. See §13b.
 - **Design scan**: `npm run design` — 16 craft checks on the built artifact. See §13a.
@@ -52,7 +52,7 @@ build.js                  src/ → sandeep-idea-map.html. Zero deps. Concatenati
 sandeep-idea-map.html     BUILD OUTPUT — the deliverable. Never edit.
 CONTEXT.md                this file
 README.md                 workflow, file map, known issues
-tools/verify.js           112-check harness (§16)
+tools/verify.js           114-check harness (§16)
 tools/picker.js           axis-picker behaviour: roving tabindex, arrows, aria (§4a)
 tools/probe.js            real geometry, measured in headless Chrome (§13b)
 tools/design.js           craft-floor mechanics: scales, states, contrast, icons (§13a)
@@ -566,6 +566,16 @@ Rendered as a **list under the statement, before the navigator** — it is the f
 make. Picking one names the business (the route's name beats both the work's and the twist's for
 the card title), leads the card, and applies its score deltas. `RIDX = -1` is the default, so the
 page scores exactly as it did before routes existed.
+
+Each route carries five fields: `nm` the name, `v` a one-line premise for the list, `an` the
+explanation, `kl` its own kill criterion, and `d` the score deltas. **A route with only a
+one-liner is a topic, not an idea** — that was the first version and it read as a heading with
+nothing behind it. The card now runs: one-liner, *What this business actually is*, *Then how you
+build it*, *In practice*. Their labels descend white → blue → orange; the subject leads so it
+takes full contrast rather than a third accent.
+
+Stage 4 now carries three kill criteria — from the combination, the route and the twist. That is
+deliberate: they are three different failure modes and collapsing them loses information.
 
 `d` is a sparse `{criterionIndex: delta}`. Route, work and twist all land on the same eight
 numbers and are **clamped once, together** — clamping in stages hides trade-offs.

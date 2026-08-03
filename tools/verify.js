@@ -341,6 +341,26 @@ if (QUICK) {
   }
   ok('every route is well formed', bad.length === 0, bad.slice(0, 3).join(' | '));
 
+  // A route with only a one-liner is a topic, not an idea — which is exactly the complaint that
+  // produced these fields. Every one has to explain itself and name what would kill it.
+  const bare = [];
+  for (let o = 0; o < NO; o++) A.routesFor(o).forEach((r) => {
+    if (!r.an || r.an.split(' ').length < 25) bare.push(`${r.nm}: explanation too thin`);
+    if (!r.kl || r.kl.split(' ').length < 10) bare.push(`${r.nm}: no real kill criterion`);
+    if (r.an && r.an === r.v) bare.push(`${r.nm}: explanation just repeats the one-liner`);
+  });
+  ok('every route explains itself and names what kills it', bare.length === 0,
+    bare.slice(0, 3).join(' | '));
+  {
+    const all = [];
+    for (let o = 0; o < NO; o++) A.routesFor(o).forEach((r) => all.push(r.an, r.kl));
+    ok('no two routes share an explanation or a kill criterion',
+      new Set(all).size === all.length,
+      'copy-paste between routes makes them look like one idea again');
+    const words = all.reduce((n, t) => n + t.split(' ').length, 0);
+    notes.push(`route prose: ${words} words across 81 explanations and kill criteria.`);
+  }
+
   // Four routes that all score the same are four names for one idea.
   const flat = [];
   for (let o = 0; o < NO; o++) {

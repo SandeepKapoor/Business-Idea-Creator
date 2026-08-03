@@ -245,7 +245,7 @@ function renderVars(silent){
           <td class="rvd" style="color:var(${none.V.c})">${none.V.t.split(' —')[0]}</td></tr>
         ${RTS.map((R,i)=>{const q=rAt(R);return `<tr class="rrow${i===RIDX?' on':''}" onclick="setRoute(${i})">
           <td class="rn">${i===RIDX?icon('chevron','xs')+' ':''}${R.nm}</td>
-          <td class="rv">${R.v}</td>
+          <td class="rv">${R.v}<span class="rmore">${R.an}</span></td>
           <td class="rs" style="color:var(${q.V.c})">${q.tot}</td>
           <td class="rvd" style="color:var(${q.V.c})">${q.V.t.split(' —')[0]}</td></tr>`;}).join('')}
       </tbody></table>
@@ -380,6 +380,8 @@ function renderVars(silent){
    <div class="st">${curRoute()?`${AX.OUT[o]} · `:''}${hasP?`${CURP.nm} work · `:''}${A.nm} twist · ${HS} · for ${WS}
      · paid by ${AX.PAY[p].toLowerCase().replace("l&d","L&D")}</div>
    ${curRoute()?`<p class="ilead">${curRoute().v}</p>
+     <div class="ibox subject"><span class="ik">What this business actually is</span>
+       <p>${curRoute().an}</p></div>
      <div class="ibox route"><span class="ik">Then how you build it</span>
        <p>${hasP?CURP.an(WS,HS,OS):A.an(WS,HS,OS)}</p></div>`
     :`<p class="ilead">${hasP?CURP.an(WS,HS,OS):A.an(WS,HS,OS)}</p>`}
@@ -470,6 +472,7 @@ function renderVars(silent){
      <li><b>Zero</b> people pay ${inr(entry)} before it exists, within 14 days → kill it.</li>
      <li>You cannot reach ${WS} without buying ads → kill it.</li>
      <li>${MH[h][0]>=4?`Delivery needs more than <b>30 days</b> of build before anyone can pay → this format already fails that test. Sell a smaller version first.`:`Delivery needs someone you have not hired → kill it.`}</li>
+     ${curRoute()?`<li><b>Only for ${curRoute().nm}:</b> ${curRoute().kl}</li>`:''}
      <li><b>Only for the ${A.nm.toLowerCase()} twist:</b> ${A.kl(WS)}</li></ul></div>`;
 
   /* PART 7 — all variants scored side by side, active row emphasised */

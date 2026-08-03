@@ -144,7 +144,7 @@ tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
 .rrow:first-child td{border-top:0}
 .rrow:hover td{background:var(--raise)}
 .rrow.on td{background:var(--raise)}
-.rrow.on td.rn{box-shadow:inset 2px 0 0 var(--f2)}
+.rrow.on td.rn{box-shadow:inset 2px 0 0 var(--ink-1)}
 .rn{color:var(--ink-1);font-weight:600;white-space:nowrap;width:1%}
 .rv{color:var(--ink-2);line-height:1.5}
 .rs{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;width:1%;
@@ -159,3 +159,15 @@ tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
   .rn{white-space:normal}
   .rs,.rvd{display:inline-block;text-align:left;padding-right:var(--sp-3)}
 }
+/* The full explanation lives in the list too, under the one-liner — you should be able to read
+   what a business actually is before committing to it, not only after. Quieter and narrower
+   than the line above it so the list still scans in one pass. */
+.rmore{display:block;margin-top:var(--sp-1);font-size:var(--t-xs);line-height:1.55;
+  color:var(--ink-3);max-width:76ch}
+.rrow.on .rmore{color:var(--ink-2)}
+/* Three boxes stacked on one card, so their labels have to descend rather than all shout in the
+   same colour. The subject leads and takes full contrast — no accent, because it is not one of
+   the two secondary choices. The build box takes the twist's blue, matching .fmod.twist below
+   it. "In practice" keeps the default orange. White, blue, orange: a hierarchy, not a rainbow. */
+.ibox.subject>.ik{color:var(--ink-1)}
+.ibox.route>.ik{color:var(--f1)}
