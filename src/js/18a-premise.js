@@ -59,6 +59,9 @@ const PREM=[
  ex:(W,H,O)=>`Rather than teaching ${W} how to get ${O}, you pull real examples apart in the
    ${H}: the ones that worked, the ones that did not, and the exact line where they diverged.
    You can start on Monday, because the material already exists.`,
+ f:{who:(W,H,O)=>`Only ${W} who already have work worth taking apart. Anyone with nothing to show is out.`,
+    out:(W,H,O)=>`Reached by pulling real examples apart, not by being taught a method.`,
+    run:(W,H,O)=>`Nothing to build first. The material is work that already exists, so you can start this week.`},
  gv:`It is your eye doing the work every single time, so it bills your calendar and it is hard
    to hand over. And you will make enemies of the people whose work you tear apart.`},
 
@@ -72,6 +75,9 @@ const PREM=[
  ex:(W,H,O)=>`For ${W}, nobody has honestly written down what it actually takes to get ${O} —
    what works, what does not, and what it really costs. You publish that as ${aAn(H)}, keep it
    current, and let being cited do the selling.`,
+ f:{who:(W,H,O)=>`Any of ${W} who look things up — a far wider circle than the ones who buy courses.`,
+    out:(W,H,O)=>`A reference they keep coming back to, not a thing they finish once.`,
+    pay:(W,H,O)=>`Very little, directly. A reference earns its money from whatever stands next to it.`},
  gv:`Slow, and people do not pay much for a reference. The money has to come from something next
    to it. Give it a year before anyone treats yours as the one to trust.`},
 
@@ -85,6 +91,9 @@ const PREM=[
  ex:(W,H,O)=>`${cap(W)} do not fail at this for lack of information — they fail in the moment
    itself. So the ${H} does exactly one thing: it makes them rehearse their way to ${O}, over and
    over, until the moment stops frightening them.`,
+ f:{who:(W,H,O)=>`${cap(W)} who already know what to do and still freeze. Not the ones who need teaching.`,
+    run:(W,H,O)=>`The same hard moment, again and again, until it stops frightening them. No new information.`,
+    out:(W,H,O)=>`Plus the nerve to go through the moment that produces it.`},
  gv:`Repetitive for you as well as for them, and easy to copy once someone has watched it. You
    are selling the practice, and nobody owns practice.`},
 
@@ -97,6 +106,10 @@ const PREM=[
    tell them plainly — which is the one thing almost nobody in this market is willing to do.`,
  ex:(W,H,O)=>`You assess ${W} against ${O} and hand back a straight answer, in writing. The ${H}
    is only how it is delivered; the verdict is the product, and the verdict is what they pay for.`,
+ f:{who:(W,H,O)=>`The ones who want a verdict rather than a lesson. Fewer people, further along.`,
+    out:(W,H,O)=>`A straight written answer about where they actually stand. The verdict is the product.`,
+    run:(W,H,O)=>`You assess rather than teach, so almost none of your time goes on preparing material.`,
+    pay:(W,H,O)=>`They pay for the verdict, not for your time — a higher price for a much shorter job.`},
  gv:`Nobody takes your verdict seriously until they know who you are, so this one needs an
    audience before anything else. Start too early and you are a stranger marking someone's
    homework.`},
@@ -111,6 +124,9 @@ const PREM=[
    compete with nobody while you are the only one who has made the trip.`,
  ex:(W,H,O)=>`The method that reliably produces ${O} exists somewhere ${W} cannot get to it. You
    bring it over as ${aAn(H)}, in the language they actually think in.`,
+ f:{who:(W,H,O)=>`The ones who cannot reach the original. That gap is the whole reason they need you.`,
+    out:(W,H,O)=>`Produced by a method that already works somewhere they cannot get to.`,
+    run:(W,H,O)=>`You are carrying something across, not inventing it, so the work is translation and not design.`},
  gv:`It lasts exactly as long as the gap does. Once two other people make the same trip, the
    edge is gone and you are competing on delivery like everyone else.`},
 
@@ -128,6 +144,9 @@ const PREM=[
  ex:(W,H,O)=>`Every one of your ${W} leaves the ${H} with ${O} — a real, finished thing that on
    the last day either exists or does not. If it does not, you have not delivered, whatever else
    happened in the room.`,
+ f:{who:(W,H,O)=>`The ones who need something to show, not something to know.`,
+    out:(W,H,O)=>`Finished and in their hands — not notes about how to make one.`,
+    run:(W,H,O)=>`Every session goes on making the thing, so your attention is the limit on how many can run.`},
  gv:`Every finished thing costs you real hours, so your calendar is the limit. And the promise
    is a hard one: on the last day it exists, or it does not.`},
 
@@ -144,6 +163,10 @@ const PREM=[
  ex:(W,H,O)=>`You can put ${W} in rooms they have no route to, alongside people who already
    have ${O}. The ${H} is only the vehicle; the access is the product, and it is the one thing
    here nobody can copy over a weekend.`,
+ f:{who:(W,H,O)=>`The ones for whom the room is the obstacle, not the knowledge.`,
+    out:(W,H,O)=>`Plus time inside a room they had no route to, alongside people who already have it.`,
+    run:(W,H,O)=>`Most of your effort goes on keeping the door open, not on what happens once they are through it.`,
+    pay:(W,H,O)=>`You are charging for the door, so the price follows how hard it is to open, not how long you spend.`},
  gv:`It rests entirely on relationships you have to keep warm, and usually on being physically
    somewhere. Lose the relationship and there is no business left underneath it.`}];
 

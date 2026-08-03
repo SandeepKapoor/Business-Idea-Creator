@@ -29,6 +29,15 @@
   gap:0 var(--sp-6);margin:0 0 var(--sp-4)}
 .ifacts>div{padding:var(--sp-3) 0;border-top:1px solid var(--grid);
   font-size:var(--t-sm);line-height:1.55;color:var(--ink-2)}
+/* What the chosen work and the chosen twist do to this fact. Indented and quieter than the axis
+   line above it, so the base reads first and the modifier reads as a change to it. The two are
+   tinted differently for the same reason the navigator has two rows: they are different
+   decisions, and you should be able to see which one moved this. */
+.fmod{display:block;margin-top:var(--sp-2);padding-left:var(--sp-3);
+  border-left:1px solid var(--grid);font-size:var(--t-xs);line-height:1.5;color:var(--ink-3)}
+.fmod b{font-weight:600}
+.fmod.work b{color:var(--f2)}
+.fmod.twist b{color:var(--f1)}
 .ipitch{background:var(--raise);border:1px solid var(--ring);border-radius:var(--r-md);
   padding:var(--sp-4) var(--sp-4);font-size:var(--t-base);line-height:1.5;color:var(--ink-1);max-width:68ch}
 .ipn{display:block;font-size:var(--t-xs);line-height:1.5;color:var(--ink-3);margin-top:var(--sp-2)}

@@ -106,7 +106,25 @@ const EXPORTS = ['scoreIt', 'rules', 'verdict', 'buildVars', 'deepPlan', 'priceC
 let A;
 try {
   vm.createContext(sandbox);
-  vm.runInContext(`${script}\n;globalThis.__api={${EXPORTS.join(',')}};`, sandbox,
+  // __card renders one idea card so the harness can compare cards to each other. Built here
+  // rather than exported by name because it needs to set module-scope state (AXS, PREMS, VIDX)
+  // that the artifact deliberately does not expose.
+  vm.runInContext(`${script}
+;globalThis.__api={${EXPORTS.join(',')},
+  __card:function(w,o,h,p,pi,vi){
+    AXS=[w,o,h,p]; ORIGIN=null; VI=false; PI=false;
+    PREMS=premFor(h,o); PIDX=pi; VARS=buildVars(w,o,h,p,PREMS[pi]); VIDX=vi;
+    renderVars(1);
+    var s=document.getElementById('cOut').innerHTML;
+    var i=s.indexOf('<div class="ideacard">'), j=s.indexOf('Part 6 &middot;');
+    if(j<0)j=s.indexOf('Part 6 ·');
+    return j>i?s.slice(i,j):s.slice(i);
+  },
+  __facts:function(w,o,h,p,pi,vi){
+    var c=globalThis.__api.__card(w,o,h,p,pi,vi);
+    var i=c.indexOf('<div class="ifacts">');
+    return i<0?'':c.slice(i, c.indexOf('</div>\\n   <div class="ibox cost"', i)+1);
+  }};`, sandbox,
     { filename: 'artifact.js', timeout: 120000 });
   A = sandbox.__api;
   pass++; // boots without throwing
@@ -292,6 +310,65 @@ if (QUICK) {
   ok('every format offers at least the default premise', minP >= 1, `saw ${minP}`);
   ok('no format offers more premises than exist', maxP <= A.PREM.length, `saw ${maxP}`);
   notes.push(`premises available per format: ${minP}–${maxP} of ${A.PREM.length}.`);
+}
+
+// --- the four facts must move with the work and the twist ------------------
+// The card's four facts come straight off the axes, so for a long time they read identically
+// whichever twist you were on — the page looked the same for seven different businesses. Each
+// twist and each kind of work now declares, in `f`, which of the four it actually changes.
+{
+  const FK = ['who', 'out', 'run', 'pay'];
+  const noF = [];
+  A.ARCH.forEach((a) => { if (!a.f || !Object.keys(a.f).length) noF.push(`twist ${a.nm}`); });
+  A.PREM.filter((P) => P.k !== 'none').forEach((P) => {
+    if (!P.f || !Object.keys(P.f).length) noF.push(`work ${P.nm}`);
+  });
+  ok('every twist and every kind of work changes at least one of the four facts', noF.length === 0,
+    `${noF.join(', ')} would render an identical fact block`);
+  // A kind of work is the bigger of the two choices, so it should move more than one fact. Every
+  // one now touches who, what they leave with and how it runs; pay only where it truly changes.
+  const thin = A.PREM.filter((P) => P.k !== 'none' && Object.keys(P.f || {}).length < 3)
+    .map((P) => `${P.nm} touches only ${Object.keys(P.f || {}).length}`);
+  ok('every kind of work changes at least three of the four facts', thin.length === 0, thin.join(', '));
+  ok('fact modifiers only use the four known keys',
+    [...A.ARCH, ...A.PREM].every((x) => !x.f || Object.keys(x.f).every((k) => FK.includes(k))));
+  ok('every fact modifier is a function',
+    [...A.ARCH, ...A.PREM].every((x) => !x.f || Object.values(x.f).every((v) => typeof v === 'function')));
+
+  // The real claim: no two ideas at one combination render the same card.
+  const dupes = [];
+  for (const [w, o, h, p] of [[2, 4, 0, 0], [2, 8, 5, 4], [10, 12, 9, 3], [5, 12, 19, 14]]) {
+    const seen = new Map();
+    const PS = A.premFor(h, o);
+    for (let pi = 0; pi < PS.length; pi++) {
+      const V = A.buildVars(w, o, h, p, PS[pi]);
+      for (let vi = 0; vi < V.length; vi++) {
+        const card = A.__card(w, o, h, p, pi, vi);
+        const key = `${PS[pi].nm} × ${V[vi].nm}`;
+        if (seen.has(card)) dupes.push(`[${w},${o},${h},${p}] ${key} is identical to ${seen.get(card)}`);
+        else seen.set(card, key);
+      }
+    }
+  }
+  ok('no two ideas at one combination render the same card', dupes.length === 0,
+    dupes.slice(0, 3).join(' | '));
+
+  // Tighter: the FACT BLOCK alone must differ per twist, which is what the reader compares.
+  const same = [];
+  for (const [w, o, h, p] of [[2, 4, 0, 0], [2, 8, 5, 4]]) {
+    const PS = A.premFor(h, o);
+    for (let pi = 0; pi < PS.length; pi++) {
+      const V = A.buildVars(w, o, h, p, PS[pi]);
+      const blocks = new Map();
+      for (let vi = 0; vi < V.length; vi++) {
+        const f = A.__facts(w, o, h, p, pi, vi);
+        if (blocks.has(f)) same.push(`${PS[pi].nm}: ${V[vi].nm} and ${blocks.get(f)} share a fact block`);
+        else blocks.set(f, V[vi].nm);
+      }
+    }
+  }
+  ok('the four facts differ for every twist at a given work', same.length === 0,
+    same.slice(0, 3).join(' | '));
 }
 
 // --- variants, across every premise --------------------------------------

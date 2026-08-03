@@ -18,6 +18,7 @@ const ARCH=[
  an:(W,H)=>`Same ${H}, same promise — but built for one narrow slice of ${W} rather than all of them. Fewer people to sell to, and far more precise about what you say to each one.`,
  ex:(W,H,O,C)=>`Instead of the ${H} for ${W} in general, you run it only for ${C.s}. Someone who fits that reads your first line and thinks: that is me.`,
  gv:`A smaller top end, on purpose. A tenth of the audience is a tenth of the money — what you buy with that is a message that lands.`,
+ f:{who:(W,H,O,C)=>`Not all ${W} — only ${C.s}. Everyone else is deliberately out of scope.`},
  kl:W=>`If you cannot name the sub-group of ${W} in five words, the wedge does not exist yet.`,
  ts:`Interview twenty people from that one slice only. Ten of them describing the same pain in the same words means the wedge is real.`},
 {k:'proof',nm:'Proof engine',pm:1.0,dS:[1,0,0,1,0,0,0,-1],
@@ -28,6 +29,7 @@ const ARCH=[
  an:(W,H,O)=>`You promise one finished thing — ${O} — and nothing else at all. The ${H} stops being the product and becomes the machine that gets it done.`,
  ex:(W,H,O,C)=>`Strip the page down to one line: they leave with ${O}. On the last day it exists or it does not, which is exactly why people will pay before it starts.`,
  gv:`Repetitive by about month six. You trade variety in your own work for a promise nobody can argue with.`,
+ f:{out:(W,H,O,C)=>`That, and nothing else. Promise one thing and on the last day it exists or it does not.`},
  kl:W=>`If a buyer cannot tell from the outside whether the thing got made, this is not a proof engine — it is a course with a promise attached.`,
  ts:`Pre-sell it as a dated deliverable with a written refund clause. If the deadline scares you, the scope is wrong, not the idea.`},
 {k:'flagship',nm:'Flagship',pm:3.0,dS:[-1,-1,1,-1,2,1,0,0],
@@ -40,6 +42,8 @@ const ARCH=[
    ?`Rather than ${inr(C.base)} for a seat among many, you charge ${inr(C.core)} to work on ${O} with a handful of ${W} directly.`
    :`Rather than a seat among many, you charge several times as much to work on ${O} with a handful of ${W} directly.`,
  gv:`Far fewer buyers, and each sale takes much longer. Nobody buys at this price on impulse, and most of them will say no.`,
+ f:{run:(W,H,O,C)=>`A handful of people instead of a room, and far more of your own time on each one.`,
+    pay:(W,H,O,C)=>`About ${inr(C.core)} — three times the usual price. Nobody buys at that on impulse, so expect a long conversation before every yes.`},
  kl:W=>`If nobody among ${W} has paid anything like this price in the last year, nothing similar has ever sold. Kill it.`,
  ts:`Do not build it. Sell three seats by hand, on calls, at full price. If three is hard, thirty is impossible.`},
 {k:'container',nm:'Container only',pm:0.7,dS:[0,0,-1,2,-1,-1,1,1],ap:h=>[0,1,3,5].includes(h),
@@ -50,6 +54,8 @@ const ARCH=[
  an:(W,H)=>`You stop teaching. You sell deadlines, a group going through the same thing, and someone who notices when one of them goes quiet — they bring their own work.`,
  ex:(W,H,O,C)=>`No lessons, no slides. You publish the dates, put ${W} in one room, and have each of them show their work on a fixed day. They still leave with ${O} — made by them.`,
  gv:`Easy to copy, and it can feel like too little for the money. You give up content nobody needed for the one thing a recorded course cannot do.`,
+ f:{run:(W,H,O,C)=>`No lessons and no slides. You publish the dates, and each of them shows their own work on a fixed day.`,
+    out:(W,H,O,C)=>`Made by them, on your deadlines. You never teach it.`},
  kl:W=>`If fewer than half the first cohort finish, the container is not tight enough. That is a design failure, not a marketing one.`,
  ts:`Run one free cohort of eight people with nothing but a calendar and a call link. Measure completion, not satisfaction.`},
 {k:'ladder',nm:'Ladder',pm:0.35,dS:[-1,2,0,1,1,-1,0,-1],ap:h=>![19,21].includes(h),
@@ -62,6 +68,9 @@ const ARCH=[
    ?`One small piece at about ${inr(C.core)}, roughly a third of full price. The people who finish it are the ones who later pay ${inr(C.base)} for the whole ${H}.`
    :`One small piece at a fraction of full price. The people who finish it are the ones who come back for the whole ${H}.`,
  gv:`The cheap thing alone will never pay your bills, and you now run two products. It only works if the step up is real and obvious.`,
+ f:{pay:(W,H,O,C)=>C.core<C.base
+      ?`About ${inr(C.core)} for the small first step. The ones who finish it come back for the ${inr(C.base)} version — that second payment is the business.`
+      :`A small amount for the first step. The ones who finish it come back for the full version — that second payment is the business.`},
  kl:W=>`If under 10% of entry buyers climb to the next rung within 90 days, the ladder has no second rung — it is just a cheap product.`,
  ts:`Sell only the bottom rung to thirty people, then count how many ask, unprompted, what comes next.`},
 {k:'anti',nm:'Contrarian',pm:1.6,dS:[-1,1,1,1,-1,2,0,1],
@@ -72,6 +81,7 @@ const ARCH=[
  an:(W,H)=>`You disagree in public, under your own name, with the thing everyone in this market repeats. The ${H} then becomes the proof that you were right.`,
  ex:(W,H,O,C)=>`The usual advice given to ${W} is ${C.y}. You say plainly that this is wrong, and run the ${H} as your evidence.`,
  gv:`Fewer buyers, because you have to win the argument first. In return: attention you could not have bought, and a position nobody can copy without looking like a copy.`,
+ f:{who:(W,H,O,C)=>`The part of ${W} who already suspect the usual advice — ${C.y} — is wrong. You lose the rest, and that is the trade.`},
  kl:W=>`If you would not say it on the record, with your name on it, you do not believe it enough to build on it.`,
  ts:`Publish the argument first, for free, and see whether it makes anyone angry. The thing to fear is that nobody cares. Someone disagreeing is fine.`},
 {k:'synd',nm:'Syndicate',pm:0.9,dS:[0,-1,-1,-2,2,1,1,-1],ap:h=>![21].includes(h),
@@ -82,6 +92,8 @@ const ARCH=[
  an:(W,H)=>`You stop delivering it. Other people run it to your standard and you take a share — your job becomes deciding who is allowed to use your name.`,
  ex:(W,H,O,C)=>`Train three people to run this ${H} for ${W}, and take a cut of each. You stop teaching and start choosing who may teach.`,
  gv:`By far the slowest to start, and two groups to keep happy instead of one. In return, it runs when you are ill, busy or asleep.`,
+ f:{run:(W,H,O,C)=>`You are not in the room. Other people run it to your standard, and your job is deciding who is allowed to.`,
+    pay:(W,H,O,C)=>`You take a share of what each of them collects, not the whole fee. Two groups to keep happy instead of one.`},
  kl:W=>`If you cannot name three people who would deliver this at your standard, for your cut, you are the syndicate — and that is the version you already have.`,
  ts:`Sign one deliverer before you sign one buyer. Supply is the hard side here, not demand.`}];
 /* An idea on this page is now PREMISE × ANGLE on top of the four axes. PIDX picks what happens
@@ -319,12 +331,28 @@ function renderVars(silent){
    ${hasP?`<div class="ibox angle"><span class="ik">Then the ${A.nm.toLowerCase()} twist</span>
      <p>${A.an(WS,HS,OS)}</p>
      <p style="margin-top:8px">${A.ex(WS,HS,OS,exc(CUR))}</p></div>`:''}
+   ${/* THE FOUR FACTS. These are axis-level: MW[w][5], MO[o][5], MH[h][7], MP[p][5] read the
+        same for every twist and every kind of work at one combination, which made the card look
+        identical whichever angle you were on. But they are not actually the same. Container only
+        genuinely changes how it runs; Flagship genuinely changes how you get paid; Wedge
+        genuinely narrows who it is for; Teardown genuinely changes what they leave with.
+
+        So each fact prints the axis base and then, underneath, what the chosen work and the
+        chosen twist do to it — attributed, so it is always clear which of the two moved it and
+        which part is the axis talking. Every one of the seven twists and seven kinds of work
+        touches at least one of the four; tools/verify.js asserts that, and asserts that no two
+        twists render the same block. */''}
    <div class="ifacts">
-     <div><span class="ik">Who it is for</span>${MW[w][5]}</div>
-     <div><span class="ik">What they leave with</span>${OS} — something they can point at.
-       If they cannot, you have not delivered.</div>
-     <div><span class="ik">How it runs</span>${MH[h][7]}</div>
-     <div><span class="ik">How you get paid</span>${MP[p][5]}</div>
+     ${[['who','Who it is for',MW[w][5]],
+        ['out','What they leave with',`${cap(OS)} — something they can point at.
+          If they cannot, you have not delivered.`],
+        ['run','How it runs',MH[h][7]],
+        ['pay','How you get paid',MP[p][5]]].map(([k,label,base])=>{
+       const pm = hasP&&CURP.f&&CURP.f[k] ? CURP.f[k](WS,HS,OS) : null;
+       const tm = A.f&&A.f[k] ? A.f[k](WS,HS,OS,exc(CUR)) : null;
+       return `<div><span class="ik">${label}</span>${base}
+         ${pm?`<span class="fmod work"><b>${CURP.nm}:</b> ${pm}</span>`:''}
+         ${tm?`<span class="fmod twist"><b>${A.nm}:</b> ${tm}</span>`:''}</div>`;}).join('')}
    </div>
    <div class="ibox cost"><span class="ik">What it costs you</span>
      ${/* No "The ${nm}" here: one kind of work is already called "The record", which produced

@@ -28,7 +28,7 @@ validation sprint.
   one `<script>` block, no external assets. **This file is generated. Do not edit it.**
 - **Source**: `src/` — 15 HTML section partials, 11 CSS files, 21 JS files.
 - **Build**: `npm run build` (zero dependencies; `build.js` is ~130 lines of plain Node).
-- **Verify**: `npm run verify` — 101 checks, ~11s. See §16.
+- **Verify**: `npm run verify` — 107 checks, ~11s. See §16.
 - **Picker**: `npm run picker` — 32 behavioural checks on the axis picker. See §4a.
 - **Layout**: `npm run probe` — measures the real layout in headless Chrome. See §13b.
 - **Design scan**: `npm run design` — 16 craft checks on the built artifact. See §13a.
@@ -52,7 +52,7 @@ build.js                  src/ → sandeep-idea-map.html. Zero deps. Concatenati
 sandeep-idea-map.html     BUILD OUTPUT — the deliverable. Never edit.
 CONTEXT.md                this file
 README.md                 workflow, file map, known issues
-tools/verify.js           101-check harness (§16)
+tools/verify.js           107-check harness (§16)
 tools/picker.js           axis-picker behaviour: roving tabindex, arrows, aria (§4a)
 tools/probe.js            real geometry, measured in headless Chrome (§13b)
 tools/design.js           craft-floor mechanics: scales, states, contrast, icons (§13a)
@@ -547,6 +547,30 @@ Each archetype also carries prose: `an()` the angle, `gv` what it trades away,
 
 **Directions are defensible; magnitudes are judgment.** The `.prov.judg` chip in the ⓘ
 panel says exactly that. Keep it.
+
+### The four facts
+
+The idea card's four facts — who it is for, what they leave with, how it runs, how you get paid —
+come straight off the axes (`MW[w][5]`, `MO[o][5]`, `MH[h][7]`, `MP[p][5]`). By construction that
+made them **identical for every twist and every kind of work at one combination**: seven different
+businesses, one fact block.
+
+They are not actually the same. Container only changes how it runs; Flagship changes how you get
+paid; Wedge narrows who it is for; Teardown changes what they leave with and rules out anyone with
+no work to take apart.
+
+So every twist and every kind of work declares an `f:{who,out,run,pay}` — **only the keys it
+genuinely changes.** The card prints the axis base, then the work's modifier, then the twist's,
+each attributed and tinted (work `--f2`, twist `--f1`) so it is always clear which of the two
+moved it.
+
+**Do not pad `f` to make a card look busier.** Container only really does not change who pays, and
+claiming otherwise is the fabrication the rest of this engine refuses. A modifier that opens by
+restating the outcome is also waste — the base sentence is directly above it.
+
+verify.js enforces: every twist and work changes at least one fact; every kind of work changes at
+least three; no two ideas at one combination render the same card; and the fact block alone
+differs for every twist at a given work.
 
 ### Kinds of work (`PREM`, `18a-premise.js`) — 7 things that can happen inside
 
