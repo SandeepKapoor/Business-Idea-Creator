@@ -125,6 +125,16 @@ eq('AX.HOW length', NH, 22);
 eq('AX.PAY length', NP, 22);
 eq('combination count matches the 193,600 quoted throughout', NW * NO * NH * NP, 193600);
 
+// CRIT (the heatmap) and CRIT2 (the builder) are two copies of the same eight column labels.
+// Nothing in the code links them, so a rename in one place silently leaves the other behind and
+// the two views of the same score start disagreeing about what they measure.
+eq('CRIT and CRIT2 are the same eight labels', A.CRIT.join('|'), A.CRIT2.join('|'));
+eq('eight criteria', A.CRIT2.length, 8);
+// These strings go into running sentences via toLowerCase(), not just table headers.
+ok('every criterion reads as a noun phrase, not a question',
+  A.CRIT2.every((c) => !c.endsWith('?')),
+  'readRow() writes "the best you have is <name> at 4" — a question there is broken English');
+
 const aligned = [['MW', A.MW, NW], ['MO', A.MO, NO], ['MH', A.MH, NH], ['MP', A.MP, NP],
   ['HOW_BASE', A.HOW_BASE, NH], ['BASE_EV', A.BASE_EV, NH], ['FIRST', A.FIRST, NH],
   ['PAY_MULT', A.PAY_MULT, NP], ['MOTION', A.MOTION, NP], ['SEG_EV', A.SEG_EV, NW]];
@@ -386,9 +396,13 @@ ok('exactly one script block', (html.match(/<script>/g) || []).length === 1);
 {
   eq('INVARIANT 4 — three of the eight criteria are flagged as guesses',
     A.CRIT_GUESS.reduce((a, b) => a + b, 0), 3);
-  const guessed = A.CRIT_GUESS.map((g, i) => g ? A.CRIT2[i] : null).filter(Boolean);
-  ok('INVARIANT 4 — the guesses are distribution, founder fit and energy',
-    guessed.join('|') === 'Distribution you have|Founder fit|Your energy for it', guessed.join(', '));
+  // Pinned by INDEX, not by label. The invariant is that columns 1, 2 and 7 — reach, edge and
+  // energy — are the three the engine cannot know about Sandeep. Pinning the strings instead
+  // meant a copy rewrite failed a content invariant it had not actually violated.
+  const guessedIx = A.CRIT_GUESS.map((g, i) => (g ? i : null)).filter((i) => i !== null);
+  ok('INVARIANT 4 — the guesses are columns 1, 2 and 7 (reach, edge, energy)',
+    guessedIx.join('|') === '1|2|7',
+    `flagged: ${guessedIx.map((i) => `${i} ${A.CRIT2[i]}`).join(', ')}`);
   ok('INVARIANT 4 — the how-to-read block badges them', /GUESS/.test(A.HOWTO()));
 }
 

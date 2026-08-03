@@ -119,7 +119,7 @@ function deepPlanFor(C){
       <tr><td class="dl">× realistic year-one capture</td><td class="mono">0.5% – 5%</td></tr>
       <tr><td class="dl">× core price</td><td class="mono">${inr(core)}</td></tr>
       <tr><td class="dl">= year-one revenue</td><td class="mono">depends entirely on line one</td></tr>
-      <tr><td class="dl">Customers needed for your target</td><td class="mono"><b>${units}</b> ${recur?"standing members":"sales a year"}</td></tr>
+      <tr><td class="dl">Customers needed for your target</td><td class="mono"><b>${units}</b> ${recur?"paying members at once":"sales a year"}</td></tr>
     </tbody></table>
     <p class="tiny">The useful number here is the last row: <b>${units}</b>. You do not need the market
     size to start — you need to know whether ${units} ${recur?"people will hold a subscription":"purchases a year"}
@@ -147,8 +147,8 @@ function deepPlanFor(C){
     MW[w][1]>=4&&MO[o][3]>=4
     ? "Both your credibility with this audience and your fit for this outcome score high — the regulated-industry and strategic-design background is the part competitors cannot copy in six months."
     : MW[w][1]>=4 ? "You have credibility with this audience, but the outcome sits outside your strongest ground. Lean on the audience relationship, not the subject expertise."
-    : MO[o][3]>=4 ? "The outcome plays to your background, but you have no established standing with this audience. Expect to spend the first three months earning the right to be heard."
-    : "Neither your audience standing nor your subject fit is strong here. That is the honest read, and it is the main argument against this idea."}</p>
+    : MO[o][3]>=4 ? "The outcome plays to your background, but this audience does not know you yet. Expect to spend the first three months earning the right to be heard."
+    : "This audience does not know you, and the subject is not really yours either. That is the honest read, and it is the main argument against this idea."}</p>
   </div></div>`;
 
   /* 5 · pricing + unit economics */
@@ -165,7 +165,7 @@ function deepPlanFor(C){
     <div class="prov ${PC.k}" style="margin-bottom:14px">${PC.t}</div>
     <div class="mathbox">
      <div class="mathrow"><span class="mk">Your annual target</span><span class="mv">${inr(target*12)}</span></div>
-     <div class="mathrow"><span class="mk">${recur?"Standing members needed":"Sales needed per year"}</span><span class="mv">${units}</span></div>
+     <div class="mathrow"><span class="mk">${recur?"Paying members needed at once":"Sales needed per year"}</span><span class="mv">${units}</span></div>
      <div class="mathrow"><span class="mk">Which is</span><span class="mv">${recur?units+" people paying every month":(units/12).toFixed(1)+" a month"}</span></div>
      <div class="mathrow"><span class="mk">Delivery cost per unit</span><span class="mv">${
        MH[h][4]===1?"your time — this caps the business at your calendar":"near zero once built — it scales past you"}</span></div>
@@ -185,7 +185,7 @@ function deepPlanFor(C){
    ["That you can reach these people without buying ads","List twenty named individuals with a route to each. If you cannot fill the list, the idea stops here."],
    ["That you are credible enough to be chosen","Publish one piece of work that only you could have made, and see whether the right people respond."],
    ["That you can get to money before you run out of patience","Cut scope until something is sellable in two weeks. Then sell that."],
-   ["That this can grow beyond a small income","Model the ceiling honestly. If it caps in the low lakhs, decide whether that is enough before starting."],
+   ["That this can grow beyond a small income","Work out how big it really gets. If it stops in the low lakhs, decide whether that is enough before you start."],
    ["That it cannot be copied the moment it works","Name what a competitor would have to acquire to match you. If the answer is nothing, expect company."],
    ["That it survives you moving countries","Remove every element that requires you in a specific room on a specific date, then see what is left."],
    ["That you will still want to do it in month fourteen","Do the delivery four times before you commit to a year of it."]][lo];
@@ -234,7 +234,7 @@ function deepPlanFor(C){
       <li>Raise the price for buyer group two. ${core>entry*2?`Core is ${inr(core)} — the gap from ${inr(entry)} is where you learn what they truly value.`:`Entry and core are close here, so test the premium tier at ${inr(prem)} instead.`}</li>
     </ul></div>
     <div class="phase"><div class="ph">Days 61–90 · repeat or stop</div><ul>
-      <li>Run it a second and third time. ${MH[h][4]===1?"Watch how many hours each delivery costs you — this format bills your calendar, and that is the ceiling.":"Watch what breaks when you are not in the room, because this format is meant to run without you."}</li>
+      <li>Run it a second and third time. ${MH[h][4]===1?"Watch how many hours each delivery costs you — this format bills your calendar, and that is the limit.":"Watch what breaks when you are not in the room, because this format is meant to run without you."}</li>
       <li>${slowPay?`The payer's cycle is ${mot[1]}, so deals opened in week two may only close now. Judge the pipeline, not the bank balance.`:`With a ${mot[1]} cycle you should have real revenue by now. If not, the problem is demand, not patience.`}</li>
       <li>Decide against section 09. Do not renegotiate the criteria at this point.</li>
     </ul></div>
@@ -251,7 +251,7 @@ function deepPlanFor(C){
        <td>Delivered three times. A repeat or referral has appeared unprompted. Price has risen at least once.</td>
        <td>Every sale still takes a bespoke conversation and a discount.</td></tr>
      <tr><td class="dl">Month 12</td>
-       <td>${recur?`${Math.max(3,Math.round(units*0.5))}+ standing members with churn under 10% a month.`
+       <td>${recur?`${Math.max(3,Math.round(units*0.5))}+ paying members, with under 10% a month quitting.`
          :`${Math.max(2,Math.round(units*0.5))}+ sales, roughly half your target run-rate, and a named source of new enquiries.`}
        ${MH[h][4]===0?' Some revenue arrived while you were not working.':''}</td>
        <td>Revenue flat, all of it from your own outreach, and you are still the only channel.</td></tr>
@@ -298,7 +298,7 @@ function deepPlanFor(C){
     ${n?`<button class="chip" onclick="mode('report');openFold('score',1)">← back to all 112 scored</button>
     <span class="tiny">Want this written out properly, with me doing fresh research on the gaps above?
     Ask me for <b style="color:var(--ink-1)">&ldquo;go deep on ${n}&rdquo;</b> in chat.</span>`
-    :`<span class="tiny">Every number above carries its provenance. Where a market figure is verified
+    :`<span class="tiny">Every number above says where it came from. Where a market figure is checked
     you get the source; where it is not, the plan says so and leaves you the arithmetic rather than
     inventing a total.</span>`}
   </div>`;

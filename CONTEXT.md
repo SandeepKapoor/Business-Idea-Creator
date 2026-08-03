@@ -28,7 +28,8 @@ validation sprint.
   one `<script>` block, no external assets. **This file is generated. Do not edit it.**
 - **Source**: `src/` — 15 HTML section partials, 11 CSS files, 21 JS files.
 - **Build**: `npm run build` (zero dependencies; `build.js` is ~130 lines of plain Node).
-- **Verify**: `npm run verify` — 96 checks, ~11s. See §16.
+- **Verify**: `npm run verify` — 99 checks, ~11s. See §16.
+- **Plain English**: `npm run plain` — scores every sentence the builder renders. See §10.
 - **Premise provenance**: `npm run premise` — how `PREM` was mined out of the 112. See §10.
 - **Runs by**: opening the built file in a browser. `open sandeep-idea-map.html`.
 - **Audience**: one reader. It is intentionally opinionated and addresses him directly.
@@ -48,7 +49,8 @@ build.js                  src/ → sandeep-idea-map.html. Zero deps. Concatenati
 sandeep-idea-map.html     BUILD OUTPUT — the deliverable. Never edit.
 CONTEXT.md                this file
 README.md                 workflow, file map, known issues
-tools/verify.js           96-check harness (§16)
+tools/verify.js           99-check harness (§16)
+tools/plain.js            sentence-difficulty scan, before/after copy work (§10)
 tools/premise.js          premise extraction + orthogonality test (§10)
 src/index.html            shell: <head>, section includes, <!--@css--> / <!--@js--> markers
 src/sections/*.html       15 partials, one per report section, in document order
@@ -508,7 +510,13 @@ fixes what happens inside, the angle changes one structural thing about how it i
 clamping twice would let a premise that pushes a criterion to 5 swallow an angle's +1 and
 hide the trade-off. Prices multiply: `core *= P.pm * a.pm`.
 
-### Angles (`ARCH`) — 7 ways to build the same idea
+### Twists (`ARCH`) — 7 ways to build the same idea
+
+**The UI says "work" and "twist"; the code says `PREM` and `ARCH`.** "Premise" and "angle"
+were jargon — the user could not read the page. The identifiers were left alone deliberately:
+renaming them buys nothing and costs a diff nobody can review. When you add UI copy, use the
+user's words.
+
 
 Same four axes, different way to build it. Each has score deltas and a price multiplier.
 
@@ -533,7 +541,7 @@ Each archetype also carries prose: `an()` the angle, `gv` what it trades away,
 **Directions are defensible; magnitudes are judgment.** The `.prov.judg` chip in the ⓘ
 panel says exactly that. Keep it.
 
-### Premises (`PREM`, `18a-premise.js`) — 7 things that can happen inside
+### Kinds of work (`PREM`, `18a-premise.js`) — 7 things that can happen inside
 
 The four axes and the seven angles both leave the *premise* free, and that is why one
 combination used to render as a single idea. Proof it is a real variable: 112 bank ideas
@@ -547,7 +555,7 @@ occupy only 106 combinations, and #36 *The Roast* and #99 *Design Court* share a
 | drill | Drill | REPS | 1.0 | `[1,0,0,1,0,-1,0,-1]` | 12 formats |
 | diagnose | Diagnosis | JUDGE | 1.4 | `[1,-1,0,-1,1,2,0,0]` | 10 formats |
 | translate | Translation | CARRY | 1.2 | `[0,0,2,0,0,1,0,0]` | 10 formats |
-| artefact | Artefact | OBJECT | 1.3 | `[1,0,0,0,-1,0,0,-1]` | 9 formats, `MO[o][2]>=3` |
+| artefact | The object | OBJECT | 1.3 | `[1,0,0,0,-1,0,0,-1]` | 9 formats, `MO[o][2]>=3` |
 | door | Access | ROOM | 1.6 | `[0,1,2,-1,0,2,-1,0]` | 9 formats |
 
 `PREM[0]` is **inert by construction** — zero deltas, ×1 price — so the default state of the
@@ -574,6 +582,27 @@ a new name. That killed *Contest*, *Matchmaking* and *Frontier*; *Instrument* an
 **Deliberately not modelled: the SUBJECT.** #46 *Studio Tour* and #72 *How They Design* share
 the Access premise and differ only in which doors get opened. Generating those would mean
 inventing rooms Sandeep can get into. Do not add it.
+
+### The copy standard
+
+`npm run plain` renders the builder for five combinations, splits everything on screen into
+sentences, and scores each one: words, plus a penalty for abstract business register and for
+every clause after the first. It is deliberately not Flesch-Kincaid — that rewards short words
+and would push this page toward clipped fragments. What matters is one idea per sentence.
+
+Current: **2,254 sentences, median 9 words, p90 16, longest 29.** Baseline before the copy pass
+had ~2,000 hard-word hits across 14 terms; it is now 10 across 8. If a change pushes the median
+or p90 up, the copy got worse.
+
+Two rules that came out of that pass and are worth keeping:
+
+- **Column labels are sentence fragments.** `CRIT2` is not only table headers — `readRow()`
+  drops the strings into running prose ("the best you have is *how big it can get* at 4"), so
+  every one has to be a plain noun phrase. A question mark there is broken English; verify.js
+  checks for it.
+- **Say it in the user's words, not the model's.** "Premise", "angle", "defensibility",
+  "willingness to pay", "distribution", "revenue ceiling", "top quartile", "provenance",
+  "acquisition" and "standing members" all left the interface. The concepts did not.
 
 ### What `renderVars()` emits, in order
 

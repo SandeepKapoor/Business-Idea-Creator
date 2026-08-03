@@ -42,11 +42,11 @@ const PREM=[
  v:`The four axes and nothing more`,
  q:`What if the shape is the whole idea?`,
  lem:`A stand. It sells lemonade.`,
- an:(W,H)=>`You have fixed the four axes and left the inside open. That is a real place to be,
-   not an unfinished one — 32 of the 112 ideas in the bank are exactly this: change the payer,
-   change the audience, change the format, and stop there.`,
- ex:(W,H,O)=>`${cap(aAn(H))} for ${W}, aimed at ${O}. What happens inside it is still yours to
-   decide — pick a premise above and the whole page rebuilds around it.`},
+ an:(W,H)=>`You have set the four axes and left the inside open. That is a real place to be, not
+   an unfinished one — 32 of the 112 ideas in your bank are exactly this: change the payer, change
+   the audience, change the format, and stop there.`,
+ ex:(W,H,O)=>`${cap(aAn(H))} for ${W}, aimed at ${O}. What you actually do inside it is still
+   yours to decide — pick a kind of work above and the whole page rebuilds around it.`},
 
 {k:'teardown',nm:'Teardown',tn:'Teardown',w1:'BREAK',pm:0.8,dS:[0,1,0,2,-1,0,0,1],
  ev:[6,36,43,67,68,69,74,97,98],ob:[2,4,6,7,8,11],xt:[0,1,3,5,9,10,18,19],
@@ -72,8 +72,8 @@ const PREM=[
  ex:(W,H,O)=>`For ${W}, nobody has honestly written down what it actually takes to get ${O} —
    what works, what does not, and what it really costs. You publish that as ${aAn(H)}, keep it
    current, and let being cited do the selling.`,
- gv:`Slow, and people do not pay much for reference material — the money always has to come from
-   somewhere adjacent. Budget a year before anyone calls it canonical.`},
+ gv:`Slow, and people do not pay much for a reference. The money has to come from something next
+   to it. Give it a year before anyone treats yours as the one to trust.`},
 
 {k:'drill',nm:'Drill',tn:'Drill',w1:'REPS',pm:1.0,dS:[1,0,0,1,0,-1,0,-1],
  ev:[7,16,20,33,44,91],ob:[0,2,5,16,20],xt:[1,3,4,9,10,11,12],
@@ -85,8 +85,8 @@ const PREM=[
  ex:(W,H,O)=>`${cap(W)} do not fail at this for lack of information — they fail in the moment
    itself. So the ${H} does exactly one thing: it makes them rehearse their way to ${O}, over and
    over, until the moment stops frightening them.`,
- gv:`Repetitive for you as well as for them, and easy for anyone to copy once they have watched
-   it. What you are selling is the reps, and reps are not proprietary.`},
+ gv:`Repetitive for you as well as for them, and easy to copy once someone has watched it. You
+   are selling the practice, and nobody owns practice.`},
 
 {k:'diagnose',nm:'Diagnosis',tn:'Diagnostic',w1:'JUDGE',pm:1.4,dS:[1,-1,0,-1,1,2,0,0],
  ev:[11,12,52,59,81,86],ob:[1,2,17,18],xt:[0,4,9,14,16,19],
@@ -97,8 +97,9 @@ const PREM=[
    tell them plainly — which is the one thing almost nobody in this market is willing to do.`,
  ex:(W,H,O)=>`You assess ${W} against ${O} and hand back a straight answer, in writing. The ${H}
    is only how it is delivered; the verdict is the product, and the verdict is what they pay for.`,
- gv:`Nobody accepts your judgement until you have standing, so this is the premise that most
-   needs an audience first. Build it too early and you are a stranger marking someone's homework.`},
+ gv:`Nobody takes your verdict seriously until they know who you are, so this one needs an
+   audience before anything else. Start too early and you are a stranger marking someone's
+   homework.`},
 
 {k:'translate',nm:'Translation',tn:'Translation',w1:'CARRY',pm:1.2,dS:[0,0,2,0,0,1,0,0],
  ev:[4,10,75,76,83],ob:[0,1,14],xt:[2,3,6,9,10,13,21],
@@ -110,14 +111,14 @@ const PREM=[
    compete with nobody while you are the only one who has made the trip.`,
  ex:(W,H,O)=>`The method that reliably produces ${O} exists somewhere ${W} cannot get to it. You
    bring it over as ${aAn(H)}, in the language they actually think in.`,
- gv:`It lasts exactly as long as the gap does. Once two other people have made the same trip,
-   the arbitrage is gone and you are competing on delivery like everyone else.`},
+ gv:`It lasts exactly as long as the gap does. Once two other people make the same trip, the
+   edge is gone and you are competing on delivery like everyone else.`},
 
 /* The only premise with an OUTCOME filter. "They leave holding one finished thing" is not a
    promise you can make about an outcome nobody can hold. Belonging, Clarity, AI-Proof and Exit
    all score 1–2 on MO's measurable column, and offering Artefact against them produced lines
    like "leaves the membership with the habit of still turning up in week nine in their hands". */
-{k:'artefact',nm:'Artefact',tn:'Build',w1:'OBJECT',pm:1.3,dS:[1,0,0,0,-1,0,0,-1],
+{k:'artefact',nm:'The object',tn:'Build',w1:'OBJECT',pm:1.3,dS:[1,0,0,0,-1,0,0,-1],
  ev:[1,5,8,90],ob:[0],xt:[1,2,3,4,5,9,10,18],apO:o=>MO[o][2]>=3,
  v:`They leave holding one finished thing`,
  q:`What is the object they walk out with?`,
@@ -127,8 +128,8 @@ const PREM=[
  ex:(W,H,O)=>`Every one of your ${W} leaves the ${H} with ${O} — a real, finished thing that on
    the last day either exists or does not. If it does not, you have not delivered, whatever else
    happened in the room.`,
- gv:`Each finished thing costs you real hours of attention, so the ceiling is your calendar, and
-   the promise is unforgiving: on the last day it exists or it does not.`},
+ gv:`Every finished thing costs you real hours, so your calendar is the limit. And the promise
+   is a hard one: on the last day it exists, or it does not.`},
 
 {k:'door',nm:'Access',tn:'Access',w1:'ROOM',pm:1.6,dS:[0,1,2,-1,0,2,-1,0],
  ev:[46,72,82],ob:[7,21],xt:[3,5,6,8,9,10,11],
@@ -161,8 +162,8 @@ function premFor(h,o){
 function premEv(P,h){
   if(P.k==='none')return null;
   const built=P.ev.filter(n=>TAGS[n]&&TAGS[n][2]===h);
-  if(built.length)return{k:'ok',t:`Built this way in your own bank: ${built.map(n=>'#'+n).join(', ')}.`};
-  return{k:'weak',t:`No bank idea uses this premise at this format. ${P.ev.length
-    ? `It appears elsewhere in the bank (${P.ev.slice(0,4).map(n=>'#'+n).join(', ')}${P.ev.length>4?'…':''}), and my judgement is that it transfers — that judgement is not evidence.`
-    : `My judgement only.`}`};
+  if(built.length)return{k:'ok',t:`Your bank already does this at this format: ${built.map(n=>'#'+n).join(', ')}.`};
+  return{k:'weak',t:`Nothing in your bank does this work at this format. ${P.ev.length
+    ? `It turns up elsewhere (${P.ev.slice(0,4).map(n=>'#'+n).join(', ')}${P.ev.length>4?'…':''}) and I think it carries over here. That is a guess, not proof.`
+    : `That is a guess, not proof.`}`};
 }

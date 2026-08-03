@@ -1,6 +1,18 @@
 /* ---------- heatmap ---------- */
-const CRIT=["Willingness to pay","Distribution you have","Founder fit","Speed to first ₹",
-            "Revenue ceiling","Defensibility","Works anywhere","Your energy for it"];
+/* The eight columns. Renamed from the original business register — "Defensibility",
+   "Willingness to pay", "Revenue ceiling" — because these strings are not only column headers:
+   readRow() drops them into running sentences ("the best you have is X at 4"), so they have to
+   be plain noun phrases a reader parses at a glance, not terms of art. CRIT2 in 15-scoring.js
+   must stay identical; verify.js asserts it. */
+const CRIT=["What they’ll pay",
+  "People you can reach",
+  "Your edge here",
+  "How soon you get paid",
+  "How big it can get",
+  "How hard to copy",
+  "Works anywhere",
+  "Your energy for it"];
+
 /* the eight hand-scored finalists now live in HAND, below, keyed by idea number */
 /* Ordinal 1–5 ramp. Two selected ramps, not an auto-flip: the light end of each must clear
    2:1 against its own surface. Both pass validate_palette.js --ordinal in their own mode.

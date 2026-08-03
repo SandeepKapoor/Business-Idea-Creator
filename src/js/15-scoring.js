@@ -1,5 +1,11 @@
-const CRIT2=["Willingness to pay","Distribution you have","Founder fit","Speed to first ₹",
-             "Revenue ceiling","Defensibility","Works anywhere","Your energy for it"];
+const CRIT2=["What they’ll pay",
+             "People you can reach",
+             "Your edge here",
+             "How soon you get paid",
+             "How big it can get",
+             "How hard to copy",
+             "Works anywhere",
+             "Your energy for it"];
 /* [what a 5 means, what a 1 means, which axis to change to fix it] */
 const CRIT_DEF=[
 ["they already spend money on this problem today","they would like it, for free","who pays — or pick a more urgent outcome"],
@@ -12,14 +18,14 @@ const CRIT_DEF=[
 ["you would still want to do it in month fourteen","bored of it by week three","how — a format you would genuinely enjoy repeating"]];
 /* Which criteria the engine cannot actually know about Sandeep, and is therefore guessing. */
 const CRIT_GUESS=[0,1,1,0,0,0,0,1];
-const GUESS_WHY=["","assumes how far your network reaches — I only know you work at Boeing",
-  "assumes your credibility with this group","","","","",
+const GUESS_WHY=["","assumes how far your network reaches — all I know is that you work at Boeing",
+  "assumes how much this group would trust you","","","","",
   "read off the format's demands, not off your temperament"];
 const BANDS=[
 ["DEAD","--crit","Either gate reads 1. Stop. No total rescues this."],
 ["ASSET, NOT REVENUE","--warn","Willingness to pay is 1–2. Run it to build audience, put the invoice elsewhere."],
-["WEAK","--serious","28 or below — under the top quartile of all combinations. Change an axis."],
-["WORTH TESTING","--warn","29–31. Top quartile. Twenty interviews, not six months."],
+["WEAK","--serious","28 or below — outside the best 25% of all combinations. Change an axis."],
+["WORTH TESTING","--warn","29–31. In the best 25%. Twenty interviews, not six months."],
 ["BUILD","--good","32–40. Top 4% of 193,600, both gates clear. Take money for it this fortnight."]];
 function HOWTO(){
   return `<details class="howto">
@@ -36,11 +42,11 @@ function HOWTO(){
      <div class="cd"><b>5</b> ${CRIT_DEF[i][0]} · <b>1</b> ${CRIT_DEF[i][1]}
      ${CRIT_GUESS[i]?`<br><span style="color:var(--f4)">Not knowable by me: ${GUESS_WHY[i]}. Override it.</span>`:''}</div></div>`).join('')}</div>
    <div class="ht-gate" style="border-left-color:var(--f4);margin-top:12px">
-    <b>Three of these eight are guesses about you, not about the market.</b> Distribution and founder
-    fit assume how far your network reaches and how much credibility you carry — I know you work at
-    Boeing and studied at Politecnico di Milano, and nothing else. Energy is read off what the format
-    demands, not off your temperament. Where you disagree, you are right and the engine is wrong.
-    The other five follow from the axes and the pricing evidence.</div>
+    <b>Three of these eight are guesses about you, not about the market.</b> How many people you can
+    reach and whether you have an edge both depend on your network and on how much people trust you.
+    All I know is that you work at Boeing and studied at Politecnico di Milano. Energy is read off
+    what the format demands, not off what you are like. Where you disagree, you are right and the
+    engine is wrong. The other five follow from the axes and the pricing evidence.</div>
    <div class="ht-t">Each column is 1–5, so 40 is the maximum. Darker blue is higher.</div>
    <div class="ht-bands">${BANDS.map(b=>
      `<span class="bb" style="color:var(${b[1]})">${b[0]}</span><span class="bd">${b[2]}</span>`).join('')}</div>
@@ -58,11 +64,11 @@ function readRow(S){
   let gap="";
   if(gateFail)gap="Irrelevant — a gate failed.";
   else if(S[0]<=2)gap=`The total is respectable, but willingness to pay at ${S[0]} overrides it: this is an audience asset, not a revenue line.`;
-  else if(tot>=32)gap="That is BUILD territory — top 4% of all 193,600 combinations.";
-  else if(tot>=29)gap=`<b>${32-tot} point${32-tot>1?'s':''}</b> short of BUILD, and inside the top quartile.`;
-  else gap=`<b>${32-tot} points</b> short of BUILD and below the top quartile — more than one axis needs to change.`;
+  else if(tot>=32)gap="That is a BUILD — the best 4% of all 193,600 combinations.";
+  else if(tot>=29)gap=`<b>${32-tot} point${32-tot>1?'s':''}</b> short of BUILD, and inside the best 25%.`;
+  else gap=`<b>${32-tot} points</b> short of BUILD and outside the best 25% — more than one axis needs to change.`;
   return `<div class="readrow"><div class="rt">Reading this specific row</div><ul>
-   <li><b>Gates:</b> willingness to pay ${S[0]}, distribution ${S[1]} —
+   <li><b>Gates:</b> what they will pay ${S[0]}, people you can reach ${S[1]} —
      ${gateFail?`<b style="color:var(--crit)">one of them reads 1, so this is dead.</b> Nothing else on the row matters.`
      :`neither reads 1, so the idea survives and the rest of the row is worth reading.`}</li>
    <li><b>Carrying it:</b> ${carry}.</li>
@@ -93,11 +99,11 @@ function scoreIt(w,o,h,p){
 function verdict(S,F){
   const gate=(S[0]===1||S[1]===1), tot=S.reduce((a,b)=>a+b);
   if(gate)return{k:"dead",t:"DEAD — GATE FAILURE",c:"--crit",
-    d:"A score of 1 on willingness to pay or on distribution kills an idea regardless of its total. Do not negotiate with this. Change an axis and roll again."};
+    d:"A 1 on what they will pay, or on how many you can reach, kills an idea whatever the total says. Do not argue with it. Change an axis and roll again."};
   if(F.some(f=>f.t==="bad"))return{k:"dead",t:"STRUCTURALLY BROKEN",c:"--crit",
     d:"The combination contains a contradiction flagged above. The scores are academic until you fix it."};
   if(S[0]<=2)return{k:"hold",t:"ASSET, NOT REVENUE",c:"--warn",
-    d:"Willingness to pay is "+S[0]+". Whatever else this scores, people will not hand over meaningful money for it. That does not make it worthless — it makes it a distribution asset, like idea #67. Run it to build the audience, and put the invoice somewhere else."};
+    d:"What they will pay is "+S[0]+". Whatever else this scores, nobody is handing over real money for it. That does not make it worthless — it makes it a way to build an audience, like idea #67. Run it for the audience, and send the invoice somewhere else."};
   /* Bands are anchored to the measured distribution of all 193,600 combinations, not chosen by
      feel. Across the scoreable remainder: median 27, p75 = 29, p96 = 32, max 37.
      So BUILD >= 32 is the top ~4% and TEST >= 29 is the top quartile.
@@ -105,8 +111,8 @@ function verdict(S,F){
   if(tot>=32)return{k:"live",t:"BUILD — TEST THIS",c:"--good",
     d:"Top 4% of all 193,600 combinations, and it clears both gates. Take it into the two-week sprint below and try to take money for it before you build anything."};
   if(tot>=29)return{k:"hold",t:"WORTH TESTING",c:"--warn",
-    d:"Top quartile, no fatal flaw, no standout strength. Worth twenty interviews, not worth six months. Compare it against the top of the bank before committing."};
+    d:"In the best 25%, no fatal flaw, nothing that stands out either. Worth twenty interviews, not six months. Compare it against the top of the bank before you commit."};
   return{k:"hold",t:"WEAK — KEEP ROLLING",c:"--serious",
-    d:"Below the top quartile, with no gate failure. Nothing here is pulling its weight. That is a fine result: you learned it in ten seconds instead of ten months. Change the axis that scored lowest and go again."};
+    d:"Outside the best 25%, with no gate failure. Nothing here is pulling its weight. That is a fine result: you learned it in ten seconds instead of ten months. Change the axis that scored lowest and go again."};
 }
 

@@ -17,7 +17,7 @@ const ARCH=[
  ti:t=>`The ${t} Wedge`,
  an:(W,H)=>`Same ${H}, same promise — but built for one narrow slice of ${W} rather than all of them. Fewer people to sell to, and far more precise about what you say to each one.`,
  ex:(W,H,O,C)=>`Instead of the ${H} for ${W} in general, you run it only for ${C.s}. Someone who fits that reads your first line and thinks: that is me.`,
- gv:`A smaller ceiling, deliberately. A tenth of the audience is a tenth of the money — you are buying a message that lands.`,
+ gv:`A smaller top end, on purpose. A tenth of the audience is a tenth of the money — what you buy with that is a message that lands.`,
  kl:W=>`If you cannot name the sub-group of ${W} in five words, the wedge does not exist yet.`,
  ts:`Interview twenty people from that one slice only. Ten of them describing the same pain in the same words means the wedge is real.`},
 {k:'proof',nm:'Proof engine',pm:1.0,dS:[1,0,0,1,0,0,0,-1],
@@ -28,7 +28,7 @@ const ARCH=[
  an:(W,H,O)=>`You promise one finished thing — ${O} — and nothing else at all. The ${H} stops being the product and becomes the machine that gets it done.`,
  ex:(W,H,O,C)=>`Strip the page down to one line: they leave with ${O}. On the last day it exists or it does not, which is exactly why people will pay before it starts.`,
  gv:`Repetitive by about month six. You trade variety in your own work for a promise nobody can argue with.`,
- kl:W=>`If a buyer cannot tell from the outside whether the artefact got produced, this is not a proof engine — it is a course with a promise attached.`,
+ kl:W=>`If a buyer cannot tell from the outside whether the thing got made, this is not a proof engine — it is a course with a promise attached.`,
  ts:`Pre-sell it as a dated deliverable with a written refund clause. If the deadline scares you, the scope is wrong, not the idea.`},
 {k:'flagship',nm:'Flagship',pm:3.0,dS:[-1,-1,1,-1,2,1,0,0],
  w1:`PRICE`,
@@ -40,7 +40,7 @@ const ARCH=[
    ?`Rather than ${inr(C.base)} for a seat among many, you charge ${inr(C.core)} to work on ${O} with a handful of ${W} directly.`
    :`Rather than a seat among many, you charge several times as much to work on ${O} with a handful of ${W} directly.`,
  gv:`Far fewer buyers, and each sale takes much longer. Nobody buys at this price on impulse, and most of them will say no.`,
- kl:W=>`If nobody among ${W} has paid a comparable price for anything in the last year, the flagship has no precedent to lean on. Kill it.`,
+ kl:W=>`If nobody among ${W} has paid anything like this price in the last year, nothing similar has ever sold. Kill it.`,
  ts:`Do not build it. Sell three seats by hand, on calls, at full price. If three is hard, thirty is impossible.`},
 {k:'container',nm:'Container only',pm:0.7,dS:[0,0,-1,2,-1,-1,1,1],ap:h=>[0,1,3,5].includes(h),
  w1:`DELIVERY`,
@@ -71,9 +71,9 @@ const ARCH=[
  ti:t=>`The Anti-${t} Play`,
  an:(W,H)=>`You disagree in public, under your own name, with the thing everyone in this market repeats. The ${H} then becomes the proof that you were right.`,
  ex:(W,H,O,C)=>`The usual advice given to ${W} is ${C.y}. You say plainly that this is wrong, and run the ${H} as your evidence.`,
- gv:`Fewer buyers, because you have to win the argument first. In return: attention you could not have bought, and a position nobody can copy without looking derivative.`,
+ gv:`Fewer buyers, because you have to win the argument first. In return: attention you could not have bought, and a position nobody can copy without looking like a copy.`,
  kl:W=>`If you would not say it on the record, with your name on it, you do not believe it enough to build on it.`,
- ts:`Publish the argument first, for free, and see whether it makes anyone angry. Indifference is the failure mode here, not disagreement.`},
+ ts:`Publish the argument first, for free, and see whether it makes anyone angry. The thing to fear is that nobody cares. Someone disagreeing is fine.`},
 {k:'synd',nm:'Syndicate',pm:0.9,dS:[0,-1,-1,-2,2,1,1,-1],ap:h=>![21].includes(h),
  w1:`TEAM`,
  lem:`Same lemonade — but three other people run stands using your recipe and your name, and you take a cut of each.`,
@@ -167,7 +167,7 @@ function renderVars(silent){
     const revenue=recur?`recurring — ${inr(core)} a month per customer`
       :`one-off — ${inr(core)} a sale`;
     const shape=MH[h][4]===1
-      ?`It bills your calendar: every unit sold costs you hours, so your available time is the ceiling.`
+      ?`It bills your calendar: every sale costs you hours, so the time you have is the limit.`
       :`It runs without you once built, so revenue is not capped by your hours.`;
     html+=`<div class="origin"><div><b>Loaded from the bank · #${ORIGIN} ${src?src.nm:''}</b>
       <div class="obiz">
@@ -192,9 +192,13 @@ function renderVars(silent){
 
   /* ---------- the navigator ----------
      Two rows, because an idea here is two independent choices. The old single row said
-     "Idea 1 of 7", which was a lie — those were seven angles on ONE idea, and it is what made
+     "Idea 1 of 7", which was a lie — those were seven twists on ONE idea, and it is what made
      the whole page look like a single combination could only ever produce one business.
-     Premise on top (what happens), angle below (the one structural thing that changes). */
+     The work on top (what you actually do), the twist below (the one thing that changes).
+
+     "Premise" and "angle" were my words, not plain English, so the UI says "work" and "twist"
+     everywhere. The identifiers stay PREM / ARCH — renaming those buys nothing and costs a
+     diff nobody can read. */
   const vdot=v=>v.V.k==='dead'?'--crit':v.V.k==='live'?'--good':'--warn';
   const kdot=k=>k==='dead'?'--crit':k==='live'?'--good':'--warn';
   /* What every premise would score AT THE ANGLE CURRENTLY SELECTED, so the premise row is a
@@ -204,28 +208,28 @@ function renderVars(silent){
     return{tot:s.reduce((x,y)=>x+y),V:verdict(s,baseF)};};
   const CURP=PREMS[PIDX], total=PREMS.length*VARS.length;
   html+=`<div class="vnav2" id="vnav">
-    <div class="vhead"><b>${total} ideas</b> for this one combination —
-      ${PREMS.length} premises × ${VARS.length} angles. You are reading
+    <div class="vhead"><b>${total} ideas</b> from this one combination:
+      ${PREMS.length} kinds of work × ${VARS.length} twists. You are on
       <b style="color:var(--f2)">${CURP.nm}</b> × <b style="color:var(--f1)">${A.nm}</b>,
       number <b>${PIDX*VARS.length+VIDX+1}</b>.</div>
     <div class="vrow">
-      <div class="vrl">What happens<span>the premise</span></div>
+      <div class="vrl">The work<span>what you actually do</span></div>
       <div class="vpills">${PREMS.map((P,i)=>{const q=pAt(P);
         return `<button class="vpill${i===PIDX?' on':''}" onclick="setPrem(${i})"
           title="${P.v}"><span class="vd" style="background:var(${kdot(q.V.k)})"></span>${P.nm}
           <span class="vt">${q.tot}</span></button>`;}).join('')}<button
         class="vpill vinfo${PI?' on':''}" onclick="PI=!PI;renderVars(1)"
-        title="What a premise is, and where these came from"
-        aria-label="What a premise is, and where these came from">ⓘ</button></div>
+        title="What the work means, and where this list came from"
+        aria-label="What the work means, and where this list came from">ⓘ</button></div>
     </div>
     <div class="vrow">
-      <div class="vrl">How you build it<span>the angle</span></div>
+      <div class="vrl">The twist<span>one thing you change</span></div>
       <div class="vpills">${VARS.map((v,i)=>
         `<button class="vpill${i===VIDX?' on':''}" onclick="setVar(${i})">
           <span class="vd" style="background:var(${vdot(v)})"></span>${v.nm}
           <span class="vt">${v.tot}</span></button>`).join('')}<button
         class="vpill vinfo${VI?' on':''}" onclick="VI=!VI;renderVars(1)"
-        title="Show every angle in full" aria-label="Show every angle in full">ⓘ</button></div>
+        title="Show every twist in full" aria-label="Show every twist in full">ⓘ</button></div>
     </div>
   </div>`;
   if(PI)html+=premPanel(w,o,h,p,WS,HS,OS,pAt);
@@ -234,15 +238,15 @@ function renderVars(silent){
     const dn=d=>d.map((x,i)=>x<0?CRIT2[i].toLowerCase():null).filter(Boolean);
     html+=`<div class="viexp">
       <div class="ht-t">What is different between them</div>
-      <p class="tiny" style="margin-bottom:12px">Your four dropdowns fix <b>what</b> the business is.
-      Every angle keeps those four the same and changes exactly <b>one</b> thing about how you build
-      it. Each one has a word to remember it by.</p>
+      <p class="tiny" style="margin-bottom:12px">Your four dropdowns set <b>what</b> the business is.
+      Every twist keeps those four the same and changes exactly <b>one</b> thing about how you build
+      it. Each has a word to remember it by.</p>
 
       <p class="tiny" style="margin-bottom:8px"><b style="color:var(--ink-1)">Start with a lemonade
-      stand.</b> Anyone can walk up and buy a cup. Watch each angle change one thing about it —
-      and leave everything else alone.</p>
+      stand.</b> Anyone can walk up and buy a cup. Watch each twist change one thing —
+      and leave the rest alone.</p>
       <table class="dtab acmp">
-        <thead><tr><th>Angle</th><th>In a word</th><th>The same stand, one thing changed</th></tr></thead>
+        <thead><tr><th>Twist</th><th>In a word</th><th>The same stand, one thing changed</th></tr></thead>
         <tbody>${VARS.map((v)=>`<tr>
           <td class="dl">${v.nm}</td>
           <td><span class="w1">${v.a.w1}</span></td>
@@ -250,10 +254,10 @@ function renderVars(silent){
       </table>
 
       <p class="tiny" style="margin:14px 0 8px"><b style="color:var(--ink-1)">Now the same seven, on
-      your idea.</b> Click a row to switch to it. The prices are all for this one combination, so the
-      spread you see is the angle alone.</p>
+      your idea.</b> Click a row to switch. Every price is for this one combination, so the gap you
+      see is the twist alone.</p>
       <table class="dtab acmp">
-        <thead><tr><th>Angle</th><th>In a word</th><th>The one thing it changes</th>
+        <thead><tr><th>Twist</th><th>In a word</th><th>The one thing it changes</th>
           <th>Price</th><th>Score</th></tr></thead>
         <tbody>${VARS.map((v,i)=>`<tr class="vrow${i===VIDX?' on':''}" onclick="setVar(${i})">
           <td class="dl">${i===VIDX?'▸ ':''}${v.nm}</td>
@@ -262,10 +266,10 @@ function renderVars(silent){
           <td class="anum">×${v.a.pm}<span class="asub">${inr(v.core)}</span></td>
           <td class="anum" style="color:var(${v.V.c})">${v.tot}</td></tr>`).join('')}</tbody>
       </table>
-      <p class="tiny" style="margin-bottom:16px">Same seven angles, same one-word tags — first on a
-      lemonade stand, then on the business you are actually building.</p>
+      <p class="tiny" style="margin-bottom:16px">Same seven twists, same words — first on a lemonade
+      stand, then on the business you are actually building.</p>
 
-      <div class="ht-t">All ${VARS.length} angles in full</div>
+      <div class="ht-t">All ${VARS.length} twists in full</div>
       <div class="vitab">${VARS.map((v,i)=>`
         <div class="viv${i===VIDX?' on':''}">
           <div class="vivh"><b>${v.nm}</b>
@@ -279,15 +283,15 @@ function renderVars(silent){
             <span class="vplus">▲ ${up(v.a.dS).join(', ')||'nothing'}</span>
             <span class="vminus">▼ ${dn(v.a.dS).join(', ')||'nothing'}</span></div>
         </div>`).join('')}</div>
-      <p class="tiny" style="margin-top:12px">Only the angles that fit your chosen format appear.
-      <b>Container only</b> needs a teaching format; <b>Ladder</b> and <b>Syndicate</b> do not work for
-      retainers or study tours. So you see between four and seven, never a fixed list.</p>
-      <div class="prov judg" style="margin-top:10px">The <i>directions</i> here are defensible —
-      narrowing raises willingness to pay, premium pricing lowers it, syndication trades speed for
-      ceiling. The exact <i>magnitudes</i> are my judgment, not measured. Read the row as a comparison,
-      not as forecasts. The &ldquo;for this idea&rdquo; lines are worked illustrations of each angle —
-      the named sub-group and the conventional advice are my characterisation of the market, offered to
-      make the angle concrete, not as findings you should take on trust.</div>
+      <p class="tiny" style="margin-top:12px">Only the twists that fit your format show up.
+      <b>Container only</b> needs a teaching format. <b>Ladder</b> and <b>Syndicate</b> do not work for
+      retainers or study tours. So you get four to seven, never a fixed list.</p>
+      <div class="prov judg" style="margin-top:10px"><b>Which way</b> each number moves is sound:
+      going narrow raises what people will pay, charging a lot lowers it, handing delivery to other
+      people trades speed for size. <b>How far</b> it moves is my guess, not a measurement. Use the row
+      to compare, not to predict. The &ldquo;for this idea&rdquo; lines are worked examples: the named
+      sub-group and the usual advice are how <i>I</i> read the market. They are there to make the twist
+      concrete, not for you to take on trust.</div>
     </div>`;
   }
 
@@ -307,13 +311,13 @@ function renderVars(silent){
   const pev = premEv(CURP,h);
   html+=`<div class="ideacard">
    <div class="tt">${title}</div>
-   <div class="st">${hasP?`${CURP.nm} premise · `:''}${A.nm} angle · ${HS} · for ${WS}
+   <div class="st">${hasP?`${CURP.nm} work · `:''}${A.nm} twist · ${HS} · for ${WS}
      · paid by ${AX.PAY[p].toLowerCase().replace("l&d","L&D")}</div>
    <p class="ilead">${hasP?CURP.an(WS,HS,OS):A.an(WS,HS,OS)}</p>
    <div class="ibox"><span class="ik">In practice</span>
      <p>${hasP?CURP.ex(WS,HS,OS):A.ex(WS,HS,OS,exc(CUR))}</p>
      ${pev?`<span class="prov ${pev.k}" style="margin-top:8px;display:block">${pev.t}</span>`:''}</div>
-   ${hasP?`<div class="ibox angle"><span class="ik">Then the ${A.nm.toLowerCase()} angle</span>
+   ${hasP?`<div class="ibox angle"><span class="ik">Then the ${A.nm.toLowerCase()} twist</span>
      <p>${A.an(WS,HS,OS)}</p>
      <p style="margin-top:8px">${A.ex(WS,HS,OS,exc(CUR))}</p></div>`:''}
    <div class="ifacts">
@@ -324,10 +328,10 @@ function renderVars(silent){
      <div><span class="ik">How you get paid</span>${MP[p][5]}</div>
    </div>
    <div class="ibox cost"><span class="ik">What it costs you</span>
-     ${/* No "The ${nm}" here: one premise is already called "The record", which produced
-          "The the record premise". Premise names lead, angle names follow "the". */''}
-     ${hasP?`<p><b>${CURP.nm} premise:</b> ${CURP.gv}</p>
-       <p style="margin-top:8px"><b>The ${A.nm.toLowerCase()} angle:</b> ${A.gv}</p>`
+     ${/* No "The ${nm}" here: one kind of work is already called "The record", which produced
+          "The the record work". Work names lead, twist names follow "the". */''}
+     ${hasP?`<p><b>${CURP.nm} work:</b> ${CURP.gv}</p>
+       <p style="margin-top:8px"><b>The ${A.nm.toLowerCase()} twist:</b> ${A.gv}</p>`
       :`<p>${A.gv}</p>`}</div>
    <div class="ipitch">&ldquo;I help ${WS} get ${OS}, through ${aHS}, and ${payer}.&rdquo;
      <span class="ipn">Say it out loud to a stranger. If they do not get it immediately, the
@@ -337,7 +341,7 @@ function renderVars(silent){
   /* flags */
   if(F.length){html+=`<h3 style="margin:26px 0 10px">Flags on this combination</h3>
     <p class="tiny" style="margin:-4px 0 10px">These come from the four axes, so they apply to
-    <b style="color:var(--ink-1)">every one of the ${VARS.length} variants</b> — switching angle does not fix them.</p>`;
+    <b style="color:var(--ink-1)">every one of the ${VARS.length} twists</b> — changing the twist does not fix them.</p>`;
     F.forEach(f=>{html+=`<div class="flag ${f.t}"><div class="ic">${f.ic}</div>
       <div><b>${f.tt}</b><br><span style="color:var(--ink-2)">${f.tx}</span></div></div>`;});}
 
@@ -345,7 +349,7 @@ function renderVars(silent){
   html+=`<h3 style="margin:30px 0 12px">Part 6 · The four stages, for <span style="color:var(--f1)">${title}</span></h3>`;
   const q5=[
    ["Can you name ten people who want this today?",MW[w][0]>=4?"LIKELY YES":"PROBABLY NOT",MW[w][0]>=4],
-   ["Do you have unfair access or credibility here?",MW[w][1]>=4?"YES":"NO",MW[w][1]>=4],
+   ["Do you have access, or a name, that others do not?",MW[w][1]>=4?"YES":"NO",MW[w][1]>=4],
    ["Can you deliver v1 alone inside 30 days?",MH[h][0]<=2?"YES":"NO",MH[h][0]<=2],
    ["Would you still do it in month 14, when it is boring?",S[7]>=4?"PROBABLY":"DOUBTFUL",S[7]>=4],
    ["Does it work from another country?",MH[h][2]>=4?"YES":"NO",MH[h][2]>=4]];
@@ -361,8 +365,8 @@ function renderVars(silent){
       trust your version over mine.</div></div>`;
   html+=`<div class="stage" style="border-left-color:var(--s5)">
     <div class="sh"><span class="sn">Stage 2</span><span class="stt">Scorecard and hard gates</span></div>
-    <ul><li>Total <b>${tot} of 40</b>, with gates on willingness to pay (<b>${S[0]}</b>)
-      and distribution (<b>${S[1]}</b>). Full table below.</li>
+    <ul><li>Total <b>${tot} of 40</b>. The two gates are what they will pay (<b>${S[0]}</b>)
+      and how many you can reach (<b>${S[1]}</b>). Full table below.</li>
       <li>Weakest axis: <b>${CRIT2[S.indexOf(Math.min(...S))]}</b> at ${Math.min(...S)}.
       That is the thing to change first if you want a better idea.</li></ul></div>`;
   html+=`<div class="stage" style="border-left-color:var(--s6)">
@@ -372,7 +376,7 @@ function renderVars(silent){
      <li>Ask: <b>&ldquo;Tell me about the last time you tried to ${MO[o][4].toLowerCase()==="raise"?"ask for a raise":"get "+MO[o][5]}. What did you actually do?&rdquo;</b></li>
      <li>Ask: <b>&ldquo;What is the last thing you paid for to solve this, how much was it, and did you finish it?&rdquo;</b></li>
      ${EMPLOYER.includes(p)?`<li>Ask the budget holder: <b>&ldquo;What did this line item get spent on last year, and who signed it off?&rdquo;</b> You are listening for a budget code, not enthusiasm.</li>`:``}
-     <li><b>Specific to the ${A.nm.toLowerCase()} angle:</b> ${A.ts}</li>
+     <li><b>Only for the ${A.nm.toLowerCase()} twist:</b> ${A.ts}</li>
      <li>Banned question: &ldquo;would you pay for this?&rdquo; Everyone says yes and it means nothing.</li></ul></div>`;
   html+=`<div class="stage" style="border-left-color:var(--crit)">
     <div class="sh"><span class="sn">Stage 4</span><span class="stt">Kill criteria · write these down before you start</span></div>
@@ -381,13 +385,13 @@ function renderVars(silent){
      <li><b>Zero</b> people pay ${inr(entry)} before it exists, within 14 days → kill it.</li>
      <li>You cannot reach ${WS} without buying ads → kill it.</li>
      <li>${MH[h][0]>=4?`Delivery needs more than <b>30 days</b> of build before anyone can pay → this format already fails that test. Sell a smaller version first.`:`Delivery needs someone you have not hired → kill it.`}</li>
-     <li><b>Only for the ${A.nm.toLowerCase()} angle:</b> ${A.kl(WS)}</li></ul></div>`;
+     <li><b>Only for the ${A.nm.toLowerCase()} twist:</b> ${A.kl(WS)}</li></ul></div>`;
 
   /* PART 7 — all variants scored side by side, active row emphasised */
   const RMP=ramp(), RINK=rink();
   const best=Math.max(...VARS.map(v=>v.tot));
-  html+=`<h3 style="margin:30px 0 12px">Part 7 · All ${VARS.length} variants, scored side by side</h3>
-   <div class="card"><table><thead><tr><th class="l">Variant</th>
+  html+=`<h3 style="margin:30px 0 12px">Part 7 · All ${VARS.length} twists, side by side</h3>
+   <div class="card"><table><thead><tr><th class="l">Twist</th>
      ${CRIT2.map((c,i)=>`<th>${c}${i<2?'<br><span style="color:var(--crit)">gate</span>':''}</th>`).join('')}
      <th>Total</th><th class="l">Verdict</th></tr></thead><tbody>
      ${VARS.map((v,i)=>`<tr class="${i===VIDX?'vrow on':'vrow'}" onclick="setVar(${i})">
@@ -396,10 +400,10 @@ function renderVars(silent){
        <td class="tot">${v.tot}</td>
        <td class="l"><span class="verdict v-${v.V.k==='live'?'live':v.V.k==='dead'?'dead':'hold'}">${v.V.t.split(' —')[0]}</span></td></tr>`).join('')}
      </tbody></table>
-   <p class="tiny" style="margin-top:12px">Click any row to switch to that variant. Every part above and
-   below re-renders for it. The rows differ only by strategic angle — the four axes and the premise are
-   identical, which is the point:
-   <b style="color:var(--ink-1)">how you build it moves the score as much as what you build.</b></p>
+   <p class="tiny" style="margin-top:12px">Click any row to switch. Everything above and below rebuilds
+   for it. Every row here has the same four axes and the same work — only the twist changes, which is
+   the point: <b style="color:var(--ink-1)">how you build it moves the score as much as what you
+   build.</b></p>
    <div style="margin-top:16px"><span class="vbadge" style="color:var(${V.c});border:1px solid currentColor">${title} — ${V.t}</span>
    <p style="margin-top:11px;max-width:780px">${V.d}</p></div>
    ${readRow(S)}${HOWTO()}</div>`;
@@ -411,12 +415,12 @@ function renderVars(silent){
     const pc=Math.max(500,Math.round(HOW_BASE[h]*PAY_MULT[p]*(0.85+MW[w][2]*0.06)*P.pm*A.pm/500)*500);
     return {P,i,S:s,tot:s.reduce((x,y)=>x+y),V:verdict(s,baseF),core:pc,ev:premEv(P,h)};});
   const pBest=Math.max(...pRows.map(r=>r.tot));
-  html+=`<h3 style="margin:30px 0 12px">Part 7b · All ${PREMS.length} premises, at the
-    <span style="color:var(--f1)">${A.nm.toLowerCase()}</span> angle</h3>
-   <p class="tiny" style="margin:-6px 0 12px">The table above holds the premise still and moves the
-   angle. This one does the opposite — same four axes, same angle, different thing happening inside.
-   Between them they are the ${total} ideas this one combination can produce.</p>
-   <div class="card"><table><thead><tr><th class="l">Premise</th><th class="l">What happens</th>
+  html+=`<h3 style="margin:30px 0 12px">Part 7b · All ${PREMS.length} kinds of work, with the
+    <span style="color:var(--f1)">${A.nm.toLowerCase()}</span> twist</h3>
+   <p class="tiny" style="margin:-6px 0 12px">The table above keeps the work and changes the twist.
+   This one keeps the twist and changes the work. Together they are the ${total} ideas you can get
+   out of these four dropdowns.</p>
+   <div class="card"><table><thead><tr><th class="l">The work</th><th class="l">What you do</th>
      ${CRIT2.map((c,i)=>`<th>${c}${i<2?'<br><span style="color:var(--crit)">gate</span>':''}</th>`).join('')}
      <th>Price</th><th>Total</th></tr></thead><tbody>
      ${pRows.map(r=>`<tr class="${r.i===PIDX?'vrow on':'vrow'}" onclick="setPrem(${r.i})">
@@ -427,14 +431,13 @@ function renderVars(silent){
        <td class="tot" style="font-weight:500">${inr(r.core)}</td>
        <td class="tot" style="color:var(${r.V.c})">${r.tot}</td></tr>`).join('')}
      </tbody></table>
-   <p class="tiny" style="margin-top:12px">Only the premises that fit
-   <b style="color:var(--ink-1)">${HS}</b> appear — ${PREMS.length} of ${PREM.length}. A
-   <span class="pjudg">J</span> means no idea in your bank uses that premise at this format, so its
-   presence here is my judgement that it transfers, not evidence that it does. Click a row to switch.</p>
-   <div class="prov judg" style="margin-top:10px">Same caveat as the angles: the
-   <i>directions</i> are defensible — judging pays better than teaching, a reference is slow and
-   cheap, access is hard to copy. The <i>magnitudes</i> are mine and are not measured. Read the
-   column as a ranking, not as forecasts.</div></div>`;
+   <p class="tiny" style="margin-top:12px">Only the ${PREMS.length} of ${PREM.length} that fit
+   <b style="color:var(--ink-1)">${HS}</b> show up. A <span class="pjudg">J</span> means nothing in
+   your bank does that work at this format — I think it would still work, and that is a guess, not
+   proof. Click a row to switch.</p>
+   <div class="prov judg" style="margin-top:10px">Same warning as the twists. <b>Which way</b> each
+   number moves is sound: judging pays more than teaching, a reference is slow and cheap, access is
+   hard to copy. <b>How far</b> it moves is my guess. Use the column to rank, not to predict.</div></div>`;
 
   /* PART 8 — position map, every variant plotted */
   html+=`<h3 style="margin:30px 0 12px">Part 8 · Where the ${VARS.length} variants land</h3>
@@ -450,7 +453,7 @@ function renderVars(silent){
      const hi=VARS.reduce((a,b)=>b.core>a.core?b:a), lo=VARS.reduce((a,b)=>b.core<a.core?b:a);
      const r=hi.core/lo.core;
      return VARS.length>1&&r>1.2
-       ? `Price moves with the angle: across these ${VARS.length} variants it runs from
+       ? `Price moves with the twist: across these ${VARS.length} of them it runs from
           <b style="color:var(--ink-1)">${inr(lo.core)}</b> (${lo.nm.toLowerCase()}) to
           <b style="color:var(--ink-1)">${inr(hi.core)}</b> (${hi.nm.toLowerCase()}) off identical axes —
           a factor of ${r.toFixed(1)}. Below is the ${A.nm.toLowerCase()} version.`
@@ -461,7 +464,7 @@ function renderVars(silent){
       nobody pays this, nothing above it matters.</div></div>
     <div class="tier core"><div class="tl">Core${recur?" · per month":""}</div><div class="tp">${inr(core)}</div>
       <div class="td">${AX.PAY[p].toLowerCase()} as payer, ${WS}' budget authority,
-      ${A.nm.toLowerCase()} angle.<br>
+      ${A.nm.toLowerCase()} twist.<br>
       <span class="prov ${PC.k}">${PC.t}</span></div></div>
     <div class="tier"><div class="tl">Premium</div><div class="tp">${inr(prem)}</div>
       <div class="td">Same delivery, more access or more accountability. Roughly one buyer in six
@@ -471,7 +474,7 @@ function renderVars(silent){
     <div class="mathrow"><span class="mk">Your monthly target</span><span class="mv">${inr(target)}</span></div>
     <div class="mathrow"><span class="mk">Annual target (12 × monthly)</span><span class="mv">${inr(target*12)}</span></div>
     <div class="mathrow"><span class="mk">Core price${recur?", per member per month":", one-off"}</span><span class="mv">${inr(core)}</span></div>
-    <div class="mathrow"><span class="mk">${recur?"Paying members you need, standing":"Sales you need per year"}</span>
+    <div class="mathrow"><span class="mk">${recur?"Paying members you need at any one time":"Sales you need per year"}</span>
       <span class="mv">${units}${recur?"":" &nbsp;·&nbsp; "+(perMonth<1?"about one every "+(1/perMonth).toFixed(1)+" months":perMonth.toFixed(1)+" a month")}</span></div>
     <div class="mathrow"><span class="mk">Revenue that produces</span><span class="mv">${inr(yearly)} / year</span></div>
     <div class="mathrow"><span class="mk">Speed to first rupee</span>
@@ -483,7 +486,7 @@ function renderVars(silent){
         tight<=400?"This is a volume business. Budget for marketing, or raise the price.":
         "Implausible at this price. Raise the price or change the payer."}</span></div>
    </div>
-   <p class="tiny" style="margin-top:10px">${tight>60?`At ${units} ${recur?"standing members":"sales a year"}, the constraint stops being the product and becomes acquisition. Every idea in the bank that clears the gates does so by needing <b>fewer, larger</b> cheques — that is Observation 1 expressed as arithmetic.`:`${units} ${recur?"standing members":"sales a year"} is a number you can reach by hand, one conversation at a time. That is the shape you want, and it is why the payer axis matters more than the product axis.`}
+   <p class="tiny" style="margin-top:10px">${tight>60?`At ${units} ${recur?"paying members":"sales a year"}, the hard part stops being the product and becomes finding people. Every idea in the bank that clears the gates does it by needing <b>fewer, bigger</b> cheques — that is Observation 1, in numbers.`:`${units} ${recur?"paying members":"sales a year"} is a number you can reach by hand, one conversation at a time. That is the shape you want, and it is why the payer axis matters more than the product axis.`}
    ${core>=target?`<br>One sale at ${inr(core)} covers <b style="color:var(--ink-1)">${(core/target).toFixed(1)} months</b> of your target — which is exactly why a small number of large cheques beats a large number of small ones.`:``}</p>`;
 
   /* nearest */
@@ -495,7 +498,7 @@ function renderVars(silent){
 
   /* PART 10 — the full business case, for the angle currently selected.
      This is what used to be a separate tab, available only for the 112 bank ideas and only at
-     their implied angle. Built from the variant's own scores and price multiplier, so the money
+     their implied twist. Built from the variant's own scores and price multiplier, so the money
      here matches the money on the card above rather than quietly reverting to the ×1 version. */
   html+=`<h3 style="margin:30px 0 12px">Part 10 · The full business case for
     <span style="color:var(--f1)">${title}</span></h3>
@@ -503,7 +506,7 @@ function renderVars(silent){
     carries its provenance: where a market figure is verified you get the source, and where it is
     not, the plan says so and leaves you the arithmetic rather than inventing a total.</p>`;
   html+=deepPlanFor({w,o,h,p,S,tot,V,pm:CURP.pm*A.pm,
-    kicker:hasP?`${CURP.nm} premise · ${A.nm} angle`:`${A.nm} angle`,
+    kicker:hasP?`${CURP.nm} work · ${A.nm} twist`:`${A.nm} twist`,
     nm:title,hand:false,blurb:hasP?CURP.an(WS,HS,OS):A.an(WS,HS,OS)});
 
   document.getElementById('cOut').innerHTML=html;
@@ -519,7 +522,7 @@ function renderVars(silent){
   [0,25,50,75,100].forEach(v=>{
     s+=`<line x1="${X(v)}" y1="${P.t}" x2="${X(v)}" y2="${H-P.b}" stroke="${v===50?axis:grid}" stroke-width="${v===50?2:1}"/>`;
     s+=`<line x1="${P.l}" y1="${Y(v)}" x2="${W-P.r}" y2="${Y(v)}" stroke="${v===50?axis:grid}" stroke-width="${v===50?2:1}"/>`;});
-  s+=`<text class="qlab" x="${X(52)}" y="${P.t+16}">★ fast money, high ceiling</text>`;
+  s+=`<text class="qlab" x="${X(52)}" y="${P.t+16}">★ fast money, gets big</text>`;
   s+=`<text class="qlab" x="${P.l+8}" y="${H-P.b-10}">slow and capped — avoid</text>`;
   s+=`<text class="axlab" x="${(P.l+W-P.r)/2}" y="${H-14}" text-anchor="middle">Speed to first rupee →</text>`;
   s+=`<text class="axlab" transform="rotate(-90 18 ${(P.t+H-P.b)/2})" x="18" y="${(P.t+H-P.b)/2}" text-anchor="middle">Revenue ceiling →</text>`;
@@ -542,31 +545,31 @@ function renderVars(silent){
 }
 
 /* ---------- the premise explainer ----------
-   Same shape as the angle panel deliberately: lemonade stand first, then the identical list on
-   the live combination, then every premise in full. The reader learns one pattern and reuses it.
+   Same shape as the twist panel deliberately: lemonade stand first, then the identical list on
+   the live combination, then every kind of work in full. The reader learns one pattern and reuses
+   it.
 
-   The difference is that this panel has to carry provenance the angle panel does not need. An
-   angle is a way of building anything; a premise is a claim that a particular kind of business
-   exists, so every card names the bank ideas that already are it, and says plainly when the
-   current format has no bank example behind it. */
+   The difference is that this panel has to carry provenance the twist panel does not need. A
+   twist is a way of building anything; a kind of work is a claim that a particular sort of
+   business exists, so every card names the bank ideas that already are it, and says plainly when
+   the current format has no bank example behind it. */
 function premPanel(w,o,h,p,WS,HS,OS,pAt){
   const built=P=>P.ev.filter(n=>TAGS[n]&&TAGS[n][2]===h);
   let s=`<div class="viexp">
-    <div class="ht-t">What a premise is</div>
-    <p class="tiny" style="margin-bottom:12px">Your four dropdowns fix the <b>shape</b> of the
-    business — who, what result, what format, whose money. They do not fix what actually
-    <b>happens inside</b>, and that is a separate choice. Two businesses can share all four axes
-    and be nothing alike.</p>
+    <div class="ht-t">What &ldquo;the work&rdquo; means</div>
+    <p class="tiny" style="margin-bottom:12px">Your four dropdowns set the <b>shape</b>: who you
+    sell to, what they get, how it is delivered, who pays. They do not say what you actually
+    <b>do all day</b>. Two businesses can have all four the same and still be nothing alike.</p>
     <p class="tiny" style="margin-bottom:12px"><b style="color:var(--ink-1)">Your own bank proves
-    it.</b> #36 <i>The Roast, Live</i> and #99 <i>Design Court</i> sit on identical axes: mid-level
-    designers, portfolio, ticketed live show, ticket sales. One tears work apart on stage, the
-    other runs a mock trial. Same shape, different premise.</p>
+    it.</b> #36 <i>The Roast, Live</i> and #99 <i>Design Court</i> have the same four axes:
+    mid-level designers, portfolio, ticketed live show, ticket sales. One rips portfolios apart on
+    stage. The other runs a fake trial. Same shape. Different work.</p>
 
-    <p class="tiny" style="margin-bottom:8px"><b style="color:var(--ink-1)">The lemonade stand
-    again.</b> The angles changed one thing about how the stand is run. A premise changes what
-    you are doing there at all.</p>
+    <p class="tiny" style="margin-bottom:8px"><b style="color:var(--ink-1)">Back to the lemonade
+    stand.</b> A twist changes one thing about how you run the stand. The work changes what you
+    are doing there at all.</p>
     <table class="dtab acmp">
-      <thead><tr><th>Premise</th><th>In a word</th><th>What you are actually doing</th></tr></thead>
+      <thead><tr><th>The work</th><th>In a word</th><th>What you are actually doing</th></tr></thead>
       <tbody>${PREM.map(P=>`<tr>
         <td class="dl">${P.nm}</td>
         <td><span class="w1">${P.w1}</span></td>
@@ -574,10 +577,10 @@ function premPanel(w,o,h,p,WS,HS,OS,pAt){
     </table>
 
     <p class="tiny" style="margin:14px 0 8px"><b style="color:var(--ink-1)">The ${PREMS.length} that
-    fit ${HS}.</b> Click a row to switch. Scores are at the angle you currently have selected, so
-    the spread is the premise alone.</p>
+    fit ${aAn(HS)}.</b> Click a row to switch. Every score uses the twist you have picked, so the
+    gap you see is the work alone.</p>
     <table class="dtab acmp">
-      <thead><tr><th>Premise</th><th>In a word</th><th>The question it asks</th>
+      <thead><tr><th>The work</th><th>In a word</th><th>The question it asks</th>
         <th>Price</th><th>Score</th></tr></thead>
       <tbody>${PREMS.map((P,i)=>{const q=pAt(P);
         const pc=Math.max(500,Math.round(HOW_BASE[h]*PAY_MULT[p]*(0.85+MW[w][2]*0.06)*P.pm*VARS[VIDX].a.pm/500)*500);
@@ -589,7 +592,7 @@ function premPanel(w,o,h,p,WS,HS,OS,pAt){
         <td class="anum" style="color:var(${q.V.c})">${q.tot}</td></tr>`;}).join('')}</tbody>
     </table>
 
-    <div class="ht-t" style="margin-top:16px">All ${PREMS.length} premises in full</div>
+    <div class="ht-t" style="margin-top:16px">All ${PREMS.length} kinds of work in full</div>
     <div class="vitab">${PREMS.map((P,i)=>{
       const b=built(P);
       return `<div class="viv${i===PIDX?' on':''}">
@@ -597,30 +600,28 @@ function premPanel(w,o,h,p,WS,HS,OS,pAt){
           <span class="w1">${P.w1}</span>
           <span class="vivp">price ×${P.pm}</span>
           <span class="vivt" style="color:var(${P.k==='none'?'--ink-3':b.length?'--good':'--warn'})">
-            ${P.k==='none'?'the default':b.length?`built in your bank at this format`:`no bank example here`}</span></div>
+            ${P.k==='none'?'the default':b.length?`your bank does this`:`not in your bank`}</span></div>
         <div class="vivd">${P.an(WS,HS,OS)}</div>
         <div class="vivx"><b>For this idea:</b> ${P.ex(WS,HS,OS)}</div>
         ${P.gv?`<div class="vivg"><b>Trades away:</b> ${P.gv}</div>`:''}
         ${P.ev.length?`<div class="vivev"><b>Already in your bank:</b> ${P.ev.map(n=>
           `<a href="#bank" onclick="mode('report')">#${n}</a>`).join(' ')}
           ${b.length?`<span class="pok">${b.map(n=>'#'+n).join(', ')} at this exact format</span>`
-            :`<span class="pjudg">J</span> none of them at ${HS} — transfer is my judgement`}</div>`:''}
+            :`<span class="pjudg">J</span> but none as ${aAn(HS)}. I think it carries over. That is a guess.`}</div>`:''}
       </div>`;}).join('')}</div>
 
     <p class="tiny" style="margin-top:12px">You see ${PREMS.length} of ${PREM.length} because the
-    format filters them, exactly as it filters the angles. ${PREMS.length}
-    ${PREMS.length===1?'premise':'premises'} × ${VARS.length} angles =
-    <b style="color:var(--ink-1)">${PREMS.length*VARS.length} distinct ideas</b> off these four
-    dropdowns.</p>
-    <div class="prov judg" style="margin-top:10px">Where this list came from, and what it is worth:
-    every premise was mined out of your own 112 ideas, not invented — run <code>npm run premise</code>
-    to see the working. Each had to appear across three or more delivery formats with no single
-    format holding more than 60% of it, or it was cut for being the format axis under a new name.
-    That test killed <i>Contest</i>, <i>Matchmaking</i> and <i>Frontier</i>. What remains is still
-    my reading of which idea belongs to which premise — the arithmetic is checkable, the tagging is
-    editorial. And one dimension below this is deliberately absent: #46 <i>Studio Tour</i> and #72
-    <i>How They Design</i> share the Access premise and differ only in <i>which</i> doors you open.
-    Generating those would mean inventing rooms you can get into. That stays yours.</div>
+    format rules some out, the same way it does for twists. ${PREMS.length} × ${VARS.length} =
+    <b style="color:var(--ink-1)">${PREMS.length*VARS.length} ideas</b> from these four dropdowns.</p>
+    <div class="prov judg" style="margin-top:10px"><b>Where this list came from.</b> I did not make
+    it up. All ${PREM.length} came out of your own 112 ideas — run <code>npm run premise</code> to
+    see the working. To get on the list, a kind of work had to turn up in three or more formats,
+    with no single format holding more than 60% of it. Anything that failed was really just the
+    format wearing a new name, so <i>Contest</i>, <i>Matchmaking</i> and <i>Frontier</i> were cut.
+    What is left is still <i>my</i> reading of which idea is which: you can check the counting, the
+    labelling is my call. One thing is missing on purpose. #46 <i>Studio Tour</i> and #72 <i>How
+    They Design</i> are both Access work, and differ only in <i>which</i> doors you open. To list
+    those I would have to invent rooms you can get into. That part stays yours.</div>
   </div>`;
   return s;
 }

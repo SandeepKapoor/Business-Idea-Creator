@@ -18,13 +18,13 @@ function rules(w,o,h,p){
       "GLG and Third Bridge pay for a call with a named expert. They will not buy "+aAn(MH[h][6].toLowerCase())+". Set HOW to a 1:1 intensive or a retainer, or change the payer.");
   if(p===13&&MW[w][0]<4)
     add("warn","!","Certification requires trust you do not have yet.",
-      "Charging for judgment is the best position in this whole bank — and it is unreachable until an audience already believes your judgment is worth something. This is a year-three move. Park it and build distribution first.");
+      "Charging for your judgment is the best spot in this whole bank — and you cannot get there until people already believe your judgment is worth paying for. This is a year-three move. Park it and build the audience first.");
   if(TRAVEL.includes(h))
     add("warn","!","This breaks your stated goal of living anywhere.",
       "A "+MH[h][6].toLowerCase()+" ties you to a room on a date. It can be a profitable once-a-quarter luxury, but it cannot be the engine if location independence is genuinely the point. Async critique, retainers and licensing are the location-proof equivalents.");
   if(CONTENT.includes(h)&&[0,1,3,4].includes(p))
     add("warn","!","Content is not a purchase.",
-      "A "+MH[h][6].toLowerCase()+" is top-of-funnel. Almost nobody pays upfront for it, and no employer expenses it. Keep it — but as the distribution asset that feeds a paid thing, not as the revenue line itself.");
+      "A "+MH[h][6].toLowerCase()+" is how people first find you. Almost nobody pays upfront for it, and no employer will expense it. Keep it — but as the thing that feeds a paid product, not as the money itself.");
   if(ORG_BUYER.includes(w)&&LEARNER.includes(p))
     add("warn","!","You found the buyer with budget, then asked the individual to pay.",
       "You have selected "+MW[w][4]+" — people who sit near or on a budget — and then routed the invoice to a personal credit card. Switch the payer to the L&D budget and the same delivery is worth three to five times more.");
