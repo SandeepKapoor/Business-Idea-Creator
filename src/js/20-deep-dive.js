@@ -15,7 +15,7 @@ function fillDeepSel(){
   s.innerHTML=CL.map(c=>`<optgroup label="${c.L} · ${c.t.replace(/&amp;/g,'&')}">`+
     c.i.map(x=>`<option value="${x[0]}">#${x[0]} — ${x[1]}</option>`).join('')+
     `</optgroup>`).join('');
-  s.value="23";
+  s.value=String(DEFAULT_IDEA);
 }
 /* One income target for the whole workspace. The old deep tab had its own input; prefer whichever
    exists, so deepPlan(n) keeps working from the harness and from the merged page alike. */

@@ -1,4 +1,17 @@
 let LAST=null, ORIGIN=null;
+/* The idea the workspace opens on. Both entry points read it, so the picker and the four
+   dropdowns agree from the first paint instead of pointing at different combinations. */
+const DEFAULT_IDEA=1;
+/* Which way into the workspace is on screen. Never both: the four axes are the single input the
+   engine reads, and showing two editors for one value only raises "which is it using?". */
+let WMODE='bank';
+function pickMode(m){
+  WMODE=m;
+  document.getElementById('wtabBank').classList.toggle('on',m==='bank');
+  document.getElementById('wtabAxes').classList.toggle('on',m==='axes');
+  document.getElementById('wBank').hidden = m!=='bank';
+  document.getElementById('wAxes').hidden = m!=='axes';
+}
 /* clicking a row in Part 7 loads that idea's four axis values into the builder */
 function openInBuilder(n){
   const t=TAGS[n]; if(!t)return;
@@ -13,8 +26,8 @@ function fillSel(){
   [["sWHO","WHO"],["sOUT","OUT"],["sHOW","HOW"],["sPAY","PAY"]].forEach(([id,k])=>{
     document.getElementById(id).innerHTML=AX[k].map((o,i)=>
       `<option value="${i}">${o}</option>`).join('');});
-  document.getElementById('sWHO').value=2;document.getElementById('sOUT').value=4;
-  document.getElementById('sHOW').value=0;document.getElementById('sPAY').value=3;
+  const t=TAGS[DEFAULT_IDEA]||[2,4,0,3];
+  ['sWHO','sOUT','sHOW','sPAY'].forEach((id,i)=>{document.getElementById(id).value=t[i];});
 }
 function surprise(){
   ["sWHO","sOUT","sHOW","sPAY"].forEach((id,i)=>{

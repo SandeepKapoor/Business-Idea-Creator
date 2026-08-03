@@ -75,3 +75,10 @@ tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
 .viexp table.dtab th{font-size:12px;padding-bottom:7px}
 .acmp .anum{white-space:nowrap;font-weight:600;color:var(--ink-1)}
 .acmp .asub{display:block;font-size:12px;font-weight:400;color:var(--ink-3)}
+/* which way into the workspace — a segmented control, never two editors at once */
+.wseg{display:inline-flex;gap:2px;background:var(--plane);border:1px solid var(--ring);
+  border-radius:9px;padding:3px;margin-bottom:16px}
+.wtab{background:none;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;
+  font:inherit;font-size:13px;font-weight:600;color:var(--ink-3);white-space:nowrap}
+.wtab:hover{color:var(--ink-1)}
+.wtab.on{background:var(--f1);color:#fff}

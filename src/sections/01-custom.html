@@ -1,34 +1,54 @@
 <!-- ============ THE WORKSPACE ============
-     One panel, two ways in. Both set the same four axes: pick a bank idea and its axes load,
-     or set the axes yourself. Everything below rebuilds from those four values. -->
+     Two ways in, and only ever one on screen. Both set the same four axes: pick a bank idea and
+     its axes load behind the scenes, or set them yourself. Showing both at once invited the
+     question "which one is it actually using?", which has no good answer. -->
 <div class="sec" id="custom" hidden>
   <h2>Workspace</h2>
   <h3>Start from one of the 112 ideas, or build a combination yourself.</h3>
   <div class="card">
-    <div class="bldbar" style="margin-top:0">
-      <div class="fld" style="flex:1;min-width:260px;max-width:470px">
-        <label>Start from an idea in the bank</label>
-        <select id="dSel" onchange="openInBuilder(+this.value)"></select></div>
-      <div class="tiny" style="max-width:260px">Picking one loads its four axes below. Change any
-      of them to fork it into something of your own.</div>
+    <div class="wseg">
+      <button class="wtab on" id="wtabBank" type="button" onclick="pickMode('bank')">
+        Start from an idea</button>
+      <button class="wtab" id="wtabAxes" type="button" onclick="pickMode('axes')">
+        Build my own combination</button>
     </div>
+
+    <div id="wBank">
+      <div class="bldbar" style="margin-top:0">
+        <div class="fld" style="flex:1;min-width:250px;max-width:460px">
+          <label>One of the 112 ideas</label>
+          <select id="dSel" onchange="openInBuilder(+this.value)"></select></div>
+        <button class="rollbtn" onclick="openInBuilder(+document.getElementById('dSel').value)">⚡ Build it</button>
+        <div class="tiny" style="max-width:250px">Its four axes load behind the scenes. Switch to
+        <b style="color:var(--ink-1)">Build my own</b> to fork them into something else.</div>
+      </div>
+    </div>
+
+    <div id="wAxes" hidden>
+      <div class="bld">
+        <div class="fld a"><label>1 · Who</label><select id="sWHO"></select></div>
+        <div class="fld b"><label>2 · Outcome they want</label><select id="sOUT"></select></div>
+        <div class="fld c"><label>3 · How it's delivered</label><select id="sHOW"></select></div>
+        <div class="fld d"><label>4 · Who pays</label><select id="sPAY"></select></div>
+      </div>
+      <div class="bldbar">
+        <button class="rollbtn" onclick="gen()">⚡ Build it</button>
+        <button class="rollbtn ghost" onclick="surprise()">⟳ Surprise me</button>
+        <div class="tiny" style="max-width:300px">193,600 combinations are reachable from here — most
+        are garbage, and finding that out in ten seconds is the entire point.</div>
+      </div>
+    </div>
+
     <div class="bldsplit"></div>
-    <div class="bld">
-      <div class="fld a"><label>1 · Who</label><select id="sWHO"></select></div>
-      <div class="fld b"><label>2 · Outcome they want</label><select id="sOUT"></select></div>
-      <div class="fld c"><label>3 · How it's delivered</label><select id="sHOW"></select></div>
-      <div class="fld d"><label>4 · Who pays</label><select id="sPAY"></select></div>
-    </div>
-    <div class="bldbar">
-      <button class="rollbtn" onclick="gen()">⚡ Build it</button>
-      <button class="rollbtn ghost" onclick="surprise()">⟳ Surprise me</button>
+    <div class="bldbar" style="margin-top:0">
       <div class="fld" style="min-width:170px"><label>Monthly income target ₹</label>
-        <input type="number" id="tgt" value="250000" step="25000" min="25000" onchange="gen(1)"></div>
-      <div class="tiny" style="max-width:300px">Used for the break-even maths and the business
-      case. Set it to whatever number actually lets you resign.</div>
+        <input type="number" id="tgt" value="250000" step="25000" min="25000"
+               onchange="if(LAST)gen(1)"></div>
+      <div class="tiny" style="max-width:340px">Used for the break-even maths and the business case.
+      Set it to whatever number actually lets you resign.</div>
     </div>
   </div>
-  <div id="cOut"><div class="empty">Pick an idea from the list, or choose four values and hit
-    <b style="color:var(--ink-1)">Build it</b>. 193,600 combinations are reachable from here — most
-    are garbage, and finding that out in ten seconds is the entire point.</div></div>
+  <div id="cOut"><div class="empty">Pick one of the 112 ideas and hit
+    <b style="color:var(--ink-1)">Build it</b> — or switch to
+    <b style="color:var(--ink-1)">Build my own combination</b> and set the four axes yourself.</div></div>
 </div>
