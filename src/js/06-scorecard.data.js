@@ -14,23 +14,36 @@ const CRIT=["What they’ll pay",
   "Your energy for it"];
 
 /* the eight hand-scored finalists now live in HAND, below, keyed by idea number */
-/* Ordinal 1–5 ramp. Two selected ramps, not an auto-flip: the light end of each must clear
-   2:1 against its own surface. Both pass validate_palette.js --ordinal in their own mode.
-   (The previous single ramp started at step 100, #cde2fb, which failed light at 1.29:1.) */
-/* The five heat steps and the ink that sits on each. Every pair is measured, not chosen by eye:
-   step 3 used to be #2a78d6, which reads 4.42:1 with white and 4.46:1 with black — the one cell
-   on the page that cleared neither. Light step 3 is now a darker blue carrying white ink; dark
-   step 3 kept its colour and flipped to black ink, which was enough on its own.
+/* THE RAMP IS FIVE TINTS OF CORAL — the Airbnb-style redesign's ordinal device, replacing the
+   two-colour-press blue/vermillion plate the ramp used in two earlier worlds. Rank is still
+   carried by ink coverage rather than by five unrelated hues, so it survives greyscale, and the
+   verdict word beside every row still means nothing rides on hue alone.
 
-   ONLY STEP 3 MOVED. The first attempt lightened steps 1 and 2 as well and broke a different
-   invariant: the lightest step also has to stay separable from the card surface it sits on, and
-   #8fbaec measured 1.97:1 against #fcfcfb. Both ramps now clear AA at every step, stay monotonic,
-   and keep their end steps visible against their own surface. tools/verify.js measures all of
-   that rather than pinning the hex values. */
-const RAMP_L=["#86b6ef","#5598e7","#2f6fbd","#1c5cab","#104281"];
-const INK_L =["#0b0b0b","#0b0b0b","#ffffff","#ffffff","#ffffff"];
-const RAMP_D=["#184f95","#256abf","#3987e5","#6da7ec","#9ec5f4"];
-const INK_D =["#ffffff","#ffffff","#0b0b0b","#0b0b0b","#0b0b0b"];
+   Both ladders are the same ladder. The light one darkens as the score rises, from a pale pink
+   at step 1 to a deep berry-coral at step 5; the dark one is its mirror and brightens, because on
+   near-black stock more ink means more light, not less. All ten cell/ink pairs clear AA 4.5:1,
+   every adjacent pair is separable (ΔL ≥ .045), step 1 is visible against its own stock and step
+   5 still leaves its numeral readable. tools/verify.js re-measures all of that on the built CSS
+   AND asserts these four arrays match src/styles/01a-field.css's .den-N declarations exactly —
+   that check is what caught this ramp and 01a-field.css's ramp disagreeing after the Airbnb pass:
+   the CSS had already moved to pink tints, this file was still the old vermillion five.
+
+   THE INK FLIPS AT THE CROSSOVER — this is the step that has shipped broken in three worlds now,
+   and this time the reason was a genuine dead zone: at this hue and saturation, lightness values
+   roughly 0.50–0.60 (light theme) and 0.49–0.53 (dark theme) clear NEITHER ink at 4.5:1 — the tint
+   is simultaneously too dark for white text and too light for dark text. A ramp that steps
+   smoothly through lightness will land a step inside that band by construction. The fix is not a
+   gentler curve; it is refusing to place a step there at all. Steps 1–3 sit above the light-theme
+   dead zone, steps 4–5 sit below it (and the mirror image in dark theme) — the jump across the
+   band happens between step 3 and step 4, which is a bigger visual gap than an evenly-spaced ramp
+   would give, and that unevenness is the price of every step clearing AA.
+
+   Light flips after step 3 (1–3 dark ink, 4–5 white ink); dark flips after step 3 (1–3 light ink,
+   4–5 dark ink). Do not hand-edit one array, one theme, or one file without the other three. */
+const RAMP_L=["#fdced7","#fa89a0","#f74569","#e10935","#76051b"];
+const INK_L =["#222222","#222222","#222222","#ffffff","#ffffff"];
+const RAMP_D=["#550716","#890b24","#cb1036","#ef395d","#f5849b"];
+const INK_D =["#f5f5f6","#f5f5f6","#f5f5f6","#14110f","#14110f"];
 const isDark=()=>document.documentElement.dataset.theme!=='light';
 /* Column geometry for every score table on the page. Auto layout cannot do this job: the eight
    criteria are equal in meaning and must be equal in width, but their LABELS are wildly unequal
@@ -61,7 +74,8 @@ const TAGS=[null,
 /*H 75-84*/ [17,0,0,0],[17,0,1,16],[19,18,18,4],[18,1,18,4],[11,17,9,16],[11,17,18,3],[19,11,18,14],[3,15,21,0],[18,1,14,0],[11,12,19,14],
 /*I 85-94*/ [3,5,0,0],[11,11,18,3],[2,5,0,0],[3,5,0,3],[2,11,15,9],[11,11,0,3],[18,8,16,2],[3,14,14,0],[11,11,18,3],[11,11,19,14],
 /*J 95-106*/[2,0,0,0],[3,19,2,0],[5,12,2,3],[9,11,11,7],[2,6,11,10],[9,11,1,0],[2,13,11,10],[1,6,11,10],[2,13,6,2],[3,19,0,0],[0,15,16,9],[10,18,9,3],
-/*K 107-112*/[9,12,18,14],[5,12,19,14],[3,2,3,0],[10,10,9,3],[19,12,2,21],[9,12,19,14]];
+/*K 107-112*/[9,12,18,14],[5,12,19,14],[3,2,3,0],[10,10,9,3],[19,12,2,21],[9,12,19,14],
+/*L 113-114*/[3,10,0,3],[3,15,0,0]];
 /* The eight I scored by hand and argued about in prose — those judgments win over the engine. */
 const HAND={23:[5,4,5,3,5,4,3,4],85:[4,3,5,4,4,3,5,5],2:[3,3,5,3,4,4,5,4],
   78:[5,2,3,2,5,3,5,3],67:[2,3,5,1,3,4,5,5],34:[5,2,4,4,3,2,5,2],

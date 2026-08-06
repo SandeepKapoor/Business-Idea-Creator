@@ -1,28 +1,71 @@
+<!-- The skip link is the first focusable thing in the document, which is the only position that
+     does its job: four modes, eleven section links and a theme switch stand between the top of
+     the page and the first paragraph. -->
+<a class="skip" href="#main">Skip to content</a>
+
 <header>
+  <!-- TIER 1 — identity, the four modes, the theme switch. A left column above 760px; a single
+       top row at and below it, where a fixed sidebar has nowhere to go. -->
   <div class="topbar">
-    <h1 class="brand">Business Idea Map</h1>
-    <div class="tabs">
-      <button class="tab on" id="tabR" onclick="mode('report')">
+    <!-- A <div>, not an <h1>. This is a wordmark in the chrome; the document's heading is the
+         masthead's own <h1> a few hundred pixels below, and shipping both meant two level-one
+         headings with the same words in them — which tells a screen reader the page has two
+         titles and tells a sighted reader nothing at all. -->
+    <div class="brand">Business Idea Map</div>
+    <button class="searchbtn" id="searchOpen" type="button" onclick="openSearch()">
+      <svg class="i i-sm" aria-hidden="true"><use href="#i-search"/></svg><span>Search</span>
+      <kbd class="kbd">/</kbd></button>
+    <div class="tabs" role="tablist" aria-label="Modes">
+      <button class="tab on" id="tabR" role="tab" aria-selected="true" aria-controls="main" onclick="mode('report')">
         <svg class="i i-sm" aria-hidden="true"><use href="#i-doc"/></svg>The full report</button>
-      <button class="tab" id="tabC" onclick="mode('custom')">
+      <button class="tab" id="tabC" role="tab" aria-selected="false" aria-controls="main" onclick="mode('custom')">
         <svg class="i i-sm" aria-hidden="true"><use href="#i-sliders"/></svg>Idea workspace</button>
+      <button class="tab" id="tabF" role="tab" aria-selected="false" aria-controls="main" onclick="mode('frontier')">
+        <svg class="i i-sm" aria-hidden="true"><use href="#i-bolt"/></svg>The frontier</button>
+      <button class="tab" id="tabB" role="tab" aria-selected="false" aria-controls="main" onclick="mode('bma')">
+        <svg class="i i-sm" aria-hidden="true"><use href="#i-scale"/></svg>Business models</button>
     </div>
     <button class="themebtn" onclick="tog()" aria-label="Switch between light and dark">
-      <svg class="i i-sm" aria-hidden="true"><use href="#i-contrast"/></svg>Light / dark</button>
+      <svg class="i i-sm" aria-hidden="true"><use href="#i-contrast"/></svg><span>Light / dark</span></button>
   </div>
 
-  <div class="nav" id="navRow">
-    <a href="#stuck" onclick="openM('dStuck')">Why you're stuck</a><a href="#engine">The engine</a>
-    <a href="#fw">15 frameworks</a><a href="#bank">112 ideas</a>
-    <a href="#obs">What the bank reveals</a><a href="#conv">Convergence</a>
-    <a href="#score">Scorecard + gates</a><a href="#map">Speed × ceiling</a>
-    <a href="#sprint">2-week sprint</a><a href="#pos">My position</a>
-    <a href="#evid" class="nav-ev">
-      <svg class="i i-xs" aria-hidden="true"><use href="#i-scale"/></svg>Evidence ledger</a>
-  </div>
-
-  <div class="foldbar" id="foldBar">
+  <!-- TIER 2 — the eleven sections as one scrolling rail, with "expand all" pinned to its end.
+       Report mode only; mode() hides the whole wrapper for the other three tabs. Below the sidebar
+       tabs on desktop, in its own row above 760px. -->
+  <div class="railwrap" id="navRow">
+    <nav class="nav" aria-label="Sections of the report">
+      <a href="#stuck" onclick="openM('dStuck')">Why you're stuck</a><a href="#engine">The engine</a>
+      <a href="#fw">15 frameworks</a><a href="#bank">114 ideas</a>
+      <a href="#obs">What the bank reveals</a><a href="#conv">Convergence</a>
+      <a href="#score">Scorecard + gates</a><a href="#map">Speed × ceiling</a>
+      <a href="#sprint">2-week sprint</a><a href="#pos">My position</a>
+      <a href="#evid" class="nav-ev">
+        <svg class="i i-xs" aria-hidden="true"><use href="#i-scale"/></svg>Evidence ledger</a>
+      <a href="#srcBlock" class="nav-ev">Sources</a>
+    </nav>
+    <!-- Outside the <nav>, because the nav scrolls and this must not scroll away with it. -->
     <button class="foldall" id="foldAll" type="button"
             onclick="foldAll(this.dataset.open!=='1')"><svg class="i i-sm" aria-hidden="true"><use href="#i-expand"/></svg><span>Expand all</span></button>
   </div>
 </header>
+
+<!-- THE SEARCH OVERLAY. One index built at boot from every idea, framework, frontier entry,
+     business model and report section — not just the text on screen, because most of that text
+     starts folded shut. A hit jumps the reader there: it switches mode, opens the right fold or
+     <details>, scrolls, and marks the match so they land somewhere concrete rather than at the
+     top of a section and having to re-read it to find what they searched for. -->
+<div class="searchveil" id="searchVeil" hidden onclick="if(event.target===this)closeSearch()">
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search this page">
+    <div class="searchhd">
+      <svg class="i i-sm" aria-hidden="true"><use href="#i-search"/></svg>
+      <input class="searchin" id="searchIn" type="text" autocomplete="off" spellcheck="false"
+             placeholder="Search ideas, frameworks, routes, sources…"
+             oninput="searchType(this.value)" onkeydown="searchKey(event)">
+      <button class="searchclose" type="button" onclick="closeSearch()" aria-label="Close search">
+        <svg class="i i-sm" aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="searchres" id="searchRes"></div>
+    <div class="searchft"><span><kbd class="kbd">&uarr;</kbd><kbd class="kbd">&darr;</kbd> navigate</span>
+      <span><kbd class="kbd">&crarr;</kbd> open</span><span><kbd class="kbd">esc</kbd> close</span></div>
+  </div>
+</div>

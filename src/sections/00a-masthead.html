@@ -1,0 +1,20 @@
+<!-- ============ MASTHEAD ============
+     The report used to open on eleven folded headings — a table of contents, which tells you the
+     document exists and nothing about what it does. This opens on the mechanism instead: the whole
+     space as a field, one column of it lit, and the four counts that matter underneath.
+
+     Every figure here is computed at boot from the same engine that scores the bank, so the
+     masthead cannot drift from the document. Filled by 00b-mast.js.
+
+     It carries class="sec" so mode() hides it outside the report, and it deliberately has no h2 —
+     initFold() only folds sections with one, and a masthead that can be collapsed is furniture. -->
+<div class="sec mast" id="mast">
+  <h1>Business idea map</h1>
+  <p class="mastdeck">One combination of four axes, out of 193,600. Everything below is an argument
+  about which one, and every number says where it came from.</p>
+
+  <!-- The field. 193,600 combinations as a bar-field, with the current selection lit. -->
+  <div class="mastfield" id="mastField" aria-hidden="true"></div>
+
+  <div class="mastnums" id="mastNums"></div>
+</div>

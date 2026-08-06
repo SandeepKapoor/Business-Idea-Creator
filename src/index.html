@@ -7,15 +7,56 @@
 <!--@css-->
 </head>
 <body>
+<!--
+  THESIS: Every figure carries its method, on a page that looks like a broadsheet rather than a
+  dashboard. Refuses the analytics grey — no cards on grey, no sidebar, no rounded chrome — and
+  refuses the two worlds it replaces: the pure black field, and the cool technical stock.
+  OWN-WORLD: Warm ground on both sides — #FAF7F2 newsprint, #14110F ink on ink, never neutral
+  grey. Three values and no fourth: ink is the record, VERMILLION is everything live or selected,
+  and one cold SLATE is reserved for what failed. A red alarm beside a red accent would be
+  unreadable, so failure went cold rather than getting a second red. Heavy grotesque headlines at
+  800 and -0.032em carry the personality, because there is one hue and no imagery. Platform mono
+  for anything tabulated. Square corners, hairline rules, no shadows.
+  STORY: He finds his mode on an index tab, reads a ruled table where every figure's method sits
+  beside it, and trusts the number because he can see its source — or sees plainly it has none.
+  FIRST VIEWPORT: A masthead — title at 40px, deck, five computed counts as a ruled row — over a
+  numbered part that is already open, with the four modes as index tabs in a 38px strip above.
+  ONE DEVICE FOR "LIVE": a vermillion rule down the left edge. The open disclosure, the origin
+  strip, the selected route, the active rail item. Never a four-sided accent box — the accent
+  marks content in this world, never chrome.
+  FORM: Vermillion Broadsheet. Chosen 6 Aug 2026 from a board dealt against the ui-ux-pro-max
+  style and palette database, over Warm Terminal, Four-Axis Colour and Indigo Dusk. It replaces
+  The Bound Record, which was correct for a service bulletin and, in daily use, looked like every
+  analytics tool ever shipped.
+  DEVIATIONS, DECLARED: (1) PRODUCT.md forbids every external resource, so the grotesque and the
+  mono are platform stacks, not sourced faces. (2) The source style pins a 56–72px headline; the
+  role scale tops out at 40px and density is a product requirement, so the headline gains its
+  weight from 800 and tight tracking rather than from size. (3) No comps: this machine has an
+  image converter, not a generator, so the build answers to this contract alone.
+  ACCESSIBILITY, NOT NEGOTIABLE: no meaning rides on hue. Every verdict keeps its word, every
+  gate keeps its strike, every axis keeps its index. Warm-versus-cold does the work that
+  red-versus-green would have done badly.
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
 <!-- The icon sprite. Outside .wrap because it is not content: it paints nothing and takes no
      space, and every <use href="#i-..."> on the page resolves against it. -->
 <!--@include sections/00-icons.html-->
 
-<div class="wrap">
-
 <!--@include sections/00-header.html-->
 
+<div class="wrap">
+
+<!-- The one landmark. Everything below the header is content, whichever mode is showing, so the
+     skip link and the tabs' aria-controls both point here. -->
+<main id="main">
+
+<!--@include sections/00a-masthead.html-->
+
 <!--@include sections/01-custom.html-->
+
+<!--@include sections/02-frontier.html-->
+
+<!--@include sections/02a-bma.html-->
 
 <!--@include sections/03-stuck.html-->
 
@@ -40,6 +81,8 @@
 <!--@include sections/13-evidence.html-->
 
 <!--@include sections/14-sources.html-->
+
+</main>
 
 </div>
 

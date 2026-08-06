@@ -1,9 +1,10 @@
 /* stuck diagram */
 .stuck{display:grid;grid-template-columns:1fr auto 1fr;gap:var(--sp-4);align-items:center}
-.stuckbox{border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-4);background:var(--surface-1)}
-.stuckbox.bad{border-color:rgba(208,59,59,.4)}
-.stuckbox.good{border-color:rgba(12,163,12,.4)}
-.bignum{font-size:var(--t-3xl);font-weight:650;letter-spacing:-.03em;line-height:1}
+.stuckbox{border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-5);background:var(--plane);box-shadow:var(--e-1)}
+.stuckbox.bad{background:var(--sunken)}
+.stuckbox.good{border-color:color-mix(in srgb,var(--mark) 34%,transparent);
+  box-shadow:0 0 0 3px var(--tint-f1),var(--e-1)}
+.bignum{font-size:var(--t-3xl);font-weight:700;letter-spacing:var(--tr-display);line-height:1}
 .arrow{color:var(--ink-3);font-size:var(--t-xl)}
 
 /* ---------- the axis picker ----------
@@ -11,92 +12,111 @@
    <select> elements. It is a real control now, not a display, so it carries the full state set
    operate.md asks for — hover, focus, selected — and each column is a radiogroup with a roving
    tabindex rather than twenty clickable divs. See buildPicker() in 02-axes.js. */
-.axpick{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-2)}
-.col{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);
+.axpick{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-3)}
+.col{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
   overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--e-1)}
+.col.c1{border-left:0}
 /* The head is a label, not a card of its own: one hairline, no second fill, or four heads
    stacked across the row read louder than the twenty options underneath them. */
-.colhead{padding:var(--sp-3) var(--sp-3) var(--sp-2);border-bottom:1px solid var(--grid);
-  background:var(--sunken);display:flex;flex-direction:column;gap:1px}
-.colhead .k{font-size:var(--t-2xs);color:var(--ink-3);letter-spacing:.04em}
-.colhead .t{font-size:var(--t-sm);font-weight:600;color:var(--ink-1);line-height:1.3}
-.c1 .colhead .t{color:var(--f1)} .c2 .colhead .t{color:var(--f2)}
-.c3 .colhead .t{color:var(--f3)} .c4 .colhead .t{color:var(--f4)}
-.colbody{padding:var(--sp-1);overflow-y:auto;max-height:336px;
+.colhead{padding:var(--sp-4);border-bottom:1px solid var(--grid);
+  background:linear-gradient(180deg,var(--raise),var(--plane));display:flex;flex-direction:column;gap:var(--sp-1)}
+/* Axis identity used to be four hues. It is now the index — 01..04 — and column position, which
+   is how a data sheet has always distinguished four fields. */
+.colhead .k{font-size:var(--t-2xs);color:var(--mark);letter-spacing:var(--tr-label);
+  text-transform:uppercase;font-variant-numeric:tabular-nums;font-weight:700}
+.colhead .t{font-size:var(--t-sm);font-weight:700;color:var(--ink-1);line-height:1.35}
+.colbody{padding:var(--sp-2);overflow-y:auto;max-height:360px;
   scrollbar-width:thin;scrollbar-color:var(--axis) transparent;
   /* Same scroll-shadow technique as .tscroll, turned 90 degrees: two `local` gradients in the
      surface colour mask two `scroll` shadows, so each edge shades only while there is more
      list past it. A 20-row column that ends flush looks finished when it is not. */
   background:
-    linear-gradient(var(--surface-1) 30%,transparent) 0 0/100% var(--sp-6) no-repeat local,
-    linear-gradient(transparent,var(--surface-1) 70%) 0 100%/100% var(--sp-6) no-repeat local,
+    linear-gradient(var(--plane) 30%,transparent) 0 0/100% var(--sp-6) no-repeat local,
+    linear-gradient(transparent,var(--plane) 70%) 0 100%/100% var(--sp-6) no-repeat local,
     radial-gradient(farthest-side at 50% 0,rgba(0,0,0,.28),transparent) 0 0/100% var(--sp-3) no-repeat scroll,
     radial-gradient(farthest-side at 50% 100%,rgba(0,0,0,.28),transparent) 0 100%/100% var(--sp-3) no-repeat scroll}
 .colbody::-webkit-scrollbar{width:8px}
-.colbody::-webkit-scrollbar-thumb{background:var(--axis);border-radius:var(--r-full)}
+.colbody::-webkit-scrollbar-thumb{background:var(--axis);border-radius:var(--r-md)}
 .colbody::-webkit-scrollbar-track{background:transparent}
 
-.opt{padding:var(--sp-1) var(--sp-2);border-radius:var(--r-sm);font-size:var(--t-xs);
-  color:var(--ink-2);cursor:pointer;border:1px solid transparent;line-height:1.4;
-  transition:background var(--dur-1) var(--ease),color var(--dur-1) var(--ease)}
-.opt:hover{background:var(--raise);color:var(--ink-1)}
-/* Selection is a tinted fill plus a 1px border in the axis hue and the axis-coloured text —
-   three signals, none of them a heavy bar, so it still reads at a glance in a scrolled column. */
-.opt.on{background:var(--raise);border-color:currentColor;font-weight:600}
-.c1 .opt.on{color:var(--f1);background:var(--tint-f1)}
-.c2 .opt.on{color:var(--f2);background:var(--tint-f2)}
-.c3 .opt.on{color:var(--f3);background:color-mix(in srgb,var(--f3) 12%,transparent)}
-.c4 .opt.on{color:var(--f4);background:color-mix(in srgb,var(--f4) 14%,transparent)}
+.opt{padding:10px 12px;border-radius:var(--r-sm);font-size:var(--t-xs);
+  color:var(--ink-2);cursor:pointer;border:1px solid transparent;line-height:1.45;
+  transition:background var(--dur-1) var(--ease),color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease)}
+.opt:hover{background:var(--raise);color:var(--ink-1);border-color:var(--ring)}
+/* Selection is a tinted wash, not the primary-button fill — the axis picker sits right beside
+   "Roll" / "Build it", and filling the chosen value with the same coral gradient as those buttons
+   made picking an option look identical to pressing one. Told apart by which column it is in, not
+   by what colour it turns; the accent still marks it, just as text and a tint rather than a fill. */
+.opt.on{background:var(--tint-f1);color:var(--mark);border-color:color-mix(in srgb,var(--mark) 30%,transparent);
+  font-weight:700;box-shadow:none}
+.opt.on:hover{background:var(--tint-f1);color:var(--mark)}
 
 @media(max-width:900px){.axpick{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.axpick{grid-template-columns:1fr}.colbody{max-height:220px}}
-.combo{margin-top:var(--sp-3);background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);
-  padding:var(--sp-4) var(--sp-4);display:flex;gap:var(--sp-4);align-items:center;flex-wrap:wrap}
+.combo{margin-top:var(--sp-4);background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-5);display:flex;gap:var(--sp-4);align-items:center;flex-wrap:wrap;box-shadow:var(--e-1)}
 .combo .txt{flex:1;min-width:280px;font-size:var(--t-base);line-height:1.5}
 .combo .txt em{font-style:normal;font-weight:650}
-/* PRIMARY. One per region, filled, and the only place a solid accent appears on a control. */
-.rollbtn{display:inline-flex;align-items:center;gap:var(--sp-2);background:var(--f1);color:#fff;
-  border:1px solid var(--f1);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-4);
-  font:inherit;font-size:var(--t-sm);font-weight:600;line-height:1.5;cursor:pointer;
-  box-shadow:var(--e-1);
-  transition:background var(--dur-1) var(--ease),box-shadow var(--dur-1) var(--ease),
-    transform var(--dur-1) var(--ease)}
-.rollbtn:hover{background:color-mix(in srgb,var(--f1) 86%,#fff);box-shadow:var(--e-2)}
-.rollbtn:active{transform:translateY(1px);box-shadow:var(--e-1)}
-/* SECONDARY. Same box, no fill. */
-.rollbtn.ghost{background:transparent;color:var(--ink-2);border-color:var(--ring);box-shadow:none}
-.rollbtn.ghost:hover{background:var(--raise);color:var(--ink-1);border-color:var(--ring-2);
-  box-shadow:none}
+/* PRIMARY ACTION. One per region, and it is solid vermillion — the world's rule is that the spot
+   plate marks whatever is live, and the button that runs the engine is the most live thing on
+   the page. Two things were removed to get here:
 
-/* frameworks */
-.fwgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--sp-3)}
-.fw{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-4);
-  border-top:2px solid var(--f4)}
+     the bar-field flank   a barcode stretched down the button's right edge, left over from the
+                           world this one replaced. It was drawn to look like data and was none,
+                           which is the one thing this document is not allowed to do.
+     a duplicated rule     `.rollbtn.ghost:hover` was declared twice on one line with different
+                           values. The second silently won; the first had been dead for a while.
+
+   It was `background:var(--f1);color:#fff` before either of those, which rendered white on white
+   the moment the accent token became the ink. Hence the padding being written out rather than
+   inherited from a flank that no longer exists. */
+.rollbtn{display:inline-flex;align-items:center;gap:var(--sp-2);
+  background:linear-gradient(135deg,var(--mark),var(--f3));color:#ffffff;
+  border:1px solid transparent;border-radius:var(--r-md);padding:var(--sp-3) var(--sp-5);
+  font-size:var(--t-sm);font-weight:700;line-height:1;cursor:pointer;box-shadow:var(--e-2);min-height:46px;
+  transition:transform var(--dur-1) var(--ease),box-shadow var(--dur-1) var(--ease),filter var(--dur-1) var(--ease)}
+.rollbtn:hover{transform:translateY(-1px);box-shadow:var(--e-3);filter:saturate(1.04)}
+.rollbtn:active{transform:translateY(0)}
+/* SECONDARY. Same box, not filled. */
+.rollbtn.ghost:hover{background:var(--raise);color:var(--ink-1);border-color:var(--ring-2)}
+
+/* frameworks
+   Two craft-floor "AI slop" tells removed here: a gradient top-stripe on every card (decoration,
+   not information — the exact device craft-floor names as a refusal) and a 2px coloured
+   border-left on the quoted question (the single most recognizable AI-UI tell, per the design
+   hook). The card's rank still reads without either: .fw.hero already carries a stronger ring
+   plus a filled dot, so the top bar was pure redundancy, and the question keeps its distinct
+   register from weight and colour alone. */
+.fwgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--sp-4)}
+.fw{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-5);
+  box-shadow:var(--e-1)}
 .fw .n{font-size:var(--t-xs);color:var(--ink-3);letter-spacing:.1em}
 .fw .nm{font-weight:650;margin:var(--sp-0) 0 var(--sp-2);font-size:var(--t-md)}
-.fw .q{border-left:1px solid var(--grid);padding-left:var(--sp-3);font-size:var(--t-sm);
-  color:var(--ink-1);margin-bottom:var(--sp-2);line-height:1.5}
+.fw .q{border-left:1px solid var(--ring-2);padding-left:var(--sp-3);font-size:var(--t-sm);
+  color:var(--ink-1);margin-bottom:var(--sp-2);line-height:1.5;font-style:italic}
 .fw .ex{font-size:var(--t-xs);color:var(--ink-3)}
-.fw.hero{border-top-color:var(--f2)}
+.fw.hero{box-shadow:0 0 0 3px var(--tint-f1),var(--e-2)}
+.fw.hero .n::after{content:"";display:inline-block;width:7px;height:7px;margin-left:var(--sp-2);
+  background:var(--mark);border-radius:50%;vertical-align:1px}
 
 /* idea bank */
 .filters{display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:center;margin-bottom:var(--sp-4);
-  padding:var(--sp-3);background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md)}
-/* TOGGLE. A pill that is on or off; the same shape as .nav a and .vpill on purpose. */
+  padding:var(--sp-4);background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);box-shadow:var(--e-1)}
 .chip{display:inline-flex;align-items:center;gap:var(--sp-1);font-size:var(--t-xs);
-  padding:var(--sp-1) var(--sp-3);border-radius:var(--r-full);border:1px solid var(--ring);
-  background:transparent;color:var(--ink-2);cursor:pointer;font-family:inherit;line-height:1.7;
+  padding:var(--sp-1) var(--sp-3);border-radius:var(--r-md);border:1px solid var(--ring);
+  background:var(--plane);color:var(--ink-2);cursor:pointer;font-family:inherit;line-height:1.7;box-shadow:var(--e-1);
   transition:color var(--dur-1) var(--ease),background var(--dur-1) var(--ease),
     border-color var(--dur-1) var(--ease)}
 .chip:hover{color:var(--ink-1);border-color:var(--ring-2);background:var(--raise)}
-.chip.on{background:var(--ink-1);color:var(--plane);border-color:var(--ink-1);font-weight:600}
+.chip.on{background:var(--tint-f1);color:var(--mark);border-color:color-mix(in srgb,var(--mark) 38%,transparent);font-weight:700}
 .flabel{font-size:var(--t-xs);color:var(--ink-3);margin-right:var(--sp-0)}
 /* The family colour moves off a 3px edge onto the letter chip, where it labels something. */
 .cluster{margin-bottom:var(--sp-2);padding-left:0}
 details.cluster>summary{list-style:none;cursor:pointer;user-select:none}
 details.cluster>summary::-webkit-details-marker{display:none}
 details.cluster[open]{margin-bottom:var(--sp-5)}
-.chead{display:flex;align-items:baseline;gap:var(--sp-2);flex-wrap:wrap;padding:var(--sp-2) 0}
+.chead{display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap;padding:var(--sp-3) var(--sp-4);
+  background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);box-shadow:var(--e-1)}
 summary.chead:hover .ctitle{color:var(--fam)}
 .cchev{color:var(--ink-3);display:inline-flex;align-items:center;
   transition:transform var(--dur-2) var(--ease),color var(--dur-1) var(--ease);
@@ -104,41 +124,68 @@ summary.chead:hover .ctitle{color:var(--fam)}
 details.cluster[open]>summary .cchev{transform:rotate(90deg)}
 summary.chead:hover .cchev{color:var(--fam)}
 .cmatch{font-size:var(--t-xs);color:var(--f1);font-weight:600}
-.cluster .ideas{padding-top:var(--sp-1);padding-bottom:var(--sp-1)}
+.cluster .ideas{padding-top:var(--sp-3);padding-bottom:var(--sp-1)}
 .cletter{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
   font-size:var(--t-sm);font-weight:700;color:var(--fam);line-height:1;border-radius:var(--r-sm);
   background:color-mix(in srgb,var(--fam) 14%,transparent);
   border:1px solid color-mix(in srgb,var(--fam) 30%,transparent);flex:none}
 .ctitle{font-weight:650;font-size:var(--t-md)}
 .cwhat{font-size:var(--t-xs);color:var(--ink-3)}
-.cq{font-size:var(--t-xs);color:var(--ink-3);background:var(--surface-1);border:1px solid var(--ring);
-  padding:var(--sp-0) var(--sp-2);border-radius:var(--r-lg)}
-.ideas{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:var(--sp-2)}
-.idea{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-3);
-  display:flex;gap:var(--sp-3)}
+.cq{font-size:var(--t-xs);color:var(--ink-3);background:var(--raise);border:1px solid var(--ring);
+  padding:var(--sp-0) var(--sp-2);border-radius:var(--r-md)}
+.ideas{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:var(--sp-3)}
+.idea{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-4);
+  display:flex;gap:var(--sp-3);box-shadow:var(--e-1);transition:transform var(--dur-1) var(--ease),box-shadow var(--dur-1) var(--ease)}
+.idea:hover{transform:translateY(-2px);box-shadow:var(--e-2)}
+/* Landing here from search — a border colour change alone doesn't read against a page full of
+   hairline borders, and a fill would compete with .rollbtn's coral, so this borrows the tint-wash
+   selection idiom instead and fades it out rather than snapping, since it marks a moment
+   ("you arrived here") and not a persistent state. */
+.idea.shit{background:var(--tint-f1);border-color:color-mix(in srgb,var(--mark) 40%,transparent);
+  transition:background 1.8s var(--ease),border-color 1.8s var(--ease)}
 .idea .num{font-size:var(--t-xs);font-weight:700;color:var(--fam);min-width:26px;padding-top:1px}
 .idea .nm{font-weight:650;font-size:var(--t-sm);margin-bottom:var(--sp-0)}
 .idea .ln{font-size:var(--t-xs);color:var(--ink-2);line-height:1.45}
 .idea .tags{margin-top:var(--sp-1);display:flex;gap:var(--sp-1);flex-wrap:wrap}
-.tag{font-size:var(--t-xs);padding:var(--sp-0) var(--sp-1);border-radius:var(--r-xs);
+.tag{font-size:var(--t-xs);padding:var(--sp-0) var(--sp-2);border-radius:var(--r-md);
   border:1px solid var(--ring);color:var(--ink-3)}
-.tag.pay{color:var(--f2);border-color:currentColor}
-.tag.np{color:var(--f3);border-color:currentColor}
+.tag.pay{color:var(--ink-1);border-color:var(--ring-2);background:var(--raise)}
+.tag.np{color:var(--mark);border-color:color-mix(in srgb,var(--mark) 34%,transparent);background:var(--tint-f1)}
 .idea.hide{display:none}
 .count{font-size:var(--t-xs);color:var(--ink-3);margin-left:auto}
 
 /* observations */
-.obs{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:var(--sp-3)}
-.ob{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-4)}
-.ob .oi{font-size:var(--t-xs);color:var(--f2);margin-bottom:var(--sp-1)}
+.obs{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:var(--sp-4)}
+.ob{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-5);box-shadow:var(--e-1)}
+.ob .oi{font-size:var(--t-2xs);color:var(--ink-3);margin-bottom:var(--sp-1);
+  letter-spacing:var(--tr-label);text-transform:uppercase}
 .ob .ot{font-weight:650;margin-bottom:var(--sp-1);font-size:var(--t-md)}
 .ob .od{font-size:var(--t-sm);color:var(--ink-2)}
+/* A STATE callout — kill criteria are a warning, not a neutral observation — gets the tinted-wash
+   treatment .flag already uses elsewhere, rather than a thick coloured accent edge on the card
+   (craft-floor's side-tab ban, the classic AI-UI tell). That accent-edge device used to be set
+   inline on this element and on the six regular observation cards via --f2 through --f5, which
+   all resolve to the same coral in a one-hue system — six "different" colours rendering as one
+   meaningless repeat. Removed from all seven; this rule only touches background and the existing
+   1px border's colour, nothing thicker. */
+.ob.obkill{background:var(--tint-crit);border-color:color-mix(in srgb,var(--crit) 34%,transparent)}
+.ob.obkill .oi{color:var(--crit)}
 
 /* funnel */
 .funnel{display:flex;flex-direction:column;gap:var(--sp-1);align-items:center}
 .frow{display:flex;align-items:center;gap:var(--sp-3);width:100%}
-.fbar{height:52px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
-  color:#fff;font-weight:650;font-size:var(--t-md);flex-shrink:0}
+/* The funnel bars used a colour progression to show the narrowing, which the WIDTH already shows.
+   They are bar-fields now, densest at the top, so the two signals agree instead of one being
+   decoration. The label sits on the field, in ink, at full contrast. */
+/* Same dead painter as the score cells had, same fix: these carried a --gap/--dop bar-field from
+   the previous world, and both properties stopped existing when the ladder went back to tint. The
+   five funnel stages have been painting an 8px fallback texture and no rank at all. They take the
+   tint from .den-N through the shared .denfield rule now, which is the one definition the whole
+   page is supposed to be using. */
+.fbar{position:relative;height:56px;border-radius:var(--r-md);display:flex;align-items:center;
+  justify-content:center;border:1px solid var(--grid);
+  background:var(--tint,transparent);color:var(--tint-ink,var(--ink-1));
+  font-weight:600;font-size:var(--t-sm);flex-shrink:0;
+  letter-spacing:var(--tr-caps);text-transform:uppercase;box-shadow:var(--e-1)}
 .fmeta{font-size:var(--t-xs);color:var(--ink-2)}
 .fmeta b{color:var(--ink-1)}
-

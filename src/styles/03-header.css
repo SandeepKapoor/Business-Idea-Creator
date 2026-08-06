@@ -1,45 +1,191 @@
-/* header — an app bar: name, the two modes, theme. It sticks, which is the only reason to put
-   the tabs up here: you can change mode from anywhere in a very long document. */
-header{padding:0}
-.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:var(--sp-4);
-  flex-wrap:wrap;padding:var(--sp-3) 0;background:var(--plane);
-  border-bottom:1px solid transparent;
-  transition:border-color var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease)}
-/* The bar earns depth only once there is content beneath it. A permanent shadow on a bar with
-   nothing under it is decoration; this one appears at the moment the bar starts overlapping,
-   which is the state it is reporting. Toggled from 01-theme.js. */
-.topbar.lifted{border-bottom-color:var(--grid);box-shadow:var(--e-2)}
-.brand{font-size:var(--t-md);line-height:1.3;font-weight:600;letter-spacing:-.014em;
-  color:var(--ink-1);margin:0 auto 0 0;white-space:nowrap}
+/* ---------- the index bar ----------
+   THE PROBLEM THIS FILE FIXES. There were three navigation systems stacked before any content:
+   a mode bar, an eleven-item section list that wrapped to two rows, and a row containing one
+   button. 130px of chrome on a desktop screen and close to 300px at 500px wide — where the
+   entire first screen was navigation and the reader had to scroll to reach the title.
 
-/* One control shape for every small button on the page: same height, radius, border and hover.
-   operate.md: "Consistent affordances across the surface. Same button shape." */
-.themebtn{display:inline-flex;align-items:center;gap:var(--sp-2);background:var(--surface-1);
-  color:var(--ink-2);border:1px solid var(--ring);border-radius:var(--r-sm);
-  padding:var(--sp-2) var(--sp-3);cursor:pointer;font:inherit;font-size:var(--t-xs);
-  line-height:1;white-space:nowrap;
-  transition:color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease),
-    background var(--dur-1) var(--ease)}
-.themebtn:hover{color:var(--ink-1);border-color:var(--ring-2);background:var(--raise)}
-.themebtn:active{transform:translateY(.5px)}
+   THE LAYOUT, NOW. Above 720px the whole header is a fixed left column: identity, the four
+   modes, and (in report mode) the eleven-section rail, stacked vertically instead of competing
+   for one horizontal strip. Nothing scrolls out of view and nothing wraps, because a column has
+   as much room going down as it needs. --sidew publishes the column's width so .wrap can reserve
+   the same amount of left space; the two numbers must not drift apart independently.
 
-/* A sticky bar hides whatever scrollIntoView lands on, so every jump target clears it. */
-.sec,.gsec,.dsec{scroll-margin-top:var(--sp-10)}
+   AT AND BELOW 720px A FIXED COLUMN HAS NOWHERE TO GO — it would eat a third of the viewport
+   from content that already has too little of it — so the header reverts to the original
+   two-tier sticky top bar at that width: identity/modes/theme in one row, the rail in a second
+   scrolling row beneath it. */
+
+/* <header> itself is the fixed column above 720px — .topbar and .railwrap are its two stacked
+   children rather than each positioning itself, because two independently-fixed siblings have no
+   shared box to stack inside and .railwrap rendered at the document's top-left, behind
+   everything, the first time this shipped. */
+header{position:fixed;top:0;left:0;bottom:0;width:var(--sidew);z-index:40;
+  display:flex;flex-direction:column;gap:var(--sp-5);
+  background:color-mix(in srgb,var(--plane) 92%,transparent);backdrop-filter:blur(18px);
+  border:0;border-right:1px solid var(--ring);
+  padding:var(--sp-6) var(--sp-4);overflow-y:auto;box-shadow:none}
+
+/* The sticky region's height is published as --stick / --tier1 so scroll-margin-top can be right
+   rather than approximately right. The sidebar layout has nothing to duck under, so --stick is 0
+   above the breakpoint; syncStick() in 18-modes.js only republishes a non-zero value below it,
+   where the header is a top bar again. */
+
+.topbar{display:flex;flex-direction:column;align-items:stretch;gap:var(--sp-5)}
+
+.brand{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--t-sm);line-height:1.3;
+  font-weight:700;letter-spacing:-.01em;color:var(--ink-1);margin:0;white-space:normal;
+  padding:0 0 var(--sp-4);border-bottom:1px solid var(--ring)}
+.brand::before{content:"";width:10px;height:10px;flex:none;border-radius:50%;
+  background:linear-gradient(135deg,var(--mark),var(--f3));box-shadow:0 0 0 6px var(--tint-f1)}
+
+/* One control shape for every button in this bar: square, hairline, tracked caps. */
+.themebtn{display:inline-flex;align-items:center;gap:var(--sp-2);background:var(--plane);
+  color:var(--ink-2);border:1px solid var(--ring);border-radius:var(--r-md);
+  padding:var(--sp-3) var(--sp-4);cursor:pointer;font-size:var(--t-xs);
+  font-weight:600;line-height:1;white-space:nowrap;box-shadow:var(--e-1);
+  margin-top:auto;justify-content:center;
+  transition:background var(--dur-1) var(--ease),color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease)}
+.themebtn:hover{color:var(--ink-1);background:var(--raise);border-color:var(--ring-2)}
+
+/* The search trigger — same control shape as the theme switch, so the sidebar has one button
+   language rather than two. The key hint is a real <kbd>, not a coloured pill, because it is
+   documentation of a shortcut and not a status. */
+.searchbtn{display:flex;align-items:center;gap:var(--sp-2);background:var(--plane);
+  color:var(--ink-2);border:1px solid var(--ring);border-radius:var(--r-md);
+  padding:var(--sp-3) var(--sp-4);cursor:pointer;font-size:var(--t-xs);
+  font-weight:600;line-height:1;white-space:nowrap;box-shadow:var(--e-1);width:100%;
+  transition:background var(--dur-1) var(--ease),color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease)}
+.searchbtn span{flex:1 1 auto;text-align:left}
+.searchbtn:hover{color:var(--ink-1);background:var(--raise);border-color:var(--ring-2)}
+.kbd{font-family:var(--mono);font-size:var(--t-2xs);color:var(--ink-3);background:var(--sunken);
+  border:1px solid var(--ring);border-radius:var(--r-md);padding:1px var(--sp-1);line-height:1.4}
+
+/* ---------- the search overlay ----------
+   A veil plus a centred box, the same pattern every command palette uses, because a reader who
+   has used one before should not have to learn this one. Fixed to the viewport rather than the
+   sidebar, so it centres over the actual content column, not over the 248px rail. */
+.searchveil{position:fixed;inset:0;z-index:80;
+  background:rgba(0,0,0,.72);
+  display:flex;align-items:flex-start;justify-content:center;padding-top:12vh}
+.searchbox{width:min(600px,calc(100vw - var(--sp-6)*2));max-height:70vh;
+  background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  box-shadow:var(--e-3);display:flex;flex-direction:column;overflow:hidden}
+.searchhd{display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-4) var(--sp-5);
+  border-bottom:1px solid var(--ring);color:var(--ink-3)}
+.searchin{flex:1 1 auto;border:0;background:transparent;color:var(--ink-1);
+  font:inherit;font-size:var(--t-md)}
+.searchin::placeholder{color:var(--ink-3)}
+.searchclose{display:flex;align-items:center;justify-content:center;background:transparent;
+  border:0;color:var(--ink-3);cursor:pointer;padding:var(--sp-1);border-radius:var(--r-md)}
+.searchclose:hover{color:var(--ink-1);background:var(--raise)}
+.searchres{overflow-y:auto;padding:var(--sp-2)}
+.searchempty{padding:var(--sp-6) var(--sp-4);color:var(--ink-3);font-size:var(--t-sm);text-align:center}
+.sresult{display:flex;flex-direction:column;gap:2px;align-items:flex-start;width:100%;
+  background:transparent;border:0;border-radius:var(--r-md);text-align:left;cursor:pointer;
+  padding:var(--sp-2) var(--sp-3);color:var(--ink-2)}
+.sresult:hover,.sresult.on{background:var(--tint-f1)}
+.sreskind{font-size:var(--t-2xs);font-weight:700;color:var(--mark);text-transform:uppercase;letter-spacing:var(--tr-caps)}
+.srestitle{font-size:var(--t-sm);font-weight:650;color:var(--ink-1)}
+.sressub{font-size:var(--t-xs);color:var(--ink-3)}
+.searchft{display:flex;gap:var(--sp-4);padding:var(--sp-2) var(--sp-5);
+  border-top:1px solid var(--ring);color:var(--ink-3);font-size:var(--t-2xs)}
+.searchft span{display:flex;align-items:center;gap:var(--sp-1)}
+
+/* Four stacked destinations rather than four inline tabs — the underline idiom moves from the
+   bottom edge to the left edge, because a vertical list has a left edge and no bottom one to
+   speak of until the last item. */
+.tabs{display:flex;flex-direction:column;gap:var(--sp-1);margin:0;background:transparent;border:0;padding:0}
+.tab{display:flex;align-items:center;gap:var(--sp-3);background:transparent;
+  border:0;border-left:1px solid transparent;color:var(--ink-3);border-radius:0;
+  padding:var(--sp-3) var(--sp-3);font:inherit;font-size:var(--t-xs);font-weight:600;
+  line-height:1;cursor:pointer;white-space:nowrap;text-align:left;width:100%;
+  transition:color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease),background var(--dur-1) var(--ease)}
+.tab:hover{color:var(--ink-1);background:var(--raise)}
+.tab.on{color:var(--mark);border-left-color:var(--mark);background:var(--tint-f1)}
+
+/* ---------- the section rail ----------
+   Not pills. A ruled list of tracked caps, which is what an index looks like in this world — a
+   vertical list beneath the modes, in report mode only. */
+.railwrap{display:flex;flex-direction:column;gap:var(--sp-3);
+  background:transparent;padding-top:var(--sp-4);border-top:1px solid var(--ring)}
+.nav{flex:1 1 auto;min-width:0;
+  display:flex;flex-direction:column;flex-wrap:nowrap;overflow-y:auto;overscroll-behavior-y:contain;
+  gap:var(--sp-1);margin:0;background:transparent}
+.nav a{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--t-xs);
+  font-weight:600;color:var(--ink-2);text-decoration:none;white-space:nowrap;flex:none;
+  padding:var(--sp-2) var(--sp-3);background:transparent;line-height:1.3;
+  border:0;border-left:1px solid transparent;border-radius:0;box-shadow:none;
+  transition:color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease),background var(--dur-1) var(--ease)}
+.nav a:hover{color:var(--ink-1);background:var(--raise)}
+
+/* WHERE AM I. The rail had no active state at all, so eleven identical items told the reader
+   nothing about which section they were reading. It is set by the scroll-spy in 21-collapse.js
+   and it is marked twice — text colour AND weight — because nothing on this page is allowed to
+   rest on colour alone. A tinted wash plus coral text plus the left rule reads as "current
+   location" without reading as "press this", matching .tab.on above it. */
+.nav a.here{color:var(--mark);background:var(--tint-f1);border-left-color:var(--mark);
+  font-weight:700}
+
+/* The ledger is receipts rather than argument, so it is set apart by a rule and by weight. */
+.nav a.nav-ev{color:var(--ink-2)}
+
+.foldall{margin-top:var(--sp-1)}
+
+@media(min-width:721px){
+  .wrap{padding-left:calc(var(--sidew) + var(--sp-6))}
+}
 
 @media(max-width:720px){
-  .brand{margin-right:0;width:100%}
-  .topbar{gap:var(--sp-2)}
-}
-.topbar .tabs{margin-top:0}
+  /* Below the breakpoint a fixed column has nowhere to go, so the header reverts to the
+     original two-tier sticky top bar: identity/modes/theme in one row, the rail in a second
+     scrolling row. syncStick() republishes --stick/--tier1 only at this width. header stops
+     being the fixed box; .topbar and .railwrap go back to positioning themselves. */
+  header{position:static;top:auto;left:auto;bottom:auto;width:auto;
+    display:block;padding:var(--sp-5) 0 0;overflow-y:visible;
+    background:transparent;backdrop-filter:none;border-right:0}
+  .topbar{position:sticky;top:16px;left:auto;bottom:auto;width:auto;z-index:40;
+    flex-direction:row;align-items:center;gap:var(--sp-3);
+    background:color-mix(in srgb,var(--plane) 88%,transparent);backdrop-filter:blur(18px);
+    border-right:0;border:1px solid var(--ring);border-radius:var(--r-md);
+    padding:var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-5);overflow-y:visible;
+    box-shadow:var(--e-2)}
+  .topbar.lifted{box-shadow:var(--e-3)}
+  .brand{padding:var(--sp-2) var(--sp-2) var(--sp-2) 0;border-bottom:0;margin-right:auto;font-size:var(--t-xs)}
+  .themebtn{margin-top:0}
+  /* The theme switch keeps its icon and drops its words; the aria-label already carries them. */
+  .themebtn span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .themebtn{padding-left:var(--sp-3);padding-right:var(--sp-3)}
+  /* The search trigger loses its width, its label and its key hint at this size for the same
+     reason the theme switch does — there is no row left to put a label in, and the icon plus the
+     "/" shortcut are still reachable without it. */
+  .searchbtn{width:auto;padding-left:var(--sp-3);padding-right:var(--sp-3)}
+  .searchbtn span,.searchbtn .kbd{display:none}
 
-/* Section jump list. Pills, because there are eleven and they wrap. */
-.nav{display:flex;flex-wrap:wrap;gap:var(--sp-1) var(--sp-2);margin-top:var(--sp-5)}
-.nav a{display:inline-flex;align-items:center;gap:var(--sp-1);font-size:var(--t-xs);
-  color:var(--ink-2);text-decoration:none;border:1px solid var(--ring);
-  padding:var(--sp-1) var(--sp-3);border-radius:var(--r-full);background:var(--surface-1);
-  line-height:1.7;
-  transition:color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease)}
-.nav a:hover{color:var(--ink-1);border-color:var(--ring-2)}
-/* The ledger is the one link that is not part of the argument but the receipts for it. */
-.nav a.nav-ev{color:var(--f2);border-color:color-mix(in srgb,var(--f2) 40%,transparent)}
-.nav a.nav-ev:hover{border-color:var(--f2)}
+  .tabs{flex-direction:row;gap:var(--sp-1);overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{border-left:0;border-bottom:2px solid transparent;width:auto;padding:var(--sp-3) var(--sp-4)}
+  .tab.on{border-left-color:transparent;border-bottom-color:var(--mark);background:transparent}
+
+  .railwrap{position:sticky;top:calc(16px + var(--tier1,38px) + var(--sp-2));z-index:39;
+    flex-direction:row;align-items:center;gap:var(--sp-3);background:transparent;
+    padding-top:var(--sp-3);border-top:0}
+  .nav{flex-direction:row;overflow-x:auto;overflow-y:visible;overscroll-behavior-x:contain;
+    scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{padding:var(--sp-3) var(--sp-4);background:color-mix(in srgb,var(--plane) 90%,transparent);
+    line-height:1;border:1px solid var(--ring);border-radius:var(--r-md);box-shadow:var(--e-1)}
+  .nav a:hover{border-color:var(--ring-2);background:var(--plane);transform:translateY(-1px)}
+  .nav a.here{border:1px solid color-mix(in srgb,var(--mark) 30%,transparent)}
+
+  /* The fade that says "this list continues". Sits over the right end of the SCROLLING part
+     only, which is why it hangs off .nav rather than off the wrapper. */
+  .nav{position:relative}
+  .nav::after{content:"";position:sticky;right:0;flex:none;width:48px;margin-left:-48px;
+    align-self:stretch;pointer-events:none;
+    background:linear-gradient(90deg,transparent,var(--field) 80%)}
+
+  /* header is back in flow here, with its own top padding, so .wrap does not need the extra
+     top padding that exists solely to stop .sec's margin collapsing through onto body when
+     header is fixed and out of flow. */
+  .wrap{padding-left:var(--sp-6);padding-top:0}
+}

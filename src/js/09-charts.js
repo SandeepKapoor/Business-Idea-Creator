@@ -11,7 +11,14 @@ const PTS=[
 {n:87,l:"Agentic UX",x:34,y:85,p:1},{n:78,l:"Global remote placement",x:30,y:86,p:1},
 {n:70,l:"India Design Awards",x:25,y:65},{n:67,l:"Enterprise UX newsletter",x:24,y:55,p:1},
 {n:50,l:"Take-rate marketplace",x:20,y:80},{n:89,l:"Honest AI tool lab",x:19,y:45},
-{n:37,l:"India's Got Designers",x:14,y:50},{n:52,l:"Certification body",x:10,y:95}];
+{n:37,l:"India's Got Designers",x:14,y:50},{n:52,l:"Certification body",x:10,y:95},
+/* Plotted next to #29, because it is the same motion: an L&D budget, a 4–12 week cycle, and a
+   ceiling set by how many teams you can run a cohort for. Placed by hand like every other point. */
+{n:113,l:"Business thinking",x:42,y:72},
+/* Faster to cash than #113 — a learner pays by card, with no procurement — and a lower ceiling,
+   because the people who will pay to leave their job are a much smaller pool than the teams an
+   employer will fund. Same content, different buyer, and the map should show that as a trade. */
+{n:114,l:"First company",x:52,y:58}];
 function drawScatter(){
   const W=1000,H=560,P={t:34,r:150,b:52,l:64};
   const dark=document.documentElement.dataset.theme==='dark';

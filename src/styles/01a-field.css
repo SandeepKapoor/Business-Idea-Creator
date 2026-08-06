@@ -1,0 +1,117 @@
+/* ---------- the record: signature materials ----------
+   Four materials carry this world, and all four are drawn in CSS. No image, no canvas, no
+   external anything — the artifact is one self-contained file and that constraint is absolute.
+
+     .den-1..5  the tint ladder. Five coverages of the vermillion, the ordinal device.
+     .marg      the hanging provenance margin — a figure's method, set beside it, not under it.
+     .struck    a struck line. What a ledger does to a voided entry, and what an errata slip
+                does to a claim that turned out to be wrong.
+     .secno     the decimal section number. Numbered method is the whole conceit.
+
+   WHY TINT AND NOT BAR DENSITY. An earlier world ranked by bar spacing because its grammar
+   forbade hue. A press with a spot plate has the opposite habit: it ranks by how much of that
+   one plate it lays down, and here the plate is vermillion. Tint also survives the thing bar fields do not — a cell 30px tall
+   with a numeral on top, where four hairlines and five hairlines are the same picture. */
+
+/* THE TINT LADDER — ONE DEFINITION, used by every ranked thing on the page: score cells, funnel
+   stages, anything else needing five ordered steps. Each step declares its coverage AND the ink
+   that still reads on it, because the ladder crosses over: light flips after step 4, dark after
+   step 3.
+
+   These five pairs are the same values as RAMP_L / INK_L / RAMP_D / INK_D in
+   06-scorecard.data.js. They are duplicated here because CSS cannot read a JS array, and
+   tools/verify.js asserts the two copies agree — so the duplication is checked rather than
+   merely regretted. It had drifted (this file already carried the redesign's pink tints while
+   06-scorecard.data.js still held the old vermillion five) until that check caught it.
+
+   THE UNEVEN GAP BETWEEN STEP 3 AND STEP 4 IS DELIBERATE. At this hue there is a lightness band
+   (roughly L 0.50–0.60 in light theme, 0.49–0.53 in dark) where the tint is too dark for white
+   text and too light for dark text at once — neither ink clears AA 4.5:1. Steps 1–3 sit above
+   that band, 4–5 sit below it; see the long comment beside RAMP_L in 06-scorecard.data.js. */
+.den-1{--tint:#fdced7;--tint-ink:#222222}
+.den-2{--tint:#fa89a0;--tint-ink:#222222}
+.den-3{--tint:#f74569;--tint-ink:#222222}
+.den-4{--tint:#e10935;--tint-ink:#ffffff}
+.den-5{--tint:#76051b;--tint-ink:#ffffff}
+/* On near-black stock the ladder is its mirror: more ink means more light, so it ascends. */
+html[data-theme="dark"] .den-1{--tint:#550716;--tint-ink:#f5f5f6}
+html[data-theme="dark"] .den-2{--tint:#890b24;--tint-ink:#f5f5f6}
+html[data-theme="dark"] .den-3{--tint:#cb1036;--tint-ink:#f5f5f6}
+html[data-theme="dark"] .den-4{--tint:#ef395d;--tint-ink:#14110f}
+html[data-theme="dark"] .den-5{--tint:#f5849b;--tint-ink:#14110f}
+/* The painter. Any element wanting the ladder adds .denfield and a .den-N. */
+.denfield{background:var(--tint,transparent);color:var(--tint-ink,var(--ink-1))}
+
+/* THE HANGING MARGIN. The signature composition: a figure in the measure, its method in a
+   hairline column beside it. Not a footnote — a footnote is read later, and the whole thesis is
+   that the method arrives WITH the number. */
+.marg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,17rem);gap:0 var(--sp-5);
+  background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-5);box-shadow:var(--e-1)}
+.marg>.mg{border-left:1px solid var(--grid);padding-left:var(--sp-4);font-size:var(--t-xs);
+  color:var(--ink-3);line-height:1.6}
+.marg>.mg b{color:var(--ink-2);font-weight:600}
+@media(max-width:900px){
+  /* Below the fold-out width the margin cannot hang, so it tucks under its figure and keeps its
+     rule on the left, which is still the signal that this is apparatus rather than argument. */
+  .marg{grid-template-columns:minmax(0,1fr)}
+  .marg>.mg{margin-top:var(--sp-2)}
+}
+
+/* THE STRUCK LINE. Corrections are made in place in this document, never quietly deleted — it is
+   invariant 11 — so the material for a voided claim has to exist. */
+.struck{text-decoration:line-through;text-decoration-thickness:1px;color:var(--ink-3)}
+.errata{color:var(--crit);background:var(--tint-crit);border:1px solid color-mix(in srgb,var(--crit) 28%,transparent);
+  border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);font-size:var(--t-xs);line-height:1.55}
+
+/* THE DECIMAL SECTION NUMBER. Set in mono at label size and hung to the left of its heading, the
+   way a numbered method is set. Tabular so 1.1 and 11.1 start at the same place. */
+.secno{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:var(--t-xs);
+  letter-spacing:var(--tr-caps);color:var(--mark);font-weight:700}
+
+/* A tracked-caps label. The one type mannerism this world has, and it does real work: it tells
+   you a string is a field name rather than a value, with no colour and no weight change. */
+.lbl{font-size:var(--t-2xs);letter-spacing:var(--tr-label);text-transform:uppercase;
+  color:var(--ink-3)}
+
+/* An index number, marking position in a set the reader is navigating. Information, not ornament. */
+.idx{font-variant-numeric:tabular-nums;font-size:var(--t-2xs);letter-spacing:var(--tr-caps);
+  color:var(--ink-3)}
+
+/* ---------- masthead ----------
+   The title block. A report opens by saying what it is, when it was revised and what it found —
+   not with a picture of its own data. */
+.mast{margin-top:var(--sp-8);padding:var(--sp-8);border:1px solid var(--ring);border-radius:var(--r-lg);
+  background:
+    radial-gradient(circle at top right,rgba(255,56,92,.14),transparent 28%),
+    radial-gradient(circle at top left,rgba(255,180,164,.35),transparent 32%),
+    linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.92));
+  box-shadow:var(--e-3)}
+html[data-theme="dark"] .mast{
+  background:
+    radial-gradient(circle at top right,rgba(255,90,95,.18),transparent 28%),
+    radial-gradient(circle at top left,rgba(255,255,255,.04),transparent 32%),
+    linear-gradient(180deg,rgba(32,32,32,.96),rgba(24,24,24,.94));
+}
+.mast h1{margin:0 0 var(--sp-4);max-width:12ch}
+.mastdeck{font-size:var(--t-md);color:var(--ink-2);max-width:60ch;margin:0 0 var(--sp-7);
+  line-height:1.7}
+
+/* THE REVISION LINE. Title, revision, status — the strip under a report's title that tells you
+   which printing you are holding. Ruled top and bottom, mono, tabular. */
+.mastrev{display:flex;flex-wrap:wrap;gap:0 var(--sp-6);padding:var(--sp-3) 0;
+  border-top:1px solid var(--grid);border-bottom:1px solid var(--grid);
+  font-family:var(--mono);font-size:var(--t-2xs);letter-spacing:var(--tr-caps);
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:var(--sp-6)}
+.mastrev b{color:var(--ink-2);font-weight:600}
+
+/* THE SUMMARY OF FINDINGS. The counts, as a ruled table rather than five cards: they are being
+   compared, so they share one baseline and one set of rules. */
+.mastnums{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:var(--sp-3)}
+.mn{display:flex;flex-direction:column;gap:var(--sp-2);padding:var(--sp-4) var(--sp-5);
+  background:rgba(255,255,255,.82);border:1px solid var(--ring);border-radius:var(--r-md);
+  box-shadow:var(--e-1)}
+html[data-theme="dark"] .mn{background:rgba(255,255,255,.03)}
+.mn b{font-size:var(--t-xl);font-weight:700;line-height:1;letter-spacing:var(--tr-display);
+  color:var(--ink-1);font-variant-numeric:tabular-nums}
+.mn .lbl{line-height:1.4}

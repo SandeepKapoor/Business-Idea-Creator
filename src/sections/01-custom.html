@@ -4,7 +4,7 @@
      question "which one is it actually using?", which has no good answer. -->
 <div class="sec" id="custom" hidden>
   <h2>Workspace</h2>
-  <h3>Start from one of the 112 ideas, or build a combination yourself.</h3>
+  <h3>Start from one of the 114 ideas, or build a combination yourself.</h3>
   <div class="card">
     <div class="wseg">
       <button class="wtab on" id="wtabBank" type="button" onclick="pickMode('bank')">
@@ -16,7 +16,7 @@
     <div id="wBank">
       <div class="bldbar" style="margin-top:0">
         <div class="fld" style="flex:1;min-width:250px;max-width:460px">
-          <label>One of the 112 ideas</label>
+          <label for="dSel">One of the 114 ideas</label>
           <select id="dSel" onchange="openInBuilder(+this.value)"></select></div>
         <button class="rollbtn" onclick="openInBuilder(+document.getElementById('dSel').value)"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Build it</button>
       </div>
@@ -35,12 +35,12 @@
 
     <div class="bldsplit"></div>
     <div class="bldbar" style="margin-top:0">
-      <div class="fld" style="min-width:170px"><label>Monthly income target ₹</label>
+      <div class="fld" style="min-width:170px"><label for="tgt">Monthly income target ₹</label>
         <input type="number" id="tgt" value="250000" step="25000" min="25000"
                onchange="if(LAST)gen(1)"></div>
     </div>
   </div>
-  <div id="cOut"><div class="empty">Pick one of the 112 ideas and hit
+  <div id="cOut"><div class="empty">Pick one of the 114 ideas and hit
     <b style="color:var(--ink-1)">Build it</b> — or switch to
     <b style="color:var(--ink-1)">Build my own combination</b> and pick the four axes yourself.</div></div>
 </div>

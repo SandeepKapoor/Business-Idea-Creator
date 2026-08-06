@@ -14,6 +14,17 @@
 }
 
 @media(max-width:720px){
+  /* TOUCH TARGETS. A pointer is a pixel and a fingertip is roughly nine millimetres, so the
+     controls that are comfortable at 10px tracked caps on a laptop are not tappable on a phone.
+     44px is the floor every platform guideline agrees on; these three were between 26 and 30.
+     Only the height changes — the type stays where it is, because shrinking the density to make
+     room for fingers would cost the desktop reading nothing is wrong with. */
+  .nav a,.tab,.themebtn,.foldall,.chip{min-height:44px}
+  .nav a,.tab,.themebtn,.foldall{align-items:center}
+  /* And 8px of clear space between adjacent targets, so a near-miss lands on nothing rather than
+     on the neighbour. The rails are ruled rather than gapped, so the rule does that job. */
+  .nav a{padding-left:var(--sp-4);padding-right:var(--sp-4)}
+
   /* The navigator's row label sits beside its pills on a wide screen and above them on a narrow
      one. Keeping the 116px gutter here would leave the pills a third of the width. */
   .vrow{flex-direction:column;gap:var(--sp-2)}
@@ -30,9 +41,24 @@
 }
 
 @media(max-width:560px){
-  /* Below this the segmented switch is wider than the screen; it wraps rather than clipping. */
-  .tabs,.wseg{display:flex;flex-wrap:wrap;width:100%}
-  .tab,.wtab{flex:1 1 auto;justify-content:center}
+  /* THE MODE STRIP SCROLLS, IT DOES NOT WRAP. This used to be `flex-wrap:wrap;width:100%`, from
+     before the header became two sticky tiers — and wrapping four modes onto three lines is what
+     turned tier 1 into a 146px block at 500px wide. Combined with tier 2 and the theme switch,
+     the reader met roughly 180px of navigation before the title.
+
+     Scrolling costs one row at every width and matches the section rail immediately below it, so
+     the header has one behaviour instead of two. The workspace's own two-button switch is a
+     different case: two items always fit, so it keeps wrapping. */
+  .tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;
+    min-width:0;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:none}
+  .wseg{display:flex;flex-wrap:wrap;width:100%}
+  .wtab{flex:1 1 auto;justify-content:center}
+  /* "1 of 12 open" is a useful running count on a wide screen and a third of the section rail on
+     a narrow one. The verb stays, the tally goes — the rail it is stealing room from is the more
+     useful of the two. */
+  .foldall .fcount{display:none}
   .bldbar{gap:var(--sp-2)}
   .bldbar .fld{max-width:none;flex:1 1 100%}
   .q5{grid-template-columns:1fr}

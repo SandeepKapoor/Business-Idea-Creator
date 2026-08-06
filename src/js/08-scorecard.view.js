@@ -5,7 +5,7 @@ function buildFilterUI(){
     '<option value="-1">Total score</option>'+CRIT.map((c,i)=>
       `<option value="${i}">${c}${i<2?' (gate)':''}</option>`).join('');
   document.getElementById('fCrit').value="-1";
-  document.getElementById('fClus').innerHTML='<option value="">All 11 clusters</option>'+
+  document.getElementById('fClus').innerHTML='<option value="">All 12 clusters</option>'+
     CL.map(c=>`<option value="${c.L}">${c.L} · ${c.t.replace(/&amp;/g,'&')} (${c.i.length})</option>`).join('');
   document.getElementById('fVerd').innerHTML=Object.entries(VGROUP).map(([k,v])=>
     `<button class="chip" data-v="${k}">${v}</button>`).join('');
@@ -54,7 +54,7 @@ function drawHeat(){
     h+=`<tr onclick="openInBuilder(${c.n})" title="Open #${c.n} in Build my own idea">
       <td class="l"><span class="cl">${c.cl}</span><b>#${c.n}</b> ${c.nm}${c.hand?'<span class="hand">HAND-SCORED</span>':''}<span class="go">→ build</span></td>`;
     c.s.forEach((v,i)=>{const g=(i<2&&v===1);
-      h+=`<td${ci>=0&&i!==ci?' class="dimcol"':''}><div class="cell${g?' gate':''}" style="background:${RAMP[v-1]};color:${ink[v-1]}">${v}</div></td>`;});
+      h+=`<td${ci>=0&&i!==ci?' class="dimcol"':''}><div class="cell den-${v}${g?' gate':''}" style="background-color:${RAMP[v-1]};color:${ink[v-1]}">${v}</div></td>`;});
     h+=`<td class="tot${ci>=0?' dimcol':''}">${c.tot}</td>
         <td class="l"><span class="verdict v-${c.v}">${c.vt}</span></td></tr>`;});
   h+='</tbody></table></div>';

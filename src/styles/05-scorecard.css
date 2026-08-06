@@ -9,7 +9,7 @@
    all of it. The header row and the body rows ended up in different horizontal bands. Widths are
    declared once in a colgroup by scols() in 06-scorecard.data.js; only .c-lab is auto, so it
    absorbs whatever is left. */
-table{border-collapse:separate;border-spacing:2px;width:100%;font-size:var(--t-xs)}
+table{border-collapse:separate;border-spacing:4px;width:100%;font-size:var(--t-xs)}
 table.stab{table-layout:fixed}
 .c-sc{width:58px} .c-tot{width:46px} .c-price{width:78px} .c-ver{width:142px}
 .stab .c-lab{width:auto}
@@ -32,21 +32,39 @@ td.l{color:var(--ink-1);font-size:var(--t-xs);padding-right:var(--sp-2);white-sp
 .subl{display:block;font-size:var(--t-2xs);color:var(--ink-3);font-weight:400;line-height:1.4;
   margin-top:1px}
 /* The chip fills its column, which is what makes eight of them read as one row of a grid. */
-.cell{height:32px;width:100%;border-radius:var(--r-sm);display:flex;align-items:center;
-  justify-content:center;font-variant-numeric:tabular-nums;font-weight:600;font-size:var(--t-xs)}
+/* A score cell is a tint of the vermillion with its numeral on top. The coverage IS the value:
+   den-5 is nearly solid plate, den-1 is barely inked, so a column of eight ranks at a glance
+   without reading a digit. The numeral stays, because a tint tells you roughly and a digit tells
+   you exactly — and nothing here is allowed to rest on colour alone.
+
+   THE DEAD PAINTER IS GONE. This carried a `::before` drawing a bar-field from --gap and --dop,
+   which is how the world before this one encoded rank. Those two properties stopped being
+   declared when the ladder went back to tint; the rule did not stop running. It kept painting a
+   currentColor field at the 8px/0.4 fallbacks over every one of the nine hundred-odd score cells
+   on the page — a texture with no meaning, sitting on top of the tint that carried the actual
+   value. The fill arrives inline from RAMP_L/RAMP_D; the .den-N class stays as the hook the
+   CSS/JS agreement check in verify.js anchors to. */
+.cell{position:relative;height:34px;width:100%;border-radius:var(--r-sm);display:flex;align-items:center;
+  justify-content:center;font-variant-numeric:tabular-nums;font-weight:600;font-size:var(--t-xs);
+  border:1px solid rgba(0,0,0,.04);box-shadow:var(--e-1)}
 td.tot{text-align:center;color:var(--ink-1);font-weight:700;font-size:var(--t-sm);
   font-variant-numeric:tabular-nums}
 td.tot.num{font-weight:600;font-size:var(--t-xs);color:var(--ink-2)}
-.gate{outline:2px solid var(--crit);outline-offset:-2px}
+/* A gate failure is fatal regardless of the total, so it is struck out — the mark a ledger uses
+   for a voided line. Unmistakable, and it needs no colour, which the red outline did. */
+.gate{border-color:var(--ink-1);border-width:1px}
+.gate::after{content:"";position:absolute;inset:-1px;
+  background:linear-gradient(to top right,transparent calc(50% - 1px),currentColor calc(50% - 1px),
+    currentColor calc(50% + 1px),transparent calc(50% + 1px))}
 .dimcol{opacity:.26;transition:opacity var(--dur-1) var(--ease)}
 tr:hover .dimcol{opacity:.55}
-.heatscroll{max-height:580px;overflow:auto;border:1px solid var(--ring);border-radius:var(--r-md);
-  background:var(--surface-1)}
+.heatscroll{max-height:580px;overflow:auto;border:1px solid var(--ring);border-radius:var(--r-lg);
+  background:var(--plane);padding:var(--sp-2);box-shadow:var(--e-2)}
 /* The floor the scroller needs. Without it, table-layout:fixed honours the eight declared score
    columns first and squeezes the auto label column to whatever is left — 10px at a 760px
    viewport, 0px at 520px. A fixed table does not scroll unless something makes it too wide to
    fit, so the min-width IS the scroll trigger. Measured by tools/probe.js at four widths. */
-.heatscroll table{border-spacing:2px;margin:0;min-width:860px}
+.heatscroll table{border-spacing:4px;margin:0;min-width:860px}
 .heatscroll thead th{position:sticky;top:0;z-index:3;background:var(--surface-1);
   padding:var(--sp-2) var(--sp-0) var(--sp-2);box-shadow:0 1px 0 var(--grid)}
 .heatscroll th.l,.heatscroll td.l{position:sticky;left:0;z-index:2;background:var(--surface-1)}
@@ -58,22 +76,26 @@ tr:hover .dimcol{opacity:.55}
 .go{opacity:0;color:var(--f1);font-size:var(--t-xs);margin-left:var(--sp-2);white-space:nowrap;
   transition:opacity var(--dur-1) var(--ease);font-weight:600}
 .heatscroll tbody tr:hover .go{opacity:1}
-.origin{background:var(--tint-f1);border:1px solid color-mix(in srgb,var(--f3) 30%,transparent);
-  border-radius:var(--r-md);padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-3);font-size:var(--t-sm);color:var(--ink-2);
-  display:flex;gap:var(--sp-3);align-items:flex-start;flex-wrap:wrap}
+/* "Loaded from the bank #N". A status strip saying where the thing below came from — so it takes
+   the same mark every live region on this page takes: a hairline box, a wash, and one vermillion
+   rule down the left edge. It used to be outlined in the accent on all four sides, which made the
+   strip louder than the idea it was introducing. One device, used everywhere: see .expand. */
+.origin{background:var(--raise);border:1px solid var(--ring);
+  padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-3);font-size:var(--t-sm);color:var(--ink-2);
+  display:flex;gap:var(--sp-3);align-items:flex-start;flex-wrap:wrap;border-radius:var(--r-lg);box-shadow:var(--e-1)}
 .origin b{color:var(--ink-1)}
 .origin .oback{margin-left:auto;flex-shrink:0}
 td.l .hand{font-size:var(--t-xs);color:var(--f4);border:1px solid currentColor;border-radius:var(--r-xs);
   padding:0 var(--sp-0);margin-left:var(--sp-1);letter-spacing:.04em;vertical-align:middle}
 td.l .cl{font-size:var(--t-xs);color:var(--ink-3);border:1px solid var(--ring);border-radius:var(--r-xs);
   padding:0 var(--sp-1);margin-right:var(--sp-1);font-weight:700}
-.verdict{font-size:var(--t-xs);padding:var(--sp-0) var(--sp-2);border-radius:var(--r-sm);white-space:nowrap;font-weight:600}
+.verdict{font-size:var(--t-xs);padding:var(--sp-1) var(--sp-2);border-radius:var(--r-md);white-space:nowrap;font-weight:700}
 .v-live{color:var(--good);border:1px solid currentColor}
 .v-dead{color:var(--crit);border:1px solid currentColor}
 .v-hold{color:var(--warn);border:1px solid currentColor}
 
 /* 2x2 */
-.mapwrap{position:relative;background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-4)}
+.mapwrap{position:relative;background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-5);box-shadow:var(--e-1)}
 svg{display:block;width:100%;height:auto;overflow:visible}
 .qlab{font-size:var(--t-xs);fill:var(--ink-3);}
 .axlab{font-size:var(--t-xs);fill:var(--ink-2);font-weight:600}
@@ -84,9 +106,12 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 /* gantt */
 .gantt{display:grid;grid-template-columns:150px 1fr;gap:var(--sp-1) var(--sp-2);align-items:center}
 .gname{font-size:var(--t-xs);color:var(--ink-1)}
-.gtrack{position:relative;height:26px;background:var(--raise);border-radius:var(--r-sm)}
-.gbar{position:absolute;top:0;height:26px;border-radius:var(--r-sm);display:flex;align-items:center;
-  padding:0 var(--sp-2);font-size:var(--t-xs);color:#fff;font-weight:600;white-space:nowrap}
+.gtrack{position:relative;height:30px;background:var(--sunken);border:1px solid var(--grid);border-radius:var(--r-full)}
+/* A sprint bar is a span of days, so it is an outlined block with its label inside — not a filled
+   chip, which on an ink-only palette would be white text on white. */
+.gbar{position:absolute;top:0;height:28px;border-radius:var(--r-full);display:flex;align-items:center;
+  padding:0 var(--sp-3);font-size:var(--t-2xs);color:#fff;background:linear-gradient(135deg,var(--mark),var(--f3));
+  font-weight:700;white-space:nowrap;letter-spacing:var(--tr-caps);margin:1px}
 .gdays{display:grid;grid-template-columns:repeat(14,1fr);gap:0;font-size:var(--t-xs);color:var(--ink-3);
   text-align:center}
 

@@ -1,43 +1,42 @@
 /* podium */
-.pick{display:flex;gap:var(--sp-4);background:var(--surface-1);border:1px solid var(--ring);
-  border-radius:var(--r-md);padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-2);
-  box-shadow:var(--e-1)}
+.pick{display:flex;gap:var(--sp-4);background:var(--plane);border:1px solid var(--ring);
+  border-radius:var(--r-lg);padding:var(--sp-5);margin-bottom:var(--sp-3);
+  box-shadow:var(--e-2)}
 .rank{font-size:var(--t-2xl);font-weight:750;color:var(--f1);line-height:1;min-width:34px}
 .pick .pt{font-weight:650;font-size:var(--t-md);margin-bottom:var(--sp-1)}
 .pick .pw{font-size:var(--t-sm);color:var(--ink-2)}
 .pick .pw b{color:var(--ink-1)}
 .dead{background:var(--tint-crit);border:1px solid color-mix(in srgb,var(--crit) 26%,transparent);
-  border-radius:var(--r-md);padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-2)}
+  border-radius:var(--r-lg);padding:var(--sp-5);margin-bottom:var(--sp-3)}
 .dead .dt{display:flex;align-items:center;gap:var(--sp-2);font-weight:650;color:var(--crit);
   margin-bottom:var(--sp-1);font-size:var(--t-md)}
 .dead .dd{font-size:var(--t-sm);color:var(--ink-2)}
 
 /* tree */
 .tree{font-size:var(--t-sm);line-height:1.9;color:var(--ink-2);white-space:pre;overflow-x:auto;
-  background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-4);
+  background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-5);
   font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .tree b{color:var(--ink-1)}
-.tree .a{color:var(--f1)} .tree .b{color:var(--f2)} .tree .c{color:var(--f3)}
+.tree .a{color:var(--ink-1)} .tree .b{color:var(--f2)} .tree .c{color:var(--f3)}
 
 .action{background:var(--tint-good);border:1px solid color-mix(in srgb,var(--good) 28%,transparent);
-  border-radius:var(--r-md);padding:var(--sp-5) var(--sp-6)}
+  border-radius:var(--r-lg);padding:var(--sp-5) var(--sp-6);box-shadow:var(--e-1)}
 .legendrow{display:flex;gap:var(--sp-3);flex-wrap:wrap;margin-bottom:var(--sp-3)}
 .lg{display:flex;align-items:center;gap:var(--sp-1);font-size:var(--t-xs);color:var(--ink-2)}
-.sw{width:11px;height:11px;border-radius:var(--r-xs)}
-a{color:var(--f1)}
+.sw{width:11px;height:11px;border:1px solid var(--ink-1)}
+a{color:var(--ink-1)}
 
-/* tabs */
-.tabs{display:inline-flex;gap:var(--sp-0);margin-top:var(--sp-5);background:var(--sunken);
-  border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-0)}
-/* Mode switch. Reads as a switch, not two buttons: the selected one is the raised surface, the
-   other is flat. A solid accent fill here competed with the primary action further down the
-   page, so selection is carried by surface and weight instead. */
+/* A TAB IS A DESTINATION, NOT AN ACTION — so selection cannot look like .rollbtn, the button that
+   runs the engine. It did: .tab.on filled with the same coral gradient as the primary button, so
+   "you are on this tab" and "press this to build" read as the identical control. Selection now
+   reads from the ink (full-weight text + a underline of the accent) rather than from a fill, which
+   is the distinction the whole page otherwise uses between "this is live" and "this is the one
+   action to take." Solid coral stays reserved for .rollbtn alone. */
+.tabs{display:inline-flex;gap:var(--sp-1);margin-top:0;background:transparent;border:0;padding:0}
 .tab{display:inline-flex;align-items:center;gap:var(--sp-2);background:transparent;
-  border:1px solid transparent;color:var(--ink-3);border-radius:var(--r-sm);
-  padding:var(--sp-2) var(--sp-3);font:inherit;font-size:var(--t-sm);font-weight:600;
-  line-height:1.5;cursor:pointer;white-space:nowrap;
-  transition:color var(--dur-1) var(--ease),background var(--dur-1) var(--ease)}
+  border:2px solid transparent;color:var(--ink-3);border-radius:0;
+  padding:var(--sp-3) var(--sp-4);font:inherit;font-size:var(--t-xs);font-weight:600;
+  line-height:1;cursor:pointer;white-space:nowrap;
+  transition:color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease)}
 .tab:hover{color:var(--ink-1)}
-.tab.on{background:var(--surface-1);border-color:var(--ring);color:var(--ink-1);
-  box-shadow:var(--e-1)}
-
+.tab.on{color:var(--mark);border-bottom-color:var(--mark)}

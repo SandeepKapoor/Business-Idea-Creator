@@ -62,11 +62,12 @@ if (!script) { console.error('could not find the <script> block in the artifact'
 function el(id) {
   const e = {
     id, value: undefined, innerHTML: '', textContent: '', hidden: false, open: false,
-    dataset: {}, style: {}, children: [],
+    dataset: {}, style: { setProperty() {}, getPropertyValue() { return ''; } }, children: [],
     classList: { _s: new Set(), add(c) { this._s.add(c); }, remove(c) { this._s.delete(c); },
       toggle(c, f) { const on = f === undefined ? !this._s.has(c) : !!f; on ? this._s.add(c) : this._s.delete(c); },
       contains(c) { return this._s.has(c); } },
     scrollIntoView() {}, addEventListener() {}, removeEventListener() {},
+    offsetHeight: 0, offsetWidth: 0, getBoundingClientRect() { return { top: 0, left: 0, right: 0, bottom: 0, width: 0, height: 0 }; },
     querySelector() { return null; }, querySelectorAll() { return []; },
     appendChild() {}, setAttribute() {}, getAttribute() { return null; },
   };
@@ -90,6 +91,11 @@ const sandbox = {
   window: { scrollTo() {}, addEventListener() {} },
   location: { hash: '' },   // read at boot to deep-link into a collapsed part
   setTimeout, clearTimeout,
+  /* Bare globals, not window.*: the artifact calls addEventListener() unqualified from the rail's
+     scroll-spy and from syncStick(). This fixture has no layout engine — every measurement comes
+     back 0 and the spy's own guards make it a no-op — but the calls must not throw. */
+  addEventListener() {}, requestAnimationFrame() {},
+  getComputedStyle: () => ({ getPropertyValue: () => '' }),
 };
 sandbox.window.document = sandbox.document;
 sandbox.window.location = sandbox.location;
@@ -101,7 +107,8 @@ const EXPORTS = ['scoreIt', 'rules', 'verdict', 'buildVars', 'deepPlan', 'priceC
   'HOW_BASE', 'PAY_MULT', 'BASE_EV', 'SCEN', 'SEG_EV', 'COMP', 'MOTION', 'FIRST', 'ARCH',
   'PREM', 'premFor', 'premEv', 'aAn', 'cap', 'ROUTES', 'routesFor', 'routeD',
   'CRIT', 'CRIT2', 'CRIT_GUESS', 'CRIT_DEF', 'BANDS', 'RAMP_L', 'RAMP_D', 'INK_L', 'INK_D',
-  'EMPLOYER', 'LEARNER', 'NO_EMPLOYER', 'KIDS', 'ORG_BUYER', 'TRAVEL', 'CONTENT', 'RECUR_H'];
+  'EMPLOYER', 'LEARNER', 'NO_EMPLOYER', 'KIDS', 'ORG_BUYER', 'TRAVEL', 'CONTENT', 'RECUR_H',
+  'FRONT', 'FSRC', 'FSTR', 'BMOD', 'BINST', 'BSRC', 'DOBL', 'DOBM'];
 
 let A;
 try {
@@ -126,6 +133,9 @@ try {
     var i=c.indexOf('<div class="ipitch">');
     return i<0?'':c.slice(i, c.indexOf('</div>', i));
   },
+  __frontier:function(){return frontierHTML()+frontierSrcHTML();},
+  __frontierIndex:function(){return frontierIndexHTML();},
+  __bma:function(){return bmaModelsHTML()+bmaInstHTML()+bmaDoblinHTML()+bmaSrcHTML();},
   __facts:function(w,o,h,p,pi,vi){
     var c=globalThis.__api.__card(w,o,h,p,pi,vi);
     var i=c.indexOf('<div class="ifacts">');
@@ -182,13 +192,13 @@ for (const [n, t, want] of aligned) eq(`${n} is index-aligned with its axis`, t.
 
 // --- the idea bank ------------------------------------------------------
 const ideas = A.CL.flatMap((c) => c.i);
-eq('idea bank holds 112 ideas', ideas.length, 112);
-eq('11 clusters', A.CL.length, 11);
+eq('idea bank holds 114 ideas', ideas.length, 114);
+eq('12 clusters', A.CL.length, 12);
 const nums = ideas.map((x) => x[0]);
-ok('idea numbering is continuous 1..112 with no gaps or duplicates',
+ok('idea numbering is continuous 1..114 with no gaps or duplicates',
   nums.length === new Set(nums).size && nums.every((n, i) => n === i + 1),
   `first mismatch at index ${nums.findIndex((n, i) => n !== i + 1)}`);
-eq('TAGS has an entry per idea (plus the null at 0)', A.TAGS.length, 113);
+eq('TAGS has an entry per idea (plus the null at 0)', A.TAGS.length, 115);
 ok('every TAGS row is a valid 4-axis position',
   A.TAGS.slice(1).every((t) => Array.isArray(t) && t.length === 4 &&
     t[0] < NW && t[1] < NO && t[2] < NH && t[3] < NP && t.every((v) => Number.isInteger(v) && v >= 0)),
@@ -199,6 +209,20 @@ ok('every hand score is eight integers in 1..5',
   Object.values(A.HAND).every((s) => s.length === 8 && s.every((v) => Number.isInteger(v) && v >= 1 && v <= 5)));
 ok('every "cash in <30 days" tag points at a real idea',
   [...A.FAST].every((n) => nums.includes(n)));
+
+// Cluster L holds ideas added after the original research pass. The whole point of separating
+// them is that a reader can tell. Two things therefore have to stay true: the idea itself must
+// carry a provenance chip saying it was not researched, and the evidence ledger must name it.
+// Pinned to the property, not to the wording, so a copy rewrite cannot fail this by accident.
+{
+  const later = (A.CL.find((c) => c.L === 'L') || { i: [] }).i;
+  ok('cluster L exists and holds at least one idea', later.length >= 1);
+  ok('every cluster L idea carries a provenance chip',
+    later.every((x) => /class=['"]prov /.test(x[2])),
+    later.filter((x) => !/class=['"]prov /.test(x[2])).map((x) => `#${x[0]}`).join(', '));
+  ok('the evidence ledger names cluster L as unresearched',
+    /cluster L/i.test(html) && /evrow/.test(html));
+}
 
 // --- the full scoring sweep --------------------------------------------
 if (QUICK) {
@@ -512,7 +536,7 @@ if (QUICK) {
     : `variant sweep sampled ${sampled.toLocaleString('en-US')} of 193,600 combinations (stride ${STRIDE}) — NOT exhaustive.`);
 }
 
-// --- all 112 deep-dive plans -------------------------------------------
+// --- all 114 deep-dive plans -------------------------------------------
 {
   const dTgt = sandbox.document.getElementById('dTgt'); dTgt.value = 250000;
   const BAD_TOKEN = /(undefined|NaN|\[object Object\]|₹0\b)/;
@@ -528,7 +552,7 @@ if (QUICK) {
     }
     if (!/class="prov (ok|weak|judg)"/.test(out)) { noProv++; first = first || `#${n} prints a price with no provenance chip`; }
   }
-  ok('all 112 deep-dive plans render without bad tokens', bad === 0, first);
+  ok('all 114 deep-dive plans render without bad tokens', bad === 0, first);
   ok('every plan carries all 10 sections', missingSection === 0, first);
   ok('INVARIANT 1 — every plan\'s price carries a provenance chip', noProv === 0, first);
 }
@@ -671,12 +695,86 @@ ok('INVARIANT 5 — Stage 1 says the five answers are inferred, not the user\'s'
         if (v < 4.5) bad.push(`${n} step ${i + 1}: ${ink[i]} on ${c} = ${v.toFixed(2)}:1`); }));
     ok('INVARIANT 10 — every one of the ten cell/ink pairs clears AA 4.5:1', !bad.length, bad.join('; '));
   }
-  ok('INVARIANT 10 — light ramp darkens monotonically as score rises', mono(A.RAMP_L, -1));
-  ok('INVARIANT 10 — dark ramp lightens monotonically as score rises', mono(A.RAMP_D, +1));
-  ok('INVARIANT 10 — light ramp\'s lightest step clears 2:1 on the light surface',
-    ratio(A.RAMP_L[0], '#fcfcfb') >= 2, `got ${ratio(A.RAMP_L[0], '#fcfcfb').toFixed(2)}:1`);
-  ok('INVARIANT 10 — dark ramp\'s darkest step clears 2:1 on the dark surface',
-    ratio(A.RAMP_D[0], '#1a1a19') >= 2, `got ${ratio(A.RAMP_D[0], '#1a1a19').toFixed(2)}:1`);
+  /* THE RAMP IS A TINT LADDER AGAIN, SO THE INVARIANT MEASURES TINT. Its purpose has never
+     changed across three visual worlds: five steps must be ordered, separable from each other,
+     and separable from the stock at the light end. Only the mechanism moves.
+
+       world 1 (five blues)      luminance of the five hexes
+       world 2 (Datamatics)      --gap / --dop bar density, hue being forbidden
+       world 3 (Bound Record)    coverage of the blue plate — back to luminance, new hexes
+
+     Re-pointed 5 Aug 2026. The previous body parsed `.den-N{--gap:...;--dop:...}` out of the
+     built CSS; those declarations no longer exist, so it failed five times over while the ramp
+     it was meant to protect was perfectly healthy. A check that fails when the mechanism is
+     replaced is doing its job; leaving it pointed at the dead one is not.
+
+     THE DUPLICATION IS THE RISK NOW. 01a-field.css restates all ten tint/ink pairs because CSS
+     cannot read a JS array, and its own comment promises this file asserts the two copies agree.
+     It did not. It does now — parsed from the built CSS, because the CSS is what renders. */
+  {
+    const cssTxt = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
+    const readSteps = (sel) => [1, 2, 3, 4, 5].map((n) => {
+      const m = cssTxt.match(new RegExp(
+        `${sel}\\.den-${n}\\{--tint:(#[0-9a-f]{6});--tint-ink:(#[0-9a-f]{6})\\}`, 'i'));
+      return m ? { tint: m[1].toLowerCase(), ink: m[2].toLowerCase() } : null;
+    });
+    const cssL = readSteps('');
+    const cssD = readSteps('html\\[data-theme="dark"\\] ');
+    ok('INVARIANT 10 — all ten tint steps are declared in CSS',
+      cssL.every(Boolean) && cssD.every(Boolean),
+      [...cssL.map((s2, i2) => (s2 ? '' : `light den-${i2 + 1} missing`)),
+        ...cssD.map((s2, i2) => (s2 ? '' : `dark den-${i2 + 1} missing`))].filter(Boolean).join(', '));
+    if (cssL.every(Boolean) && cssD.every(Boolean)) {
+      /* The one check the duplication actually needs: a score cell painted by CSS and a chart
+         swatch painted from the JS array must be the same ink at the same rank, or the page
+         quietly ranks the same idea two different ways. */
+      const drift = [];
+      [['light', cssL, A.RAMP_L, A.INK_L], ['dark', cssD, A.RAMP_D, A.INK_D]]
+        .forEach(([n, css, r, ink]) => css.forEach((s2, i2) => {
+          if (s2.tint !== r[i2].toLowerCase()) drift.push(`${n} den-${i2 + 1} tint ${s2.tint} vs ${r[i2]}`);
+          if (s2.ink !== ink[i2].toLowerCase()) drift.push(`${n} den-${i2 + 1} ink ${s2.ink} vs ${ink[i2]}`);
+        }));
+      ok('INVARIANT 10 — the CSS ladder and the JS ramp are the same ten pairs',
+        !drift.length, drift.join('; '));
+    }
+    /* Ordered. Light descends into the plate, dark ascends out of it; either is fine, both
+       directions at once is not a ramp. */
+    ok('INVARIANT 10 — each ramp is monotonic in luminance',
+      mono(A.RAMP_L, -1) && mono(A.RAMP_D, +1),
+      `light ${A.RAMP_L.map((c) => lum(c).toFixed(3)).join(' ')} · ` +
+      `dark ${A.RAMP_D.map((c) => lum(c).toFixed(3)).join(' ')}`);
+    /* Two adjacent steps a reader cannot tell apart are one step wearing two names. 1.25:1 is
+       the floor at which a 30px cell beside its neighbour is still two cells. */
+    {
+      const tight = [];
+      [['light', A.RAMP_L], ['dark', A.RAMP_D]].forEach(([n, r]) => r.forEach((c, i2) => {
+        if (i2 && ratio(c, r[i2 - 1]) < 1.25) tight.push(`${n} ${i2}→${i2 + 1} = ${ratio(c, r[i2 - 1]).toFixed(2)}:1`);
+      }));
+      ok('INVARIANT 10 — every adjacent pair of steps is separable', !tight.length, tight.join('; '));
+    }
+    /* The light end is the risk: a step-1 tint that matches the stock is an empty cell, and an
+       empty cell reads as "no score" rather than as "scored 1". */
+    {
+      const stock = (t) => ((cssTxt.match(t) || [])[1] || '').toLowerCase();
+      const stockL = stock(/:root\{[\s\S]*?--stock:(#[0-9a-f]{6})/i);
+      const stockD = stock(/html\[data-theme="dark"\]\{[\s\S]*?--stock:(#[0-9a-f]{6})/i);
+      ok('INVARIANT 10 — the stock colour was found in both themes', !!stockL && !!stockD,
+        `light ${stockL || 'missing'}, dark ${stockD || 'missing'}`);
+      if (stockL && stockD) {
+        ok('INVARIANT 10 — the lightest step is still visible against the stock',
+          ratio(A.RAMP_L[0], stockL) >= 1.2 && ratio(A.RAMP_D[0], stockD) >= 1.2,
+          `light ${ratio(A.RAMP_L[0], stockL).toFixed(2)}:1, dark ${ratio(A.RAMP_D[0], stockD).toFixed(2)}:1`);
+        /* And the thing that carries every word on the page. Was written as a ramp check, which
+           is why it measured a score cell rather than the field. 12:1 is a floor with headroom,
+           not a threshold the current stock is scraping past. */
+        const inkL = stock(/:root\{[\s\S]*?--ink-1:(#[0-9a-f]{6})/i);
+        const inkD = stock(/html\[data-theme="dark"\]\{[\s\S]*?--ink-1:(#[0-9a-f]{6})/i);
+        ok('INVARIANT 10 — page ink on page stock clears 12:1 in both themes',
+          ratio(inkL, stockL) >= 12 && ratio(inkD, stockD) >= 12,
+          `light ${ratio(inkL, stockL).toFixed(1)}:1, dark ${ratio(inkD, stockD).toFixed(1)}:1`);
+      }
+    }
+  }
   ok('INVARIANT 10 — the failed #cde2fb ramp has not come back', !A.RAMP_L.includes('#cde2fb') && !A.RAMP_D.includes('#cde2fb'));
 
   /* Cell text is the score numeral at weight 600. That is NOT WCAG "large text" (which needs
@@ -688,6 +786,197 @@ ok('INVARIANT 5 — Stage 1 says the five answers are inferred, not the user\'s'
     worst(A.RAMP_L, A.INK_L) >= 4.5 && worst(A.RAMP_D, A.INK_D) >= 4.5,
     `worst pair: ${worst(A.RAMP_L, A.INK_L).toFixed(2)}:1 light, ` +
     `${worst(A.RAMP_D, A.INK_D).toFixed(2)}:1 dark`);
+}
+
+// --- the frontier tab ------------------------------------------------------
+// The frontier is the only part of the page making claims about the outside world that were not
+// in the original research pass, so it is the easiest place for confident-sounding nonsense to
+// creep back in. Every check here is pinned to a property, not to wording: a copy rewrite must
+// not be able to fail these, and a lazy new entry must not be able to pass them.
+{
+  const F = A.FRONT, S = A.FSRC;
+  eq('the frontier holds a readable number of entries', F.length >= 8 && F.length <= 12, true);
+  const keys = new Set(S.map((s) => s.k));
+  ok('every frontier entry cites at least one source that exists',
+    F.every((f) => f.sk.length >= 1 && f.sk.every((k) => keys.has(k))),
+    F.filter((f) => !f.sk.every((k) => keys.has(k))).map((f) => f.k).join(', '));
+  ok('every frontier entry fills all four required fields',
+    F.every((f) => f.sg && f.wt && f.wn && f.wy && f.mv && f.by),
+    F.filter((f) => !(f.sg && f.wt && f.wn && f.wy && f.mv && f.by)).map((f) => f.k).join(', '));
+  ok('every source carries a strength of 1..4 and a URL',
+    S.every((s) => [1, 2, 3, 4].includes(s.s) && /^https:\/\//.test(s.u)));
+  ok('every source is actually cited by an entry',
+    S.every((s) => F.some((f) => f.sk.includes(s.k))),
+    S.filter((s) => !F.some((f) => f.sk.includes(s.k))).map((s) => s.k).join(', '));
+  /* A number only carries weight if something better than content marketing is behind it. An
+     entry may cite a strength-4 source to show a term is in use, but if it also states a figure
+     it needs a stronger source alongside — otherwise the tab is laundering blog posts. */
+  const strength = (k) => (S.find((s) => s.k === k) || { s: 4 }).s;
+  const hasFigure = (f) => /\d/.test(f.sg.replace(/20\d\d/g, ''));
+  const laundered = F.filter((f) => hasFigure(f) && Math.min(...f.sk.map(strength)) === 4);
+  ok('no figure rests on a content-marketing source alone',
+    laundered.length === 0, laundered.map((f) => f.k).join(', '));
+  ok('every frontier entry points at real bank ideas',
+    F.every((f) => Array.isArray(f.nr) && f.nr.length && f.nr.every((n) => nums.includes(n))),
+    F.filter((f) => !f.nr.every((n) => nums.includes(n))).map((f) => f.k).join(', '));
+  /* The whole point of the tab is that it is NOT scored. If a total ever appears on it, the
+     distinction between "researched and scored" and "watched and sourced" has collapsed. */
+  const frag = A.__frontier();
+  /* Matched on the opening tag rather than on the exact string `<article class="fr">`, which is
+     how this broke: adding an id attribute the index needs made the count zero while every entry
+     rendered perfectly. Same mistake INVARIANT 4 and INVARIANT 10 each made once. */
+  ok('the frontier renders every entry',
+    (frag.match(/<article class="fr"/g) || []).length === F.length,
+    `${(frag.match(/<article class="fr"/g) || []).length} of ${F.length}`);
+  /* The index rows call openFr(key) and it looks up `fr-<key>`. If an entry loses its id the row
+     silently does nothing — a dead link that throws no error and logs nothing. */
+  {
+    const ids = [...frag.matchAll(/<article class="fr" id="fr-([\w-]+)"/g)].map((m) => m[1]);
+    ok('every frontier entry carries the id its index row targets',
+      ids.length === F.length && F.every((f) => ids.includes(f.k)),
+      F.filter((f) => !ids.includes(f.k)).map((f) => f.k).join(', '));
+    ok('every frontier index row points at an entry that exists',
+      (A.__frontierIndex().match(/openFr\('([\w-]+)'\)/g) || [])
+        .every((s) => ids.includes(s.slice(8, -2))));
+  }
+  ok('the frontier shows no score out of 40', !/\/\s*40/.test(frag));
+  ok('the frontier renders no undefined or NaN',
+    !/undefined|NaN|\[object/.test(frag.replace(/<[^>]+>/g, ' ')));
+  ok('the frontier states it is unscored and says when it was researched',
+    /none of them is scored/i.test(html) && /Researched on 4 August 2026/.test(html));
+  ok('the frontier admits it has no market size',
+    /no market size anywhere on this tab/i.test(html));
+  /* A badge modifier with no CSS rule does not fail loudly — it just inherits the surrounding
+     colour and quietly stops meaning anything. That happened here: FSTR emitted `eb ok`, and
+     `.eb.ok` has never existed, so "primary" rendered as plain body text next to a correctly
+     amber "vendor survey". Checked against the CSS in the built file, so it covers both the
+     static markup and anything rendered. */
+  const cssBlock = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
+  const defined = (base) => new Set([...cssBlock.matchAll(new RegExp(`\\.${base}\\.([\\w-]+)`, 'g'))]
+    .map((m) => m[1]));
+  const used = (base, src) => new Set([...src.matchAll(new RegExp(`class="${base} ([\\w-]+)"`, 'g'))]
+    .map((m) => m[1]));
+  for (const base of ['eb', 'prov']) {
+    const have = defined(base);
+    const want = new Set([...used(base, frag), ...used(base, html)]);
+    const orphan = [...want].filter((c) => !have.has(c));
+    ok(`every .${base} modifier used has a CSS rule`, orphan.length === 0,
+      `no rule for: ${orphan.map((c) => `.${base}.${c}`).join(', ')}`);
+  }
+  notes.push(`frontier: ${F.length} entries, ${S.length} sources ` +
+    `(${S.filter((s) => s.s <= 2).length} primary or named research, ` +
+    `${S.filter((s) => s.s === 4).length} content marketing).`);
+}
+
+// --- the business model analyser -------------------------------------------
+// The BMA is the only tab describing other people's businesses, so the failure mode is inventing
+// their economics. Every check below is pinned to a property, and the important ones guard the
+// three-kinds-of-number rule: counted, published, judged — never blended.
+{
+  const M = A.BMOD, I = A.BINST, S = A.BSRC;
+  const keys = new Set(S.map((x) => x.k));
+  const mkeys = new Set(M.map((x) => x.k));
+  eq('the analyser holds ten business models', M.length, 10);
+  /* One fact, one home. BMOD used to carry its own `inst` list alongside BINST's `md`, and the
+     two had already drifted — the foreign-progression model listed Pearl while no institution row
+     was tagged to it. The render derives everything from `md`; nothing may reintroduce the copy. */
+  ok('no model keeps its own copy of the institution list',
+    M.every((m) => m.inst === undefined), M.filter((m) => m.inst).map((m) => m.k).join(', '));
+  ok('every model is either scored or explains why it is closed',
+    M.every((m) => (m.S && !m.cl) || (m.cl && !m.S)),
+    M.filter((m) => !((m.S && !m.cl) || (m.cl && !m.S))).map((m) => m.k).join(', '));
+  ok('every score is eight integers in 1..5, like the idea bank',
+    M.filter((m) => m.S).every((m) => m.S.length === 8 &&
+      m.S.every((v) => Number.isInteger(v) && v >= 1 && v <= 5)));
+  ok('every open model says what running it would mean for him',
+    M.filter((m) => !m.cl).every((m) => m.fit && m.how && m.pay && m.run && m.tell));
+  ok('every institution belongs to a model that exists',
+    I.every((x) => mkeys.has(x.md)), I.filter((x) => !mkeys.has(x.md)).map((x) => x.k).join(', '));
+  ok('every model has at least one institution running it',
+    M.every((m) => I.some((x) => x.md === m.k)),
+    M.filter((m) => !I.some((x) => x.md === m.k)).map((m) => m.k).join(', '));
+  ok('every institution cites a source that exists',
+    I.every((x) => x.sk.length && x.sk.every((k) => keys.has(k))),
+    I.filter((x) => !x.sk.every((k) => keys.has(k))).map((x) => x.k).join(', '));
+  ok('every source is cited by something', S.every((c) => I.some((x) => x.sk.includes(c.k))),
+    S.filter((c) => !I.some((x) => x.sk.includes(c.k))).map((c) => c.k).join(', '));
+  /* The rule the whole tab rests on: no invented economics. A rupee or dollar figure may only
+     appear in the `fee` field, which is sourced. Revenue, margin, enrolment and profit are not
+     published by these institutions, so any claim about them here would be fabricated. */
+  const bad = /\b(revenue|margin|profit|turnover|valuation|enrolment|enrollment)\b/i;
+  const invented = I.filter((x) => bad.test(x.fee || ''));
+  ok('no institution row states revenue, margin or enrolment', invented.length === 0,
+    invented.map((x) => x.k).join(', '));
+  ok('every institution either publishes a fee or says it does not',
+    I.every((x) => /[₹$]/.test(x.fee) || /not (published|verified)/i.test(x.fee)),
+    I.filter((x) => !(/[₹$]/.test(x.fee) || /not (published|verified)/i.test(x.fee)))
+      .map((x) => x.k).join(', '));
+  /* The counted number must say what it counts. "12 of the 21 I looked at" is a fact; "12 in
+     India" is a claim about a market I have not measured. */
+  const bfrag = A.__bma();
+  const bfragText = bfrag.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  const htmlText = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  ok('the counted number names its sample, not the country',
+    /of the 23 I looked at/.test(bfrag) && !/\bin India\b[^.]{0,20}\b\d+ (run|use)/.test(bfrag));
+  eq('Doblin has ten types', A.DOBL.length, 10);
+  ok('every model has a mark for all ten types, each 0..2',
+    M.every((m) => A.DOBM[m.k] && A.DOBM[m.k].length === 10 &&
+      A.DOBM[m.k].every((v) => [0, 1, 2].includes(v))),
+    M.filter((m) => !A.DOBM[m.k] || A.DOBM[m.k].length !== 10).map((m) => m.k).join(', '));
+  /* The grid's three states must not be colour-only, and each cell carries its state in text. */
+  ok('every innovation cell states its value in text for a screen reader',
+    (bfrag.match(/class="vh"/g) || []).length === M.length * 10);
+  ok('the analyser renders no undefined or NaN',
+    !/undefined|NaN|\[object/.test(bfrag.replace(/<[^>]+>/g, ' ')));
+  /* Disclosure, pinned to the four words rather than to one sentence: each must appear inside a
+     negated clause somewhere on the tab. How it is phrased is the writer's business. */
+  {
+    const missing = ['revenue', 'margin', 'enrolment', 'profitability']
+      .filter((word) => !new RegExp(`\\bno\\b[^.]{0,80}${word}`, 'i').test(htmlText));
+    ok('the analyser discloses that it holds no revenue, margin, enrolment or profitability',
+      missing.length === 0, `not disclaimed: ${missing.join(', ')}`);
+  }
+  /* A decision tab must lead with what he can act on. The cards were authored formal-first, which
+     opened the page with three doors he cannot open; the render sorts instead. If a closed model
+     ever appears above an open one again, the tab has quietly stopped being a decision tool. */
+  const order = A.BMOD.filter((m) => !m.cl).concat(A.BMOD.filter((m) => m.cl));
+  const shutIdx = order.findIndex((m) => m.cl);
+  const posOf = (m) => bfragOrder.indexOf(m.nm);
+  const bfragOrder = (bfrag.match(/<h4>([^<]+)<\/h4>/g) || []).map((x) => x.replace(/<\/?h4>/g, ''));
+  ok('every model he can run is rendered before every one he cannot',
+    bfragOrder.every((nm, i) => {
+      const m = M.find((x) => x.nm === nm);
+      return !m || (m.cl ? i >= shutIdx : i < shutIdx);
+    }), bfragOrder.join(' | '));
+  ok('open models are ordered best score first',
+    (() => { const t = bfragOrder.slice(0, shutIdx)
+        .map((nm) => (M.find((x) => x.nm === nm) || { S: [] }).S.reduce((a, b) => a + b, 0));
+      return t.every((v, i) => i === 0 || t[i - 1] >= v); })(),
+    bfragOrder.slice(0, shutIdx).join(' | '));
+  /* The prose names the two busiest and the two empty innovation types. Those are computed from
+     DOBM, so an edit to one mark can silently make the sentence false. Recompute and compare. */
+  {
+    /* PINNED TO THE FACT, NOT THE SENTENCE. The first version of these two hard-coded the exact
+       wording — "<b>Brand scores 5 and Channel 4</b>" — and a copy rewrite that changed nothing
+       factual broke them both. That is the same mistake INVARIANT 4 and 10 made. The expected
+       strings are now derived from DOBM: whatever the two busiest types turn out to be, the prose
+       must name each one within a few characters of its real count, and must name every type
+       scoring zero alongside the word zero. Reword freely; lie and it fails. */
+    const col = (i) => M.reduce((a, m) => a + (A.DOBM[m.k][i] === 2 ? 1 : 0), 0);
+    const sums = A.DOBL.map((d, i) => [d, col(i)]);
+    const top = sums.slice().sort((a, b) => b[1] - a[1]).slice(0, 2);
+    const zero = sums.filter((x) => x[1] === 0).map((x) => x[0]);
+    const named = ([d, n]) => new RegExp(`${d}\\b[^.<>]{0,14}${n}\\b`, 'i').test(bfragText) ||
+      new RegExp(`${d}\\b[^.<>]{0,14}${n}\\b`, 'i').test(htmlText);
+    ok('the prose names the two busiest innovation types with their real counts',
+      top.every(named), `computed: ${top.map(([d, n]) => `${d}=${n}`).join(', ')}`);
+    ok('the prose names every innovation type scoring zero',
+      zero.length === 0 || (zero.every((d) => new RegExp(d, 'i').test(htmlText)) &&
+        /zero/i.test(htmlText)), `computed empty: ${zero.join(', ') || 'none'}`);
+  }
+  const closed = M.filter((m) => m.cl).length;
+  notes.push(`analyser: ${I.length} providers, ${M.length} models (${closed} closed to him), ` +
+    `${S.length} sources (${S.filter((c) => c.s <= 2).length} primary or named research).`);
 }
 
 // 11 — corrections stay in place

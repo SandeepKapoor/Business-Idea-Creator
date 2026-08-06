@@ -264,7 +264,7 @@ function renderVars(silent){
       </tbody></table>
       <div class="prov judg" style="margin-top:var(--sp-3)">These are my reading of what
       <i>${AX.OUT[o].toLowerCase()}</i> actually breaks into, not a list mined from anywhere. They
-      are hypotheses in exactly the way the 112 ideas are — the value is that they are different
+      are hypotheses in exactly the way the 114 ideas are — the value is that they are different
       from each other, not that any one of them is right. Nothing here is a market claim.</div>
     </div>`;
   }
@@ -477,7 +477,7 @@ function renderVars(silent){
     <div class="sh"><span class="sn">Stage 1</span><span class="stt">Founder-fit cut · keep only 3+ yes</span></div>
     <div class="q5">${q5.map(q=>`<div class="qq">${q[0]}</div>
       <div class="qa" style="color:var(${q[2]?'--good':'--crit'})">${q[1]}</div>`).join('')}</div>
-    <div style="margin-top:11px;font-size:13.5px;color:var(--ink-1)"><b>${yes} of 5</b> on my guesses.</div>
+    <div style="margin-top:12px;font-size:13px;color:var(--ink-1)"><b>${yes} of 5</b> on my guesses.</div>
     <div class="prov judg" style="margin-top:8px">These five are <b>not your answers</b> — they are
       inferred from the axes. Questions 1 and 2 assume things about your network and credibility that I
       cannot verify; questions 4 and 5 are read off the format, not off you. Answer them yourself and
@@ -517,7 +517,7 @@ function renderVars(silent){
      <th>Total</th><th class="l">Verdict</th></tr></thead><tbody>
      ${VARS.map((v,i)=>`<tr class="${i===VIDX?'vrow on':'vrow'}" onclick="setVar(${i})">
        <td class="l">${i===VIDX?icon('chevron','xs')+' ':''}<b>${v.nm}</b>${v.tot===best&&VARS.length>1?' <span class="vbest">best total</span>':''}</td>
-       ${v.S.map((x,j)=>`<td><div class="cell${(j<2&&x===1)?' gate':''}" style="background:${RMP[x-1]};color:${RINK[x-1]}">${x}</div></td>`).join('')}
+       ${v.S.map((x,j)=>`<td><div class="cell den-${x}${(j<2&&x===1)?' gate':''}" style="background-color:${RMP[x-1]};color:${RINK[x-1]}">${x}</div></td>`).join('')}
        <td class="tot">${v.tot}</td>
        <td class="l"><span class="verdict v-${v.V.k==='live'?'live':v.V.k==='dead'?'dead':'hold'}">${v.V.t.split(' —')[0]}</span></td></tr>`).join('')}
      </tbody></table></div>
@@ -549,7 +549,7 @@ function renderVars(silent){
        <td class="l">${r.i===PIDX?icon('chevron','xs')+' ':''}<b>${r.P.nm}</b>${r.tot===pBest&&PREMS.length>1?' <span class="vbest">best total</span>':''}
          ${r.ev&&r.ev.k==='weak'?'<span class="pjudg" title="No bank example at this format — my judgement">J</span>':''}
          <span class="subl">${r.P.v}</span></td>
-       ${r.S.map((x,j)=>`<td><div class="cell${(j<2&&x===1)?' gate':''}" style="background:${RMP[x-1]};color:${RINK[x-1]}">${x}</div></td>`).join('')}
+       ${r.S.map((x,j)=>`<td><div class="cell den-${x}${(j<2&&x===1)?' gate':''}" style="background-color:${RMP[x-1]};color:${RINK[x-1]}">${x}</div></td>`).join('')}
        <td class="tot num">${inr(r.core)}</td>
        <td class="tot" style="color:var(${r.V.c})">${r.tot}</td></tr>`).join('')}
      </tbody></table></div>
@@ -619,7 +619,7 @@ function renderVars(silent){
     before you assume this is new.</p>`;}
 
   /* PART 10 — the full business case, for the angle currently selected.
-     This is what used to be a separate tab, available only for the 112 bank ideas and only at
+     This is what used to be a separate tab, available only for the 114 bank ideas and only at
      their implied twist. Built from the variant's own scores and price multiplier, so the money
      here matches the money on the card above rather than quietly reverting to the ×1 version. */
   html+=`<h3 style="margin:30px 0 12px">Part 10 · The full business case for
@@ -736,7 +736,7 @@ function premPanel(w,o,h,p,WS,HS,OS,pAt){
     format rules some out, the same way it does for twists. ${PREMS.length} × ${VARS.length} =
     <b style="color:var(--ink-1)">${PREMS.length*VARS.length} ideas</b> from these four dropdowns.</p>
     <div class="prov judg" style="margin-top:10px"><b>Where this list came from.</b> I did not make
-    it up. All ${PREM.length} came out of your own 112 ideas — run <code>npm run premise</code> to
+    it up. All ${PREM.length} came out of your own 114 ideas — run <code>npm run premise</code> to
     see the working. To get on the list, a kind of work had to turn up in three or more formats,
     with no single format holding more than 60% of it. Anything that failed was really just the
     format wearing a new name, so <i>Contest</i>, <i>Matchmaking</i> and <i>Frontier</i> were cut.

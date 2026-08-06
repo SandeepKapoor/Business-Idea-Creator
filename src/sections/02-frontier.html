@@ -1,0 +1,43 @@
+<!-- ============ THE FRONTIER ============
+     A third mode, alongside the report and the workspace. The report is a finished argument and
+     the workspace generates from a fixed model; this is neither. It is a watch list, and the
+     thing that keeps it honest is that every entry names its source and how much that source is
+     worth. Filled by 17b-frontier.js at parse time. -->
+<div class="sec" id="frontier" hidden>
+  <h2>The Frontier</h2>
+  <h3>What is opening right now, and how long before it shuts.</h3>
+
+  <div class="card frintro">
+    <p>The 114 ideas answer <b>what could I build?</b> They were written against a market that
+    already exists, which is why every one of them carries a score.</p>
+    <p>These ten answer a different question, and none of them is scored. A score is derived from
+    four axis positions, and an axis position is a claim about a market you can read. For
+    something eighteen months old there is nothing to read, so the number would look confident and
+    rest on nothing. <b>Here the evidence is the output instead:</b> one dated fact, who published
+    it, and how much that publisher is worth.</p>
+    <p class="prov judg">Researched on 4 August 2026. Nothing here has been validated with a
+    customer, and there is no market size anywhere on this tab — where I could not find a number I
+    have said so rather than estimating one. Every <i>window</i> is my judgment, not a
+    measurement.</p>
+  </div>
+
+  <!-- The index. Ten rows carrying the two columns you would otherwise have to open every entry
+       to compare, and a row click that opens the one you want. -->
+  <div id="frIndex"></div>
+
+  <div id="frList"></div>
+
+  <!-- The evidence base, folded. It is the apparatus behind the ten entries rather than part of
+       the watch list, and every entry already carries its own citations inline — so leaving three
+       hundred words of bibliography permanently open under a folded list had the disclosure the
+       wrong way round. initFrontier() folds it on the h3. -->
+  <div class="frsrcblk">
+    <h3 class="frsrch">Every source, weakest last</h3>
+    <div class="card frintro">
+      <p>Source strength is a property of the publisher, not of how much I like what it says. Four
+      of the twelve below are content marketing with no stated method. They appear because they show
+      a term is in use — <b>no number on this tab rests on one of them alone.</b></p>
+    </div>
+    <div class="evid" id="frSrc"></div>
+  </div>
+</div>

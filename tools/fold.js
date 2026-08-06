@@ -97,8 +97,10 @@ const document={
 };
 // ---- fixture: the real section inventory -------------------------------------
 const nav=mk('div',doc,'navRow');
-const foldBar=mk('div',doc,'foldBar');
-const foldBtn=mk('button',foldBar,'foldAll');
+/* The button used to sit inside a #foldBar row that existed only to be hidden. It lives at the
+   end of the section rail now and hides itself, so the fixture no longer builds the wrapper —
+   and the two assertions below moved from the wrapper to the button. */
+const foldBtn=mk('button',nav,'foldAll');
 const SECS=[['custom',1],['stuck',0,false],['engine',0],['fw',0],['bank',0],
   ['obs',0],['conv',0],['score',0],['map',0],['sprint',0],['pos',0],['evid',0]];
 const bodies={};
@@ -136,7 +138,15 @@ for(let i=0;i<3;i++){
    and the two are one file apart. */
 const src=fs.readFileSync(R+'/src/js/00-icons.js','utf8')+'\n'+
           fs.readFileSync(R+'/src/js/21-collapse.js','utf8');
-const sb={document,location:{hash:''},console};sb.globalThis=sb;
+/* initFold() also starts the rail's scroll-spy, which is a browser thing: it listens for scroll
+   and measures geometry. This fixture has no layout engine, so the spy has nothing to measure
+   and its own guards turn it into a no-op — but it must be able to RUN. These four stubs are the
+   whole browser surface it touches. Deliberately not guarded inside 21-collapse.js: product code
+   should not carry `if (typeof addEventListener)` to keep a test harness happy. */
+const sb={document,location:{hash:''},console,
+  addEventListener(){},requestAnimationFrame(){},
+  getComputedStyle:()=>({getPropertyValue:()=>''})};
+sb.globalThis=sb;
 vm.createContext(sb);vm.runInContext(src+'\n;globalThis.__f={initFold,foldAll,setFold,openFold,toggleFold,foldOut,syncFoldAll};',sb);
 const F=sb.__f;
 // ---- assertions ---------------------------------------------------------------
@@ -146,7 +156,14 @@ F.initFold();
 const folds=document.querySelectorAll('.sec.fold');
 ok('11 report parts became foldable',folds.length===11,`got ${folds.length}`);
 ok('the workspace panel itself was left alone',!byId.custom.classList.contains('fold'));
-ok('every part starts closed',folds.every(s=>s.classList.contains('shut')));
+/* THE FIRST PART OPENS, EVERY OTHER PART IS SHUT. Changed 6 Aug 2026: the report arrived as a
+   masthead over twelve closed headings, which is a table of contents, not a document. This is
+   pinned to the property — exactly one open, and it is the first — rather than to a count, so
+   adding a thirteenth part cannot quietly turn it into "some parts start closed". */
+{const open=folds.filter(s=>!s.classList.contains('shut'));
+ ok('exactly one part starts open',open.length===1,`${open.length} open: ${open.map(s=>s.id).join(',')}`);
+ ok('and it is the first one',open.length===1&&open[0]===folds[0],
+   open.length===1?`opened ${open[0].id}, first is ${folds[0].id}`:'');}
 ok('every part has a secbody wrapper',folds.every(s=>qs(s,':scope > .secbody').length===1));
 ok('the original content moved inside the wrapper',
   folds.every(s=>{const b=qs(s,':scope > .secbody')[0];return bodies[s.id].every(n=>n.parentNode===b)}));
@@ -157,7 +174,12 @@ ok('h3 kept out of the wrapper where present',
   qs(byId.engine,':scope > h3').length===1);
 const btn=q=>qs(byId[q],':scope > h2 > button.sfold')[0];
 ok('every part has a real button trigger',folds.every(s=>!!btn(s.id)));
-ok('button starts aria-expanded=false',folds.every(s=>btn(s.id).getAttribute('aria-expanded')==='false'));
+/* aria-expanded has to track the class it describes, including for the one part that starts
+   open. A button reading "collapsed" over visible content is worse than no attribute at all. */
+ok('every button announces the state its part is actually in',
+  folds.every(s=>btn(s.id).getAttribute('aria-expanded')===String(!s.classList.contains('shut'))),
+  folds.filter(s=>btn(s.id).getAttribute('aria-expanded')!==String(!s.classList.contains('shut')))
+    .map(s=>s.id).join(','));
 ok('button points at its own body',folds.every(s=>btn(s.id).getAttribute('aria-controls')==='fold-'+s.id));
 {const lab=btn('engine').childNodes[1];
  ok('heading text node moved into the button label',
@@ -196,7 +218,7 @@ ok('openFold on the workspace panel is a no-op',(F.openFold('custom',0),!byId.cu
 // ===== generated output ========================================================
 sb.CURMODE='custom';
 F.syncFoldAll();
-ok('global bar hides when the mode has nothing to fold',byId.foldBar.hidden===true);
+ok('the global toggle hides when the mode has nothing to fold',byId.foldAll.hidden===true);
 
 F.foldOut();
 const groups=qs(cOut,'.gsec');
@@ -234,7 +256,7 @@ ok('the count is scoped to the mode on screen',byId.foldAll.innerHTML.includes('
 sb.CURMODE='report';
 F.syncFoldAll();
 ok('back in the report the count is the eleven parts',byId.foldAll.innerHTML.includes('0 of 11'));
-ok('and the bar is visible again',byId.foldBar.hidden===false);
+ok('and the toggle is visible again',byId.foldAll.hidden===false);
 
 console.log(`\n  ${pass} passed, ${fail.length} failed`);
 fail.forEach(f=>console.log('    ✕ '+f));

@@ -1,0 +1,107 @@
+/* The frontier — a watch list, not a report.
+   Numbered so it reads as a ranked sequence rather than a grid of equal tiles: the order is the
+   argument. One card, one entry, and the internal blocks are told apart by the colour of their
+   label rather than by a rule down the side — the same rule the idea card already follows. */
+.frintro{max-width:74ch}
+.frintro p{margin:0 0 var(--sp-3);font-size:var(--t-sm);line-height:1.6;color:var(--ink-2)}
+.frintro p:last-child{margin-bottom:0}
+.frintro b{color:var(--ink-1)}
+
+.fr{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-6);margin-bottom:var(--sp-4);box-shadow:var(--e-2)}
+.frhd{display:flex;align-items:baseline;gap:var(--sp-3);margin-bottom:var(--sp-2)}
+.frhd h4{margin:0;font-size:var(--t-xl);font-weight:600;letter-spacing:-.014em;
+  line-height:1.25;color:var(--ink-1);flex:1}
+/* Tabular figures so 01 through 10 sit on the same left edge in the numbered column. */
+.frn{font-size:var(--t-sm);font-weight:700;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.frone{margin:0 0 var(--sp-5);font-size:var(--t-base);line-height:1.55;color:var(--ink-2);
+  max-width:68ch}
+
+/* THE HEADER IS A FOLD TRIGGER NOW, and makeFold moves the number, the title and the strength
+   badge inside a <button><span class="schev"><span>…children…</span></button>. .frhd's own flex
+   stops reaching them at that point, so the three stack vertically. Same restoration the analyser
+   already carries for .bmhd — see the note there; this is the second instance, which is the
+   argument for keeping the two files' fold headers structurally identical. */
+.fr > .frhd{margin-bottom:0}
+.fr > .frhd > .sfold{padding:0;text-align:left}
+.fr > .frhd > .sfold > span:last-child{display:flex;align-items:baseline;gap:var(--sp-3);
+  flex:1;min-width:0;flex-wrap:wrap}
+.fr > .frhd > .sfold h4{flex:1;min-width:0}
+/* Shut, the one-liner is the whole preview, so it needs the breathing room the header used to
+   provide. Open, the block below it takes over. */
+.fr.shut > .frone{margin-bottom:0}
+
+.frsig{background:var(--raise);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-4) var(--sp-5);
+  margin-bottom:var(--sp-5);max-width:74ch}
+.frsig p{margin:0;font-size:var(--t-sm);line-height:1.6;color:var(--ink-1)}
+.frsig>.ik{color:var(--f3)}
+.frcite{margin-top:var(--sp-2)!important;font-size:var(--t-xs)!important;color:var(--ink-3)!important}
+.frcite a{color:var(--ink-3);text-underline-offset:2px}
+.frcite a:hover{color:var(--ink-1)}
+
+.frwhat{margin:0 0 var(--sp-5);font-size:var(--t-sm);line-height:1.65;color:var(--ink-2);
+  max-width:68ch}
+
+/* Two columns, not auto-fit. There are exactly four cells, and auto-fit produced three at
+   desktop width — leaving the fourth alone with a hole beside it. A fixed 2x2 always balances,
+   and the pairing is meaningful: the two judgments on top, the two actions underneath.
+
+   THE RULE NOW SAYS WHAT THE COMMENT ALWAYS SAID. It was still auto-fit, and it went back to
+   three columns the moment the body face changed — because `ch` is measured in the current font
+   and a grotesque's `0` is wider than a monospace's, so the 96ch cap grew and let a third track
+   in. A comment describing behaviour the code does not have is worse than no comment: the probe
+   check written against it had been passing by luck for weeks. */
+.frgrid{display:grid;grid-template-columns:1fr 1fr;
+  gap:0 var(--sp-7);max-width:96ch}
+/* 720, which is the breakpoint the rest of the project already uses, not 760. Two 330px cells
+   plus the 32px gap need 692px and fit comfortably at 720. It was written as 760 and collided
+   exactly with the probe's own `vw >= 760 → expect 2 columns` threshold, so the check failed at
+   precisely one viewport width and passed either side of it. */
+@media(max-width:720px){.frgrid{grid-template-columns:1fr}}
+
+/* ---------- the index ----------
+   A comparison instrument, so it is a ruled table: four columns, one row per entry, the whole row
+   a link. No description column — that is the first line of the card the row opens.
+
+   IN A CARD, LIKE EVERYTHING ELSE ON THIS TAB. The table used to sit as bare rows straight on the
+   page field — a plain-text caption in tracked mono caps, no surface, no radius — while every
+   entry card below it already carried the plane/border/radius/shadow system. Same fix as the
+   analyser's decision table: one wrapping card, and the caption reads as a sentence, not as a
+   leftover instrument label from the world this replaced. */
+.frtwrap{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-2) var(--sp-5);margin-bottom:var(--sp-6);box-shadow:var(--e-1)}
+.frt{width:100%;border-collapse:collapse;font-size:var(--t-sm)}
+.frt caption{text-align:left;padding:var(--sp-3) 0 var(--sp-2);font-size:var(--t-xs);color:var(--ink-3)}
+.frt th{text-align:left;font-weight:600;color:var(--ink-3);font-size:var(--t-2xs);
+  letter-spacing:var(--tr-label);text-transform:uppercase;
+  padding:var(--sp-2) var(--sp-3) var(--sp-2) 0;border-bottom:1px solid var(--axis);white-space:nowrap}
+.frt td{padding:var(--sp-3) var(--sp-3) var(--sp-3) 0;border-bottom:1px solid var(--grid);
+  vertical-align:baseline;color:var(--ink-2)}
+.frt tr:last-child td{border-bottom:0}
+.frtn{width:1%;color:var(--ink-3);font-variant-numeric:tabular-nums;text-align:right}
+.frtl b{color:var(--ink-1);font-weight:600}
+.frtw{color:var(--ink-2);max-width:26ch}
+/* The whole row is the target, so it needs the affordances of one: a pointer, a hover state and
+   a focus ring, since it is reachable by keyboard. */
+.frtr{cursor:pointer;transition:background var(--dur-1) var(--ease)}
+.frtr:hover{background:var(--raise)}
+.frtr:focus-visible{outline:2px solid var(--ink-1);outline-offset:-2px}
+.frgrid>div{padding:var(--sp-4) 0;border-top:1px solid var(--grid);font-size:var(--t-sm);
+  line-height:1.6;color:var(--ink-2)}
+.frgrid>div>.ik{color:var(--f4)}
+
+.frnear{margin-top:var(--sp-4);padding-top:var(--sp-4);border-top:1px solid var(--grid)}
+.frnear .chip{margin:var(--sp-1) var(--sp-1) 0 0}
+.frsrch{margin-top:var(--sp-8)}
+
+/* Each citation says how much it is worth, so the summary chip cannot flatter a weak source. */
+.frw{display:inline-block;font-size:var(--t-2xs);color:var(--ink-3);border:1px solid var(--grid);
+  border-radius:var(--r-md);padding:0 var(--sp-2);margin-left:var(--sp-1);white-space:nowrap}
+
+/* Sources, grouped by how much they are worth. The band heading carries the definition once;
+   the rows under it carry only the names. */
+.frband{border-bottom:1px solid var(--grid);padding:var(--sp-4) 0}
+.frband:last-child{border-bottom:0}
+.frbh{display:flex;align-items:baseline;gap:var(--sp-3);margin-bottom:var(--sp-2);
+  font-size:var(--t-sm);color:var(--ink-2);max-width:78ch}
+.frrow{font-size:var(--t-sm);padding:var(--sp-1) 0 var(--sp-1) var(--sp-5)}

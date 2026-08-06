@@ -3,7 +3,7 @@
    about how you build it. Neither fixes what actually HAPPENS inside — and that is a real,
    separate variable, not a gap in the model I am papering over.
 
-   The proof is in Sandeep's own bank. 112 ideas occupy only 106 four-axis combinations, and
+   The proof is in Sandeep's own bank. 114 ideas occupy only 108 four-axis combinations, and
    #36 The Roast and #99 Design Court sit on identical axes: mid-level designers, portfolio,
    ticketed live show, ticket sales. One tears work apart on stage; the other runs a mock trial.
    Same shape, different premise, genuinely different businesses.
@@ -43,7 +43,7 @@ const PREM=[
  q:`What if the shape is the whole idea?`,
  lem:`A stand. It sells lemonade.`,
  an:(W,H)=>`You have set the four axes and left the inside open. That is a real place to be, not
-   an unfinished one — 32 of the 112 ideas in your bank are exactly this: change the payer, change
+   an unfinished one — 34 of the 114 ideas in your bank are exactly this: change the payer, change
    the audience, change the format, and stop there.`,
  ex:(W,H,O)=>`${cap(aAn(H))} for ${W}, aimed at ${O}. What you actually do inside it is still
    yours to decide — pick a kind of work above and the whole page rebuilds around it.`},

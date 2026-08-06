@@ -1,7 +1,11 @@
 <!-- ============ STUCK ============ -->
 <div class="sec" id="stuck">
   <h2>1 · Diagnosis</h2>
- <details class="expand" id="dStuck">
+ <!-- OPEN BY DEFAULT. This is the report's first part and its entire body is this one disclosure,
+      so with the part folded shut and the details folded shut the reader had to click twice to
+      reach any prose at all — two nested disclosures with nothing between them. The section fold
+      above is the disclosure; this one just has to not be a second gate. -->
+ <details class="expand" id="dStuck" open>
   <summary class="trig">
     <span class="ti"><svg class="i" aria-hidden="true"><use href="#i-info"/></svg></span>
     <span class="tw"><span class="tl">You're not short on creativity. You're generating at the wrong unit size.</span></span>
@@ -10,8 +14,8 @@
   <div class="expbody">
   <div class="stuck">
     <div class="stuckbox bad">
-      <div class="tiny" style="color:var(--crit);font-weight:600">What you've been doing</div>
-      <div class="bignum" style="color:var(--crit)">1</div>
+      <div class="tiny" style="color:var(--ink-2);font-weight:600">What you've been doing</div>
+      <div class="bignum" style="color:var(--ink-3)">1</div>
       <div style="font-size:13px;color:var(--ink-2);margin-top:8px">
         Trying to think of <b style="color:var(--ink-1)">a whole business</b> in one thought —
         audience, product, format and pricing decided simultaneously. That's four decisions

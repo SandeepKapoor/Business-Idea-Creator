@@ -87,7 +87,9 @@ function build() {
   if (/<\/script/i.test(js)) throw new Error('JS source contains a literal "</script" — split it as "<\\/script"');
   if (/<\/style/i.test(css)) throw new Error('CSS source contains a literal "</style"');
 
-  let out = resolveIncludes(readPart(path.join(SRC, 'index.html')));
+  const shell = readPart(path.join(SRC, 'index.html'));
+  const sections = (shell.match(/<!--@include\s+sections\//g) || []).length;
+  let out = resolveIncludes(shell);
 
   const swap = (marker, open, body, close) => {
     const re = new RegExp(`^[ \\t]*<!--@${marker}-->[ \\t]*$`, 'm');
@@ -104,7 +106,7 @@ function build() {
 
   const kb = (Buffer.byteLength(out) / 1024).toFixed(0);
   const lines = out.split('\n').length;
-  return { dest, kb, lines, css: cssFiles.length, js: jsFiles.length };
+  return { dest, kb, lines, css: cssFiles.length, js: jsFiles.length, sections };
 }
 
 function once() {
@@ -113,7 +115,7 @@ function once() {
     const stamp = new Date().toTimeString().slice(0, 8);
     console.log(
       `${stamp}  built ${path.relative(ROOT, r.dest)} — ${r.lines} lines, ${r.kb} KB ` +
-      `(${r.css} css + ${r.js} js + 15 sections)`
+      `(${r.css} css + ${r.js} js + ${r.sections} sections)`
     );
     return true;
   } catch (e) {

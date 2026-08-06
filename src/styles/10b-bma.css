@@ -1,0 +1,143 @@
+/* Business model analyser.
+   Same card language as the frontier — this is the fourth tab, not a fourth visual system. What
+   is new here is the closed state and the ten-types grid. */
+.bm{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-6);margin-bottom:var(--sp-4);box-shadow:var(--e-2)}
+/* A model he cannot run is sunk rather than tinted red: it is not a warning, it is not on offer.
+   Reading weight drops, the card stays legible, and no colour has to carry the meaning alone —
+   the badge says "closed to you" in words. */
+.bm.shutdoor{background:var(--plane);box-shadow:none}
+.bmhd{display:flex;align-items:baseline;gap:var(--sp-3);margin-bottom:var(--sp-2)}
+.bmhd h4{margin:0;font-size:var(--t-xl);font-weight:600;letter-spacing:-.014em;line-height:1.25;
+  color:var(--ink-1);flex:1}
+.bmn{font-size:var(--t-sm);font-weight:700;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.bmsc{font-size:var(--t-sm);color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bmsc b{font-size:var(--t-xl);color:var(--ink-1);font-weight:650}
+.bmone{margin:0 0 var(--sp-5);font-size:var(--t-base);line-height:1.55;color:var(--ink-2);max-width:68ch}
+
+.bmgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));
+  gap:0 var(--sp-7);max-width:96ch}
+.bmgrid>div{padding:var(--sp-4) 0;border-top:1px solid var(--grid);font-size:var(--t-sm);
+  line-height:1.6;color:var(--ink-2)}
+.bmgrid>div>.ik{color:var(--f2)}
+.bmgrid b{color:var(--ink-1)}
+
+.bmfit{margin-top:var(--sp-4);padding:var(--sp-4) var(--sp-5);background:var(--raise);
+  border:1px solid var(--ring);border-radius:var(--r-lg);font-size:var(--t-sm);line-height:1.6;color:var(--ink-1);max-width:82ch}
+.bmfit>.ik{color:var(--f3)}
+.bm.shutdoor .bmfit>.ik{color:var(--crit)}
+.bmfit b{color:var(--ink-1)}
+/* The eight criteria as a strip, not a table: it sits under one model, so the labels do the
+   work a header row would otherwise do, and it wraps instead of scrolling. */
+.bmcrit{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-5);margin-top:var(--sp-3);
+  padding-top:var(--sp-3);border-top:1px solid var(--grid)}
+.bmcrit span{display:inline-flex;align-items:baseline;gap:var(--sp-1);font-size:var(--t-xs)}
+.bmcrit i{font-style:normal;color:var(--ink-3)}
+.bmcrit b{font-variant-numeric:tabular-nums;color:var(--ink-1)}
+
+.bmruns{margin-top:var(--sp-4);padding-top:var(--sp-4);border-top:1px solid var(--grid)}
+.bmruns .chip{margin:var(--sp-1) var(--sp-1) 0 0}
+.bmruns b{color:var(--ink-1)}
+
+/* the twenty-one */
+.biband{margin-bottom:var(--sp-5)}
+.bibh{font-size:var(--t-xs);font-weight:700;color:var(--ink-3);text-transform:none;
+  padding-bottom:var(--sp-2);border-bottom:1px solid var(--axis)}
+.birow{display:grid;grid-template-columns:minmax(160px,1fr) minmax(180px,1.1fr) minmax(240px,2fr);
+  gap:var(--sp-2) var(--sp-5);padding:var(--sp-4) 0;border-bottom:1px solid var(--grid);
+  font-size:var(--t-sm);line-height:1.55;align-items:start}
+.birow:last-child{border-bottom:0}
+.bin{color:var(--ink-1);font-weight:650}
+.bin span{display:block;font-weight:400;font-size:var(--t-xs);color:var(--ink-3);margin-top:var(--sp-0)}
+.bif{color:var(--ink-2);font-variant-numeric:tabular-nums}
+.bino{color:var(--ink-3)}
+.bicite{display:block;margin-top:var(--sp-2);font-size:var(--t-xs)}
+.bicite a{color:var(--ink-3)}
+.bicite a:hover{color:var(--ink-1)}
+
+/* ten types of innovation */
+.dobwrap{overflow-x:auto;border:1px solid var(--ring);border-radius:var(--r-lg);
+  background:var(--plane);padding:var(--sp-4);box-shadow:var(--e-1)}
+.dobwrap:focus-visible{outline:2px solid var(--f1);outline-offset:2px}
+table.dob{border-collapse:collapse;min-width:760px;width:100%;font-size:var(--t-xs)}
+table.dob th{font-weight:600;color:var(--ink-3);text-align:center;padding:0 var(--sp-1) var(--sp-3);
+  vertical-align:bottom;line-height:1.3}
+table.dob th span{display:block;max-width:72px;margin:0 auto}
+table.dob td{text-align:center;padding:var(--sp-2) var(--sp-1);border-top:1px solid var(--grid);
+  line-height:1}
+table.dob .dlab{text-align:left;color:var(--ink-1);font-size:var(--t-xs);white-space:nowrap;
+  padding-right:var(--sp-4)}
+/* The three states differ in weight and in shape, not only in colour — a filled disc, a ring, a
+   dot — so the grid still reads with no colour at all. Each cell also carries its state in text
+   for a screen reader. */
+.dmk{display:inline-block;width:10px;height:10px;border-radius:var(--r-full);
+  border:1px solid currentColor;vertical-align:middle}
+.dob .d0{color:var(--ink-3)}
+/* none: a dot a quarter the size, so absence still reads as a mark rather than as a gap */
+.dob .d0 .dmk{width:4px;height:4px;background:currentColor;border-color:transparent}
+.dob .d1{color:var(--ink-2)}                    /* some: an outline ring */
+.dob .d2{color:var(--f2)}                       /* strong: filled */
+.dob .d2 .dmk{background:currentColor}
+.dob tr.dsum td{border-top:1px solid var(--axis);color:var(--ink-1);font-weight:700;
+  font-size:var(--t-sm);font-variant-numeric:tabular-nums;padding-top:var(--sp-3)}
+.dob tr.dsum .dlab{font-weight:600;color:var(--ink-2)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* The line between what he can do and what he cannot. A rule and a sentence, not a colour block:
+   the cards behind it already read as sunk. */
+.bmsplit{margin:var(--sp-7) 0 var(--sp-4);padding-top:var(--sp-4);border-top:1px solid var(--axis);
+  font-size:var(--t-sm);line-height:1.6;color:var(--ink-3);max-width:78ch}
+.bmsplit b{color:var(--ink-1)}
+
+/* THE DECISION TABLE, IN A CARD. Every other component on this tab — the model cards, the closed
+   rows below, the note strip — sits on a surface with a radius and a shadow; this table was the
+   one exception, bare rows directly on the page field with no container of its own. It gets the
+   same treatment now: one wrapping card, padding, and the rule moved from a full-bleed border to
+   an inset one so it stops at the card's own padding instead of touching the rounded corners. */
+.bmtwrap{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-2) var(--sp-5);margin-bottom:var(--sp-5);box-shadow:var(--e-1)}
+table.bmt{width:100%;border-collapse:collapse;font-size:var(--t-sm)}
+table.bmt th{text-align:left;font-size:var(--t-xs);font-weight:600;color:var(--ink-3);
+  padding:var(--sp-3) var(--sp-4) var(--sp-2) 0;border-bottom:1px solid var(--axis)}
+table.bmt .bmtn{text-align:right;padding-right:0;width:64px}
+.bmtr{cursor:pointer}
+.bmtr td{padding:var(--sp-3) var(--sp-4) var(--sp-3) 0;border-bottom:1px solid var(--grid);
+  vertical-align:baseline;color:var(--ink-2)}
+.bmtr:last-child td{border-bottom:0}
+.bmtr .bmtl b{display:block;color:var(--ink-1);font-weight:650}
+.bmtr .bmtl span{display:block;color:var(--ink-3);font-size:var(--t-xs);margin-top:var(--sp-0);
+  max-width:56ch}
+.bmtr .bmtn{text-align:right;font-variant-numeric:tabular-nums;padding-right:0}
+.bmtr .bmtn b{color:var(--ink-1);font-size:var(--t-lg);font-weight:650}
+.bmtr .bmtn i{font-style:normal;color:var(--ink-3);font-size:var(--t-xs)}
+.bmtr:hover td{background:var(--raise)}
+.bmtr:focus-visible{outline:2px solid var(--f1);outline-offset:-2px}
+/* A closed model is dimmed in the table, and the word "closed" carries the meaning — not the tint. */
+.bmtr.shut .bmtl b{color:var(--ink-2)}
+.bmnote{font-size:var(--t-xs);color:var(--ink-3);line-height:1.6;max-width:76ch;
+  margin:0 0 var(--sp-7)}
+.bmnote b{color:var(--ink-2)}
+.bmnote .prov{display:block;margin-top:var(--sp-2)}
+/* Long evidence blocks fold, so the default view is the table and ten headlines. */
+.bmlong{margin-top:var(--sp-6);padding-top:var(--sp-5);border-top:1px solid var(--grid)}
+.bmlong>h4{margin:0;font-size:var(--t-lg);font-weight:600;color:var(--ink-1)}
+.bmlead{font-size:var(--t-sm);line-height:1.6;color:var(--ink-2);max-width:78ch;
+  margin:var(--sp-3) 0 var(--sp-4)}
+.bmlead b{color:var(--ink-1)}
+
+/* FOLDED CARD HEADERS. makeFold() moves the heading's children into a <span> inside the button,
+   so .bmhd's own flex rules stop applying to them and the number, title and score stack. Restore
+   the row on the span that now holds them. Same fix would be needed by any card that folds. */
+.bm > .bmhd{margin-bottom:0}
+.bm > .bmhd > .sfold{padding:0;text-align:left}
+.bm > .bmhd > .sfold > span:last-child{display:flex;align-items:baseline;gap:var(--sp-3);
+  flex:1;min-width:0}
+.bm > .bmhd > .sfold h4{flex:1;min-width:0}
+/* A shut card is a headline, so it should cost the height of a headline. */
+.bm.fold{padding:var(--sp-4) var(--sp-5)}
+.bm.fold:not(.shut){padding:var(--sp-5) var(--sp-6) var(--sp-6)}
+.bm.fold > .bmone{margin:var(--sp-1) 0 0 var(--sp-6);font-size:var(--t-sm)}
+.bm.fold:not(.shut) > .bmone{margin-bottom:var(--sp-4)}
+.bm.fold.shut > .secbody{display:none}
+/* The long evidence blocks get the same treatment. */
+.bmlong > .foldhd > .sfold h4{margin:0;flex:1;text-align:left}

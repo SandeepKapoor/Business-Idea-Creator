@@ -1,61 +1,137 @@
 *{box-sizing:border-box}
-/* Inter first, then the platform UI face. The artifact is one self-contained file: no stylesheet
-   link, no import rule, no remote url() — all three enforced by tools/verify.js — so a webfont
-   cannot be fetched. It renders in Inter wherever Inter is installed, and falls back elsewhere.
-   (Do not write the import keyword literally here; that invariant is a plain substring check.)
 
-   operate.md: "One family is often right. A well-tuned sans carries headings, buttons, labels,
-   body, data." There is no display face here and there should not be one. */
-body{margin:0;background:var(--plane);color:var(--ink-1);
-  font:var(--t-base)/1.5 "Inter","Inter Display","Inter var",-apple-system,BlinkMacSystemFont,
-    "Segoe UI",Roboto,system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
-  text-rendering:optimizeLegibility}
-.wrap{max-width:960px;margin:0 auto;padding:0 var(--sp-6) var(--sp-10)}
+/* ---------- TWO FACES, AND WHICH ONE GETS WHICH JOB ----------
+   The contract at the top of the document says "platform grotesque for prose, platform mono for
+   tabulated data". Until now this file said the opposite — one monospace family for everything —
+   because that was the rule of the world this one replaced, and the token layer got migrated
+   without it. This is the migration finishing, not a new direction.
 
-/* TYPE ROLES — six steps, ratio ~1.2, no half-pixels. The old ramp contained 12.5 / 13.5 / 14.5,
-   which is not a scale, it is three separate arguments with the browser.
+   WHY IT MATTERS MORE THAN IT SOUNDS. Roughly nine thousand words on this page are argument, not
+   measurement: section decks, the observations, the twelve cluster essays, the frontier's "why it
+   is still empty", every provenance chip. A monospace face sets those at a fixed advance per
+   glyph, which is precisely the property that makes a column of prices comparable and the
+   property that makes a paragraph slower to read. Paying that cost on the tables is the point.
+   Paying it on the argument was an accident.
 
-   THE SECTION HEADING WAS UPSIDE DOWN. h2 rendered at 14px in --ink-3 above a 22px h3, which is
-   the eyebrow craft-floor bans outright: "no brief earns it back. The heading carries its own
-   weight." It also disagreed with the collapsed state, where h2 already led. So h2 is now the
-   section heading at full size and the h3 beneath it is supporting text — one hierarchy, the
-   same open or shut.
+   THE SPLIT, STATED ONCE:
+     grotesque   headings, decks, paragraphs, list items, the argument
+     mono        every table, every score, every price, every count, every field label, every
+                 control the reader types into or picks from, and anything set in tracked caps
+   A number that sits inside a sentence stays in the sentence's face. A number that sits in a
+   column joins the column. */
+html{scroll-behavior:smooth;background:var(--field)}
+body{margin:0;
+  background:
+    radial-gradient(circle at top left,rgba(255,56,92,.08),transparent 22%),
+    radial-gradient(circle at top right,rgba(255,184,164,.18),transparent 24%),
+    linear-gradient(180deg,#fff8f6 0%,#fffefe 28%,#fff8f4 100%);
+  color:var(--ink-1);font:var(--t-base)/1.68 var(--sans);font-variant-numeric:tabular-nums;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+html[data-theme="dark"] body{
+  background:
+    radial-gradient(circle at top left,rgba(255,90,95,.12),transparent 20%),
+    linear-gradient(180deg,#171717 0%,#121212 100%);
+}
+/* padding-top, not 0 — .sec's own margin-top would otherwise collapse straight through .wrap
+   and <main> onto <body>'s top edge (nothing here has a border or padding to stop it), pushing
+   body's painted background down and exposing bare html background above it. header cannot
+   supply that buffer any more: it is a fixed sidebar now, out of flow, so document flow starts
+   at .wrap's first child with nothing above it. */
+.wrap{max-width:1240px;margin:0 auto;padding:var(--sp-6) var(--sp-6) var(--sp-10)}
 
-   Light text on a dark plane needs compensating on all three axes (typeset.md): slightly more
-   line-height and tracking than the same face wants on white. */
-h1{font-size:var(--t-3xl);line-height:1.12;margin:0 0 var(--sp-2);letter-spacing:-.024em;font-weight:600}
-h2{font-size:var(--t-xl);line-height:1.25;margin:0 0 var(--sp-2);letter-spacing:-.014em;
-  font-weight:600;color:var(--ink-1)}
-h3{font-size:var(--t-xl);line-height:1.3;margin:0 0 var(--sp-3);letter-spacing:-.014em;font-weight:600}
-h4{font-size:var(--t-lg);line-height:1.35;font-weight:600;letter-spacing:-.01em;margin:0 0 var(--sp-2)}
-/* The line under a section heading is a deck, not a second heading. */
-.sec>h3{font-size:var(--t-md);line-height:1.5;font-weight:400;letter-spacing:0;
-  color:var(--ink-3);margin:0 0 var(--sp-4);max-width:70ch}
-p{color:var(--ink-2);margin:0 0 var(--sp-3);max-width:72ch}
-.mono{font-variant-numeric:tabular-nums}
-/* Every figure here is read against another figure in the column above or below it. */
-table,.tp,.tot,.mv,.anum,.vt,.fcount,.dnum{font-variant-numeric:tabular-nums}
+/* WHICH TABLES, NOT ALL TABLES. The first version of this rule said `table`, on the reasoning
+   that a table is tabulated data by definition. It is not: the routes table on the workspace has
+   two columns of running prose in it, and five paragraphs came out in monospace — the exact cost
+   this split exists to avoid, reintroduced by the rule meant to prevent it.
 
-/* RHYTHM — layout.md: "more space above a heading than below it", and deliberate contrast
-   between tight and generous intervals rather than one value repeated everywhere. */
+   So the face follows the CONTENT, which is the actual principle:
+     .stab .dob           score grids and matrices — nothing in them but figures, so all mono
+     .lbl .idx .mono      field labels, index numbers, and anything asking for it by name
+     controls             what the reader types into or picks from
+   A table of sentences is prose that happens to be aligned, and it stays in the reading face.
+   Its numeric and label columns ask for mono individually — see the line below. */
+.stab,.dob,.mono,.lbl,.idx,code,kbd,input,select,textarea,button{
+  font-family:var(--mono);font-variant-numeric:tabular-nums}
+/* Numeric and label columns inside a prose table: the figures line up and the column heads read
+   as field names, while the sentences beside them do not pay for either. */
+.rs,.rvd,.bmtn,.frtn,.frt th,.bmt th{font-family:var(--mono)}
+
+/* TYPE ROLES. A grotesque has a real weight axis, so hierarchy is carried by size and weight the
+   ordinary way, and case is left alone. Headings were uppercase under an earlier world because a
+   mono face has almost no weight axis to work with; that constraint is gone.
+
+   BROADSHEET WEIGHT. A poster headline is set as heavy and as tight as the face will take, and a
+   platform grotesque will take 800 at -0.032em without the counters closing up. This is where
+   nearly all the personality of the page comes from — there is one hue and no imagery, so the
+   headline has to carry it. The decks stay light and quiet underneath, which is what makes the
+   contrast read as deliberate rather than as everything shouting. */
+h1{font-size:var(--t-3xl);line-height:1.02;margin:0 0 var(--sp-3);
+  letter-spacing:var(--tr-display);font-weight:800}
+h2{font-size:var(--t-2xl);line-height:1.08;margin:0 0 var(--sp-3);
+  letter-spacing:var(--tr-display);font-weight:800;color:var(--ink-1)}
+h3{font-size:var(--t-lg);line-height:1.3;margin:0 0 var(--sp-3);letter-spacing:-.014em;
+  font-weight:700}
+h4{font-size:var(--t-base);line-height:1.4;font-weight:700;letter-spacing:-.008em;margin:0 0 var(--sp-2)}
+/* The line under a section heading is a deck: one size down, quiet ink, sentence case. */
+.sec>h3{font-size:var(--t-md);line-height:1.6;font-weight:400;letter-spacing:0;
+  color:var(--ink-3);margin:0 0 var(--sp-5);max-width:68ch}
+
+/* MEASURE. 68ch at this size lands around 560px, inside the 65–75ch band where a reader's eye
+   finds the next line without hunting. The old 74ch was set for a monospace face, whose average
+   character is wider, and it overran the band the moment the face changed. */
+p{color:var(--ink-2);margin:0 0 var(--sp-4);max-width:68ch}
+li{color:var(--ink-2);max-width:68ch}
+b,strong{font-weight:600;color:var(--ink-1)}
+
+/* RHYTHM. More space above a heading than below it. */
 .sec{margin-top:var(--sp-9)}
-.card{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-lg);
-  padding:var(--sp-5);box-shadow:var(--e-1)}
+.card{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-5);box-shadow:var(--e-2)}
 .grid{display:grid;gap:var(--sp-3)}
-.tiny{font-size:var(--t-sm);color:var(--ink-3);line-height:1.55;max-width:78ch}
+.tiny{font-size:var(--t-xs);color:var(--ink-3);line-height:1.6;max-width:76ch}
 hr{border:0;border-top:1px solid var(--grid);margin:var(--sp-7) 0}
+a{color:var(--ink-1);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{color:var(--mark)}
 
-/* ICONS — one sprite, one stroke weight, three sizes. vertical-align rather than flex, so an
-   icon can sit inside running text without shifting the line box. */
-.i{width:16px;height:16px;flex:none;display:inline-block;vertical-align:-3px}
-.i-sm{width:13px;height:13px;vertical-align:-2px}
-.i-xs{width:11px;height:11px;vertical-align:-1px}
+/* ICONS — one sprite, one stroke weight. */
+.i{width:14px;height:14px;flex:none;display:inline-block;vertical-align:-2px}
+.i-sm{width:12px;height:12px;vertical-align:-2px}
+.i-xs{width:10px;height:10px;vertical-align:-1px}
 .i-up{transform:rotate(-90deg)}
 .i-down{transform:rotate(90deg)}
 
-/* FOCUS — one ring, everywhere, on :focus-visible only, so it appears for keyboard and assistive
-   tech and never on a mouse click. operate.md lists focus as non-optional; before this, twelve
-   interactive components had no focus state at all. */
+/* FOCUS. An ink ring, because it is the only value that clears everything on this page — and
+   "everything" includes a score cell filled at full vermillion, where a vermillion ring would
+   simply disappear. The second ring is stock-coloured and has no blur at all — spread only — so
+   it punches the ink ring out of whatever it lands on. One rule covers the tinted cells and the
+   plain field alike. */
 :where(a,button,select,input,summary,[tabindex]):focus-visible{
-  outline:2px solid var(--f1);outline-offset:2px;border-radius:var(--r-xs)}
+  outline:2px solid color-mix(in srgb,var(--mark) 72%,white);outline-offset:3px;border-radius:var(--r-sm);
+  box-shadow:0 0 0 6px color-mix(in srgb,var(--mark) 18%,transparent)}
+
+/* THE SKIP LINK. Four tabs, a section rail and a theme switch stand between the top of the
+   document and its content; a keyboard reader should not have to walk all of them to reach a
+   paragraph. Off-screen until focused, then it lands in the top-left as a plain ruled control. */
+.skip{position:absolute;left:var(--sp-4);top:var(--sp-2);z-index:60;
+  transform:translateY(-200%);background:var(--plane);color:var(--ink-1);
+  border:1px solid var(--ring-2);padding:var(--sp-2) var(--sp-4);
+  font-family:var(--mono);font-size:var(--t-xs);letter-spacing:var(--tr-caps);
+  text-transform:uppercase;text-decoration:none;border-radius:var(--r-md);box-shadow:var(--e-2)}
+.skip:focus{transform:translateY(0)}
+
+/* A SCROLLED-TO SECTION MUST NOT LAND UNDER THE STICKY HEADER. Set on the scroll targets rather
+   than as padding on the sections, so it costs nothing visually and cannot open a gap. */
+.sec,[id]{scroll-margin-top:var(--stick,88px)}
+
+/* MOBILE READS AT 16PX. Density is a requirement on a desktop screen because comparison needs
+   things side by side; a 400px column cannot put anything side by side, so the reason for the
+   smaller size is not present and the size goes up. This is the one place the density rule and
+   the legibility rule do not actually conflict. */
+@media(max-width:720px){
+  body{font-size:16px;line-height:1.6}
+  p,li,.sec>h3{max-width:none}
+  .wrap{padding-left:var(--sp-4);padding-right:var(--sp-4)}
+  /* This used to bump h1/h2 UP to 48/34px on mobile — off the type ramp, and backwards from how
+     responsive type usually moves. --t-3xl (40px) is already the top of the allowed scale, so
+     mobile just inherits the desktop heading sizes rather than needing a step that doesn't exist. */
+}

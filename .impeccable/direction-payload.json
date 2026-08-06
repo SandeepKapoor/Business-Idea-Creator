@@ -1,0 +1,100 @@
+{
+  "title": "Choose the visual world",
+  "question": "The roll assigned The Bound Record. Keep it, take an alternate, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "The Bound Record",
+      "kicker": "THE ROLL",
+      "lineage": "the bound analytical report — numbered method, ruled results, struck-through corrections, an appendix of raw data",
+      "thesis": "Every claim carries its method, in the one document form where that is the grammar rather than a feature.",
+      "palette": [
+        "#12100c",
+        "#f4f1e8",
+        "#1d5cc8",
+        "#b8481f"
+      ],
+      "materials": [
+        "ruled paper",
+        "ink of two weights",
+        "index tabs",
+        "struck-through correction"
+      ],
+      "viewport": "A numbered section head, a wide ruled results table, and a hairline margin column carrying the provenance of every figure beside it.",
+      "risk": "A record can read as inert. It must feel like an instrument being used, not an archive being stored.",
+      "case": "The document already half-is this: an evidence ledger, corrections stated in place rather than deleted, and a known-issues line. This makes the whole surface behave the way its best part already does."
+    },
+    {
+      "id": "challenger-splitflap",
+      "label": "Departures Board",
+      "lineage": "rail concourse split-flap board — fixed columns, ranked rows, amber for exception",
+      "thesis": "The 114 ideas as a live departures board: columns never move, rows re-rank, a failed gate reads like a cancelled train.",
+      "case": "Wins audience identification outright — Boeing, concourses, public information. Loses product clarity: fixed-column grammar owns the scorecard and has nothing to say about thirteen sections of argued prose.",
+      "palette": [
+        "#0e0e0e",
+        "#f2f2f2",
+        "#e8a317",
+        "#c4342c"
+      ],
+      "materials": [
+        "matte flap faces",
+        "brushed steel frame",
+        "amber row lamp"
+      ],
+      "viewport": "The scorecard as the board: eight fixed columns, rows cascading into rank order.",
+      "risk": "Two thirds of the document is prose, and prose on a departures board is a costume.",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-split-flap-concourse-hero.webp"
+    },
+    {
+      "id": "challenger-ikeda",
+      "label": "Datamatics",
+      "lineage": "Ryoji Ikeda — hairline bar fields, monospace numerics, full-frame inversion",
+      "thesis": "193,600 combinations rendered as the field they are, and your one choice as a single lit column inside it.",
+      "case": "Fuses poorly on a named fact: the grammar forbids colour, and this product needs a five-step score ramp and four axis colours that carry meaning and are contrast-verified in both themes. Stripping them would fail an accessibility check, not just a taste one.",
+      "palette": [
+        "#000000",
+        "#ffffff",
+        "#ffffff",
+        "#000000"
+      ],
+      "materials": [
+        "hairline bar field",
+        "tabular monospace",
+        "frame inversion"
+      ],
+      "viewport": "A wall of hairline columns, one of them yours.",
+      "risk": "Beautiful, and it deletes the colour system three harnesses currently verify.",
+      "hero": "https://impeccable.style/worlds/cards/ikeda-datamatics-hero.webp"
+    },
+    {
+      "id": "challenger-deck",
+      "label": "Deck Fascia",
+      "lineage": "cassette-futurist tape deck — engraved labels, panel grid, amber ladders",
+      "thesis": "One fascia holds everything: every function gets its own labelled switch, and the score climbs an amber ladder.",
+      "case": "Fuses honestly — a tool with four modes really is a panel of labelled zones, and the axis picker really is a bank of switches. Weakest on craft risk: brushed metal and lit LEDs are exactly the chrome the quality floor treats as a substitute for authored content.",
+      "palette": [
+        "#b9b6ae",
+        "#d8d2c4",
+        "#1a1a1a",
+        "#e8940c"
+      ],
+      "materials": [
+        "brushed aluminium",
+        "engraved label",
+        "amber LED ladder"
+      ],
+      "viewport": "A bolted panel: mode zones left to right, the picker as switch banks, meters along the foot.",
+      "risk": "Skeuomorphism ages badly and the metal is a texture, not an idea.",
+      "hero": "https://impeccable.style/worlds/cards/pop-culture-shelf-cassette-futurism-deck-hero.webp"
+    }
+  ],
+  "reroll": true,
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "The analytics dashboard, executed impeccably — neutral ground, one blue accent, cards, a sidebar.",
+    "viewport": "What you would expect, at full craft and nothing more.",
+    "risk": "You would not be able to tell it from any other tool, which for a private instrument may be exactly fine."
+  },
+  "steer": true
+}

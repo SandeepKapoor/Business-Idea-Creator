@@ -36,7 +36,7 @@ function filt(){
     const m=c.querySelector('.cmatch');
     if(m)m.textContent=active&&vis?`${vis} of ${tot} match`:'';
     c.open=active&&vis>0;});
-  document.getElementById('cnt').textContent=`${n} of 112 shown`;
+  document.getElementById('cnt').textContent=`${n} of 114 shown`;
 }
 document.getElementById('expAll').onclick=()=>
   document.querySelectorAll('.cluster').forEach(c=>{if(c.style.display!=='none')c.open=true;});

@@ -1,35 +1,37 @@
 /* builder */
 .fld{display:flex;flex-direction:column;gap:var(--sp-1)}
 .fld label{font-size:var(--t-xs);color:var(--ink-3);font-weight:600}
-select,input[type=number]{background:var(--raise);color:var(--ink-1);border:1px solid var(--ring);
-  border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);font:inherit;font-size:var(--t-sm);width:100%}
-select:focus,input:focus{outline:2px solid var(--f1);outline-offset:-1px}
+select,input[type=number]{background:var(--plane);color:var(--ink-1);border:1px solid var(--ring);
+  border-radius:var(--r-sm);padding:12px 14px;font:inherit;font-size:var(--t-sm);width:100%;box-shadow:var(--e-1)}
+select:focus,input:focus{outline:2px solid color-mix(in srgb,var(--mark) 72%,white);outline-offset:2px}
+.fld label{letter-spacing:var(--tr-label);text-transform:uppercase;font-size:var(--t-2xs);
+  color:var(--ink-3);font-weight:400}
 /* Action bars used to end in a paragraph of instructions, so the tight gap read as text-next-to-
    button. With the prose gone the bar is buttons only and needs its own air above. */
 .bldbar{display:flex;gap:var(--sp-3);align-items:end;flex-wrap:wrap;margin-top:var(--sp-4)}
 .bldbar .fld{max-width:190px}
 /* The statement is the one line saying what you are looking at, so it leads on type, not on a
    coloured edge. The four axis words inside it already carry the four axis colours. */
-.stmt{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-lg);
-  padding:var(--sp-5) var(--sp-6);margin-bottom:var(--sp-3);box-shadow:var(--e-1)}
-.stmt .lb{font-size:var(--t-xs);color:var(--ink-3);margin-bottom:var(--sp-2)}
-.stmt .sx{font-size:var(--t-xl);line-height:1.4;letter-spacing:-.011em;color:var(--ink-1)}
+.stmt{background:linear-gradient(180deg,var(--plane),var(--raise));border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-6);margin-bottom:var(--sp-4);box-shadow:var(--e-2)}
+.stmt .lb{font-size:var(--t-xs);color:var(--mark);margin-bottom:var(--sp-2);font-weight:700}
+.stmt .sx{font-size:clamp(24px,3vw,36px);line-height:1.35;letter-spacing:-.02em;color:var(--ink-1);font-weight:700}
 .stmt .sx em{font-style:normal;font-weight:600}
-.ideacard{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-5) var(--sp-6);margin-bottom:var(--sp-3)}
+.ideacard{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-6);margin-bottom:var(--sp-4);box-shadow:var(--e-2)}
 /* variant navigator */
-.vnav{display:flex;gap:var(--sp-3);align-items:center;background:var(--surface-1);
-  border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-3);margin-bottom:var(--sp-3)}
-.vbtn{background:var(--raise);color:var(--ink-2);border:1px solid var(--ring);border-radius:var(--r-md);
-  width:38px;height:38px;cursor:pointer;font:inherit;font-size:var(--t-sm);flex-shrink:0}
-.vbtn:hover{color:var(--ink-1);border-color:var(--f1)}
+.vnav{display:flex;gap:var(--sp-3);align-items:center;background:var(--plane);
+  border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-4);margin-bottom:var(--sp-3);box-shadow:var(--e-1)}
+.vbtn{background:var(--raise);color:var(--ink-2);border:1px solid var(--ring);border-radius:50%;
+  width:42px;height:42px;cursor:pointer;font:inherit;font-size:var(--t-sm);flex-shrink:0;box-shadow:var(--e-1)}
+.vbtn:hover{color:var(--ink-1);border-color:var(--ring-2)}
 .vmid{flex:1;min-width:0}
 .vcount{font-size:var(--t-xs);color:var(--ink-2);margin-bottom:var(--sp-2)}
 .vcount b{color:var(--ink-1)}
 /* Two-dimensional navigator: premise on top, angle below. Labelled rows rather than two
    anonymous pill strips — without the labels the second row reads as an overflow of the first,
    which is the exact confusion this replaced. */
-.vnav2{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);
-  padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-3)}
+.vnav2{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-3);box-shadow:var(--e-1)}
 .vhead{font-size:var(--t-xs);color:var(--ink-2);margin-bottom:var(--sp-3);line-height:1.5}
 .vhead b{color:var(--ink-1)}
 /* NAMED .nrow, NOT .vrow. `tr.vrow` is the clickable row in Parts 7 and 7b, and a bare
@@ -46,28 +48,31 @@ select:focus,input:focus{outline:2px solid var(--f1);outline-offset:-1px}
 .vrl span{display:block;font-size:var(--t-2xs);font-weight:400;color:var(--ink-3);margin-top:var(--sp-0)}
 .nrow .vpills{flex:1;min-width:0}
 .vpills{display:flex;flex-wrap:wrap;gap:var(--sp-1)}
-.vpill{display:inline-flex;align-items:center;gap:var(--sp-2);background:transparent;
-  color:var(--ink-2);border:1px solid var(--ring);border-radius:var(--r-full);
-  padding:var(--sp-1) var(--sp-3);font:inherit;font-size:var(--t-xs);line-height:1.7;
+.vpill{display:inline-flex;align-items:center;gap:var(--sp-2);background:var(--plane);
+  color:var(--ink-2);border:1px solid var(--ring);border-radius:var(--r-md);
+  padding:var(--sp-2) var(--sp-3);font:inherit;font-size:var(--t-xs);line-height:1.7;
   cursor:pointer;
   transition:color var(--dur-1) var(--ease),background var(--dur-1) var(--ease),
     border-color var(--dur-1) var(--ease)}
 .vpill:hover{color:var(--ink-1);border-color:var(--ring-2);background:var(--raise)}
-.vpill.on{background:var(--raise);color:var(--ink-1);border-color:var(--f1);font-weight:650;
+.vpill.on{background:var(--tint-f1);color:var(--mark);border-color:color-mix(in srgb,var(--mark) 38%,transparent);font-weight:700;
   box-shadow:var(--e-1)}
 .vpill .vd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .vpill .vt{font-variant-numeric:tabular-nums;color:var(--ink-3);font-weight:600}
 .vpill.on .vt{color:var(--f1)}
-.vpill.vinfo{padding:var(--sp-1) var(--sp-2);font-size:var(--t-sm);color:var(--f2);border-color:var(--ring)}
-.vpill.vinfo:hover{border-color:var(--f2)}
-.vpill.vinfo.on{background:var(--f2);color:#fff;border-color:var(--f2)}
-.viexp{background:var(--surface-1);border:1px solid var(--f2);border-radius:var(--r-md);
-  padding:var(--sp-4) var(--sp-5);margin:calc(-1 * var(--sp-1)) 0 var(--sp-3)}
+.vpill.vinfo{padding:var(--sp-1) var(--sp-2);font-size:var(--t-sm);color:var(--mark);border-color:var(--ring)}
+.vpill.vinfo:hover{border-color:var(--mark)}
+/* Matches .vpill.on above rather than the button fill it had drifted to — same selection state,
+   two inconsistent treatments three lines apart. */
+.vpill.vinfo.on{background:var(--tint-f1);color:var(--mark);border-color:color-mix(in srgb,var(--mark) 38%,transparent)}
+/* An explainer panel, so it takes the live mark rather than an accent outline — see .prov. */
+.viexp{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-5);margin:calc(-1 * var(--sp-1)) 0 var(--sp-3);box-shadow:var(--e-1)}
 .viexp p{font-size:var(--t-sm)}
 .viexp .vd{width:8px;height:8px;border-radius:50%;margin:0 1px 0 var(--sp-1)}
 .vitab{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--sp-2)}
-.viv{border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-3);background:var(--plane)}
-.viv.on{border-color:var(--f1);background:var(--raise)}
+.viv{border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-4);background:var(--plane);box-shadow:var(--e-1)}
+.viv.on{border-color:color-mix(in srgb,var(--mark) 34%,transparent);background:var(--raise)}
 .vivh{display:flex;gap:var(--sp-2);align-items:baseline;flex-wrap:wrap;margin-bottom:var(--sp-2)}
 .vivh b{font-size:var(--t-sm);color:var(--ink-1)}
 .vivp{font-size:var(--t-xs);color:var(--ink-3);border:1px solid var(--ring);border-radius:var(--r-xs);padding:1px var(--sp-1)}
@@ -90,7 +95,7 @@ select:focus,input:focus{outline:2px solid var(--f1);outline-offset:-1px}
 .vivev a:hover{text-decoration:underline}
 .pok{color:var(--good)}
 .pjudg{display:inline-block;font-size:var(--t-2xs);font-weight:700;color:var(--warn);
-  border:1px solid currentColor;border-radius:var(--r-xs);padding:0 var(--sp-1);line-height:1.5;
+  border:1px solid currentColor;border-radius:var(--r-md);padding:0 var(--sp-2);line-height:1.5;
   vertical-align:1px}
 .vivs{display:flex;gap:var(--sp-3);flex-wrap:wrap;font-size:var(--t-xs);line-height:1.4}
 .vplus{color:var(--good)} .vminus{color:var(--crit)}
@@ -100,9 +105,16 @@ tr.vrow.on td{background:var(--raise)}
 tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
 .vbest{font-size:var(--t-xs);color:var(--good);border:1px solid currentColor;border-radius:var(--r-xs);
   padding:0 var(--sp-1);letter-spacing:.04em;font-weight:700;vertical-align:middle}
-/* provenance chips — every generated number declares where it came from */
-.prov{display:inline-block;font-size:var(--t-xs);line-height:1.35;margin-top:var(--sp-1);padding:var(--sp-0) var(--sp-2);
-  border-radius:var(--r-xs);border:1px solid currentColor;letter-spacing:.01em}
+/* PROVENANCE CHIPS — every generated number declares where it came from.
+   Boxed in currentColor on all four sides, which was fine when the accent was a quiet process
+   blue and is not fine now: a judgment note is a paragraph-length block, and at vermillion a
+   four-sided rule around it made the caveat shout louder than the figure it qualifies. Same
+   device as every other live region on the page — a hairline box with one rule down the left
+   edge, in the chip's own colour, so weak / judged / sourced still read apart at a glance. */
+.prov{display:inline-block;font-size:var(--t-xs);line-height:1.35;margin-top:var(--sp-1);
+  padding:var(--sp-1) var(--sp-3);
+  border-radius:var(--r-md);border:1px solid currentColor;background:color-mix(in srgb,currentColor 10%,transparent);
+  letter-spacing:.01em}
 .prov.ok{color:var(--good)} .prov.weak{color:var(--warn)} .prov.judg{color:var(--f4)}
 /* divider between the two ways into the workspace */
 .bldsplit{border-top:1px solid var(--grid);margin:var(--sp-6) 0 var(--sp-2)}
@@ -114,28 +126,31 @@ tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
 .acmp .anum{white-space:nowrap;font-weight:600;color:var(--ink-1)}
 .acmp .asub{display:block;font-size:var(--t-xs);font-weight:400;color:var(--ink-3)}
 /* which way into the workspace — a segmented control, never two editors at once */
-.wseg{display:inline-flex;gap:var(--sp-0);background:var(--sunken);border:1px solid var(--ring);
-  border-radius:var(--r-md);padding:var(--sp-0);margin-bottom:var(--sp-5)}
-/* Identical mechanics to .tab in the header — same segmented shape, same selected treatment —
-   because they do the same job. Two different-looking switches for the same idea is the
-   inconsistency operate.md warns about. */
-.wtab{background:none;border:1px solid transparent;border-radius:var(--r-sm);
-  padding:var(--sp-2) var(--sp-3);cursor:pointer;font:inherit;font-size:var(--t-sm);
-  font-weight:600;color:var(--ink-3);white-space:nowrap;line-height:1.5;
-  transition:color var(--dur-1) var(--ease),background var(--dur-1) var(--ease)}
+/* The two ways into the workspace: ruled cells, active one inverted. Identical mechanics to the
+   mode tabs in the index bar, which is the point — one selection idiom for the whole surface. */
+.wseg{display:inline-flex;gap:var(--sp-5);background:transparent;border:0;border-bottom:1px solid var(--grid);
+  border-radius:0;padding:0;margin-bottom:var(--sp-5)}
+.wtab{background:transparent;border:0;border-bottom:2px solid transparent;border-radius:0;
+  color:var(--ink-2);padding:var(--sp-3) var(--sp-1);font:inherit;font-size:var(--t-xs);
+  line-height:1;cursor:pointer;box-shadow:none;margin-bottom:-1px;
+  transition:color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease)}
 .wtab:hover{color:var(--ink-1)}
-.wtab.on{background:var(--surface-1);border-color:var(--ring);color:var(--ink-1);
-  box-shadow:var(--e-1)}
+/* Same underline idiom as the top-nav tabs, not a filled pill — a solid fill (white/ink or coral)
+   put "which mode am I in" in visual competition with .rollbtn a few pixels to the right. Text
+   colour plus an underline in the accent is the one selection device this page now uses
+   everywhere: top-nav tabs, this switch, the section rail's current-location marker. */
+.wtab.on{color:var(--mark);border-bottom-color:var(--mark);font-weight:700}
 /* the one word to remember an angle by */
-.w1{display:inline-block;font-size:var(--t-2xs);font-weight:700;letter-spacing:.06em;color:var(--f2);
-  border:1px solid currentColor;border-radius:var(--r-xs);padding:1px var(--sp-1);white-space:nowrap}
+.w1{display:inline-block;font-size:var(--t-2xs);font-weight:700;letter-spacing:.06em;color:var(--mark);
+  border:1px solid color-mix(in srgb,var(--mark) 34%,transparent);background:var(--tint-f1);
+  border-radius:var(--r-md);padding:2px var(--sp-2);white-space:nowrap}
 
 /* ---------- the businesses ----------
    Sits between the statement and the navigator, because it is the first choice: what is this
    thing about? A table rather than pills — five names with a sentence each do not fit in a pill
    row, and the score column only means something read down. */
-.rtlist{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-lg);
-  padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-3);box-shadow:var(--e-1)}
+.rtlist{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-5);margin-bottom:var(--sp-3);box-shadow:var(--e-1)}
 .rthead{font-size:var(--t-sm);color:var(--ink-2);line-height:1.55;margin-bottom:var(--sp-3);
   max-width:78ch}
 .rthead b{color:var(--ink-1)} .rthead em{font-style:normal;font-weight:600}
@@ -146,7 +161,7 @@ tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
 .rrow:first-child td{border-top:0}
 .rrow:hover td{background:var(--raise)}
 .rrow.on td{background:var(--raise)}
-.rrow.on td.rn{box-shadow:inset 2px 0 0 var(--ink-1)}
+.rrow.on td.rn{box-shadow:inset 3px 0 0 var(--mark)}
 .rn{color:var(--ink-1);font-weight:600;white-space:nowrap;width:1%}
 .rv{color:var(--ink-2);line-height:1.5}
 .rs{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;width:1%;
@@ -169,7 +184,7 @@ tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
 .rrow.on .rmore{color:var(--ink-2)}
 /* Three boxes stacked on one card, so their labels have to descend rather than all shout in the
    same colour. The subject leads and takes full contrast — no accent, because it is not one of
-   the two secondary choices. The build box takes the twist's blue, matching .fmod.twist below
-   it. "In practice" keeps the default orange. White, blue, orange: a hierarchy, not a rainbow. */
+   the two secondary choices. Below it the route box takes the vermillion, matching .fmod.twist.
+   Full ink, then vermillion, then quiet ink: a hierarchy in two values, not a rainbow. */
 .ibox.subject>.ik{color:var(--ink-1)}
 .ibox.route>.ik{color:var(--f1)}

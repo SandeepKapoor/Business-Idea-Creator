@@ -22,6 +22,17 @@ const html = fs.readFileSync(path.join(ROOT, 'sandeep-idea-map.html'), 'utf8');
 const css = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
 const js = html.slice(html.indexOf('<script>') + 8, html.lastIndexOf('</script>'));
 const body = html.slice(html.indexOf('</style>'));
+/* Strips HTML/CSS/JS comments and <pre> blocks before any check that scans markup for a literal
+   pattern (border-left:, font-size:, border-radius:). Defined once, up top, because moving to
+   scanning `html` instead of just `css` means every one of those checks can now match its OWN
+   explanatory comment describing the bug it fixed — which is exactly what happened here: this
+   file's comment about the border-left violation quoted the offending CSS verbatim, and the
+   check (correctly) found it. A comment demonstrating a banned pattern is not the pattern. */
+const decommentAll = (s) => s
+  .replace(/<!--[\s\S]*?-->/g, ' ')
+  .replace(/\/\*[\s\S]*?\*\//g, ' ')
+  .replace(/^[ \t]*\/\/.*$/gm, ' ');
+const htmlNoComments = decommentAll(html);
 
 const ALL = process.argv.includes('--all');
 let fails = 0, passes = 0;
@@ -54,23 +65,78 @@ check('spacing uses the 4-unit scale', spaceBad,
   'off-scale px values; layout.md wants a documented scale, not one-off nudges');
 
 const TYPE_OK = new Set([10, 11, 12, 13, 15, 16, 18, 21, 26, 32, 40]);
-const typeBad = [...css.matchAll(/font-size\s*:\s*(\d+(?:\.\d+)?)px/g)]
+/* Scans `html`, not just `css` — an inline style="font-size:15px" on a <p> is exactly as capable
+   of breaking the scale as a stylesheet rule, and the border-left check right below this one
+   found six real violations hiding in markup for exactly that reason. */
+const typeBad = [...htmlNoComments.matchAll(/font-size\s*:\s*(\d+(?:\.\d+)?)px/g)]
   .filter((m) => !TYPE_OK.has(+m[1])).map((m) => m[0]);
 check('type sizes come from the role scale', typeBad,
   'half-pixel sizes are nudging, not a scale — operate.md wants a fixed ramp at ~1.15');
 
-const RAD_OK = new Set([0, 2, 3, 4, 6, 10, 14, 999]);
-const radBad = [...css.matchAll(/border-radius\s*:\s*([^;}]+)/g)]
+/* The check above reads `font-size:` declarations, and this project declares its scale as custom
+   properties that are then referenced by name. So the one place where an off-scale size does the
+   most damage — the token that a hundred rules inherit from — was the one place nothing looked.
+   14px, 20px and 38px sat in --t-base, --t-xl and --t-3xl for three visual worlds and this file
+   reported a clean pass every time. Same allowed ramp, applied at the source. */
+const tokenBad = [...css.matchAll(/--t-(?:3xl|2xl|xl|lg|base|md|sm|xs|2xs)\s*:\s*(\d+(?:\.\d+)?)px/g)]
+  .filter((m) => !TYPE_OK.has(+m[1])).map((m) => m[0]);
+check('the declared type tokens are on the role scale', tokenBad,
+  'a token off the ramp puts every rule that references it off the ramp');
+
+/* ---------- 1b. no rule reads a custom property nobody sets ----------
+   This is the bug that got through three visual worlds in a row, twice in the same shape:
+
+     .cell::before  { ... transparent 1px var(--gap,8px); opacity:var(--dop,.4) }
+     .fbar::before  { ... same }
+
+   --gap and --dop were the previous world's rank mechanism. When the ramp went back to tint they
+   stopped being declared — and these two rules kept running, silently falling back to 8px and
+   0.4 and painting a meaningless texture over roughly nine hundred score cells and five funnel
+   bars. Nothing failed. Nothing logged. The fallback is what made it invisible: without one the
+   rules would have collapsed and someone would have noticed the same afternoon.
+
+   So a var() reference to a property this stylesheet never declares is an error, fallback or
+   not. Properties written from JS are declared in :root with their default for exactly this
+   reason — a token nobody can find is a token nobody can retire. */
+{
+  const declaredProps = new Set([...css.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]));
+  const ghosts = new Map();
+  for (const m of css.matchAll(/var\(\s*(--[\w-]+)/g)) {
+    if (!declaredProps.has(m[1])) ghosts.set(m[1], (ghosts.get(m[1]) || 0) + 1);
+  }
+  check('every custom property a rule reads is declared somewhere',
+    [...ghosts].map(([n, c]) => `${n} read ${c}×, never set`),
+    'a var() with a fallback onto a retired property paints something meaningless and fails silently');
+}
+
+/* THE ALLOWED SET IS READ FROM THE TOKENS, NOT HARD-CODED. It used to be a fixed literal list
+   ([0,2,3,4,6,10,14,999]) written for the square-cornered broadsheet world, where nothing ever
+   exceeded 14px. The Airbnb-style redesign declared a real --r-lg:24px and the checker's stale
+   ceiling turned every one of those legitimate large-radius cards into a false failure — the
+   same class of bug the type-token check exists to catch, just one file over. Parsed from
+   :root's own --r-* declarations, so a token change here can never fall out of sync with what
+   this check allows; only a literal pixel value that matches NO declared token still fails. */
+const RAD_TOKENS = new Set([...css.matchAll(/--r-[\w-]+\s*:\s*(\d+(?:\.\d+)?)px/g)].map((m) => +m[1]));
+const RAD_OK = new Set([0, ...RAD_TOKENS]);
+const radBad = [...htmlNoComments.matchAll(/border-radius\s*:\s*([^;"'}]+)/g)]
   .flatMap((m) => m[1].split(/[\s/]+/).map((t) => t.trim()))
   .filter((t) => /^\d+(\.\d+)?px$/.test(t) && !RAD_OK.has(parseFloat(t)));
-check('radii come from the radius scale', radBad);
+check('radii come from the radius scale', radBad,
+  `allowed: ${[...RAD_OK].sort((a, b) => a - b).join(', ')} — declared in :root's --r-* tokens`);
 
-/* ---------- 2. craft-floor's named refusals ---------- */
-const borderBad = [...css.matchAll(/border-(?:left|right)\s*:\s*(\d+(?:\.\d+)?)px\s+solid\s+([^;}]+)/g)]
+/* ---------- 2. craft-floor's named refusals ----------
+   READ FROM `html`, NOT JUST `css`. Six of these were sitting in inline style="" attributes in
+   the section markup — border-left:3px solid var(--f2) on every "observation" card, and again on
+   a kill-criteria callout and a warning card — invisible to this check for as long as it only
+   scanned the <style> block. All six rendered as the SAME coral rule, because every --f1..--f5
+   token collapsed onto one hue in the redesign, so six "distinct" colours were one repeated,
+   meaningless device. Scanning the whole document is what catches a violation hiding in markup
+   rather than in the stylesheet the checker happened to be told to look at. */
+const borderBad = [...htmlNoComments.matchAll(/border-(?:left|right)\s*:\s*(\d+(?:\.\d+)?)px\s+solid\s+([^;"'}]+)/g)]
   .filter((m) => parseFloat(m[1]) > 1)
   .map((m) => m[0].trim());
 check('no colored border-left/right above 1px', borderBad,
-  'craft-floor names this device explicitly: "on cards, list items, callouts, or alerts"');
+  'craft-floor names this device explicitly: "on cards, list items, callouts, or alerts" — checked in inline style="" too, not just <style>');
 
 /* Glyphs standing in for an icon system. Excludes ₹ (currency), × (multiplication in "6 × 7"),
    — – ' " … (punctuation) and ° ± % which are notation, not iconography. */
@@ -172,12 +238,18 @@ check('no unicode glyphs standing in for icons', glyphHits,
       classList: { add() {}, remove() {}, toggle() {}, contains() { return false; } },
       children: [], childNodes: [], hidden: false, scrollIntoView() {}, appendChild() {},
       insertBefore() {}, setAttribute() {}, addEventListener() {}, querySelector() { return null; },
-      querySelectorAll() { return []; }, closest() { return null; }, getAttribute() { return ''; } });
-    const doc = { documentElement: { dataset: { theme: 'dark' } },
+      querySelectorAll() { return []; }, closest() { return null; }, getAttribute() { return ''; },
+      offsetHeight: 0, offsetWidth: 0,
+      getBoundingClientRect() { return { top: 0, left: 0, right: 0, bottom: 0, width: 0, height: 0 }; } });
+    const doc = { documentElement: { dataset: { theme: 'dark' },
+        style: { setProperty() {}, getPropertyValue() { return ''; } } },
       getElementById(id) { return store[id] || (store[id] = El(id)); },
       querySelectorAll() { return []; }, querySelector() { return null; },
       createElement(t) { return El(t); }, body: El('b'), addEventListener() {} };
+    /* The rail's scroll-spy and syncStick() call addEventListener() and getComputedStyle() as
+       bare globals. No layout engine here, so both are no-ops — they just have to exist. */
     const sb = { document: doc, console, location: { hash: '' }, Math, JSON, Date,
+      addEventListener() {}, getComputedStyle: () => ({ getPropertyValue: () => '' }),
       requestAnimationFrame() {}, setTimeout() {}, matchMedia() { return { matches: false, addEventListener() {} }; } };
     sb.window = sb; sb.globalThis = sb;
     vm2.createContext(sb);
@@ -213,9 +285,19 @@ check('no unicode glyphs standing in for icons', glyphHits,
 check('no gradient text', [...css.matchAll(/background-clip\s*:\s*text|-webkit-text-fill-color/g)].map((m) => m[0]));
 check('no zero-blur block shadows', [...css.matchAll(/box-shadow\s*:\s*[^;}]*?\d+px\s+\d+px\s+0(?:px)?\s/g)].map((m) => m[0].trim()));
 
-/* craft-floor: "shadows carry an offset and a soft blur". A shadow with no offset is a halo. */
+/* craft-floor: "shadows carry an offset and a soft blur". A shadow with no offset is a halo.
+
+   ONE EXCLUSION, AND IT IS NOT A LOOPHOLE. `0 0 0 <n>px <colour>` — no offset, no blur, spread
+   only — does not draw a halo. It draws a ring, and the one legitimate use of a ring on this page
+   is punching a focus indicator out of whatever it lands on, including a score cell filled with
+   the solid blue plate where the ink ring would otherwise sit directly on the tint. The rule this
+   check enforces is about faked elevation; a zero-blur ring is the opposite of elevation. Written
+   as a blur test rather than a "not in a focus rule" test, so a decorative ring anywhere on the
+   page still fails it. */
 const haloBad = [...css.matchAll(/box-shadow\s*:\s*([^;}]+)/g)]
-  .filter((m) => !/inset/.test(m[1]) && /(^|[\s,])0\s+0\s+\d/.test(m[1]))
+  .filter((m) => !/inset/.test(m[1]))
+  .filter((m) => /(^|[\s,])0\s+0\s+\d/.test(m[1]))
+  .filter((m) => !/(^|[\s,])0\s+0\s+0(px)?\s+\d/.test(m[1]))
   .map((m) => m[0].trim());
 check('shadows have an offset, not just a blur halo', haloBad);
 
@@ -283,6 +365,43 @@ const noReducedMotion = /prefers-reduced-motion/.test(css) ? [] : ['no prefers-r
 check('motion respects prefers-reduced-motion', noReducedMotion);
 
 console.log(`\n${'='.repeat(72)}\nDESIGN SCAN — craft-floor mechanics\n${'='.repeat(72)}`);
+/* ---------- 7. the semantics a stylesheet cannot fix ----------
+   Three structural properties that no amount of CSS makes right, all of them things the
+   ui-ux-pro-max guideline set rates High, and all three of which this file shipped wrong. */
+
+/* ONE h1. There were two, both reading "Business Idea Map": the wordmark in the header and the
+   masthead's title. To a screen reader that is a document with two titles; to the outline
+   algorithm it is ambiguous nesting. The wordmark is chrome and is a <div> now. */
+{
+  /* Comments stripped first: the note explaining this rule mentions <h1> in prose, and without
+     this the check counted its own documentation as a heading. */
+  const h1s = [...decomment(html).matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)]
+    .map((m) => m[1].replace(/<[^>]+>/g, '').trim());
+  check('the document has exactly one h1',
+    h1s.length === 1 ? [] : [`${h1s.length} found: ${h1s.map((t) => `"${t}"`).join(', ')}`]);
+}
+
+/* EVERY LABEL POINTS AT ITS CONTROL. A <label> with no `for` and no control inside it is a
+   caption: it looks like a label, it reads as one, and clicking it does nothing while a screen
+   reader announces the field as unlabelled. Both of the workspace's two labels were like this. */
+{
+  const orphans = [...html.matchAll(/<label\b([^>]*)>([\s\S]*?)<\/label>/g)]
+    .filter((m) => !/\bfor\s*=/.test(m[1]) && !/<(input|select|textarea)\b/.test(m[2]))
+    .map((m) => `"${m[2].replace(/<[^>]+>/g, '').trim().slice(0, 40)}"`);
+  check('every label is tied to a control', orphans,
+    'a label with no for= and no control inside it is a caption pretending to be a label');
+}
+
+/* EVERY for= FINDS SOMETHING. The fix for the above is one attribute, and one attribute with a
+   typo in it fails exactly as silently as no attribute at all. */
+{
+  const ids = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
+  const dangling = [...html.matchAll(/<label\b[^>]*\bfor="([^"]+)"/g)]
+    .map((m) => m[1]).filter((f) => !ids.has(f));
+  check('every label for= names an element that exists', dangling.map((f) => `for="${f}"`));
+}
+
 console.log(out.join('\n'));
 console.log(`\n  ${passes} passed, ${fails} failed\n`);
 process.exitCode = fails ? 1 : 0;
+

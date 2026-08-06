@@ -1,11 +1,11 @@
 /* ================= THE BUSINESS CASE =================
-   The ten-section plan used to be its own tab, reachable only for the 112 bank ideas. It is now
+   The ten-section plan used to be its own tab, reachable only for the 114 bank ideas. It is now
    the detail layer of the workspace, so it has to build for an arbitrary combination and for a
    chosen strategic angle — neither of which has an idea number.
 
    So the plan is built from a CONTEXT, not from `n`:
      deepPlan(n)      bank idea -> context -> plan. Unchanged behaviour, and this is the entry
-                      point tools/verify.js exercises across all 112 ideas and three invariants.
+                      point tools/verify.js exercises across all 114 ideas and three invariants.
      deepPlanFor(C)   the generalised builder. C carries the axes, the scores, the verdict and a
                       price multiplier; `n` is optional and only decorates the header and footer.
    Keep deepPlan(n) intact — it is the tested surface. */
@@ -47,7 +47,6 @@ function deepPlanFor(C){
   const PC=priceCheck(h,p,core);
   const seg=SEG_EV[w], cmp=compFor(h,p,w), mot=MOTION[p];
   const lo=S.indexOf(Math.min(...S));
-  const RAMPX=ramp(), INKX=rink();
 
   let H=`<div class="dhead">
     <div class="dh-l"><span class="cl">${C.kicker}</span>
@@ -295,7 +294,7 @@ function deepPlanFor(C){
   </div></div>`;
 
   H+=`<div class="dfoot">
-    ${n?`<button class="chip" onclick="mode('report');openFold('score',1)">${icon('arrow-left','sm')} back to all 112 scored</button>
+    ${n?`<button class="chip" onclick="mode('report');openFold('score',1)">${icon('arrow-left','sm')} back to all 114 scored</button>
     <span class="tiny">Want this written out properly, with me doing fresh research on the gaps above?
     Ask me for <b style="color:var(--ink-1)">&ldquo;go deep on ${n}&rdquo;</b> in chat.</span>`
     :`<span class="tiny">Every number above says where it came from. Where a market figure is checked

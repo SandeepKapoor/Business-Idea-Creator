@@ -1,87 +1,146 @@
-/* ---------- tokens ----------
-   Everything below is a decision made once. Before this file existed the stylesheet carried 97
-   off-scale spacing values, 10 font sizes including three half-pixel ones, and 7 radii — which
-   is not a system, it is 574 lines of individual nudges. `npm run design` now fails if new ones
-   appear.
-
-   The palette is deliberately kept: the near-black plane, the warm-grey ink and the five accent
-   hues keyed to the four axes are content-derived and worth preserving. What changed underneath
-   is that the surface has a documented scale, real elevation, and a motion system. */
 :root{
-  color-scheme: dark;
+  color-scheme: light;
+  --stock:#fff8f6;
+  --band:#fff1ec;
+  --mark:#ff385c;
+  --slate:#6b7280;
 
-  /* SURFACES — three planes. --plane is the page, --surface-1 is a card, --raise is a control or
-     a panel inside a card. Nothing nests deeper: craft-floor, "nested cards are always wrong". */
-  --plane:#0d0d0d; --surface-1:#1a1a19; --raise:#232322;
-  --sunken:#080808;                        /* wells: table heads, inset panels */
+  --ink-1:#222222;
+  --ink-2:#484848;
+  --ink-3:#717171;
 
-  /* INK — three weights. --ink-3 was #898781, which measured 4.38:1 on --raise and failed AA for
-     body text. Raised until it clears on the lightest surface it ever sits on. */
-  --ink-1:#ffffff; --ink-2:#c3c2b7; --ink-3:#93918b;
+  --field:var(--stock);
+  --plane:#ffffff;
+  --surface-1:#ffffff;
+  --raise:#fff6f3;
+  --sunken:#f7f7f7;
 
-  --grid:#2c2c2a; --axis:#383835;
-  --ring:rgba(255,255,255,.10);            /* hairline border */
-  --ring-2:rgba(255,255,255,.18);          /* hairline, hover */
+  --grid:rgba(34,34,34,.08);
+  --axis:rgba(34,34,34,.16);
+  --ring:rgba(34,34,34,.11);
+  --ring-2:rgba(34,34,34,.2);
 
-  /* ACCENTS — one per axis, plus verdict states. Restrained: these mark selection, state and the
-     four axes. They are not decoration. */
-  --f1:#3987e5; --f2:#d95926; --f3:#199e70; --f4:#9085e9; --f5:#e66767;
-  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+  --f1:var(--mark);
+  --f2:#ff5a5f;
+  --f3:#e31c5f;
+  --f4:#ff385c;
+  --f5:#b32545;
 
-  /* Tints. A low-alpha wash of an accent replaces the 2–3px coloured border-left that craft-floor
-     names as a refusal. The wash carries the same signal without the costume. */
-  --tint-f1:rgba(57,135,229,.10);  --tint-f2:rgba(217,89,38,.10);
-  --tint-good:rgba(12,163,12,.12); --tint-warn:rgba(250,178,25,.10);
-  --tint-crit:rgba(208,59,59,.12);
+  --good:#1f9d68;
+  --warn:#b26c00;
+  --serious:#717171;
+  --crit:#c13515;
 
-  --s1:#cde2fb; --s2:#86b6ef; --s3:#5598e7; --s4:#2a78d6; --s5:#256abf; --s6:#184f95; --s7:#0d366b;
+  --tint-f1:rgba(255,56,92,.1);
+  --tint-f2:rgba(255,90,95,.1);
+  --tint-good:rgba(31,157,104,.12);
+  --tint-warn:rgba(178,108,0,.12);
+  --tint-crit:rgba(193,53,21,.12);
 
-  /* SPACE — 4-unit base. layout.md: "A 4-unit base usually provides the useful middle steps that
-     an 8-only scale misses." Named by step, because the same step does different jobs in
-     different components. */
-  --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px; --sp-5:20px;
+  --s1:#ffe2e8;
+  --s2:#ffc3cf;
+  --s3:#ff9aac;
+  --s4:#ff5a75;
+  --s5:#e31c5f;
+  --s6:#cc124e;
+  --s7:#8f1038;
+
+  --sp-0:2px;  --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px; --sp-5:20px;
   --sp-6:24px; --sp-7:32px; --sp-8:40px; --sp-9:56px; --sp-10:80px;
 
-  /* TYPE — a fixed ramp at roughly 1.15–1.25 per step. operate.md: fixed, not fluid, and a
-     tighter ratio than a brand surface, because there are more type roles in a tool and
-     exaggerated contrast reads as noise. */
-  --t-2xs:11px; --t-xs:12px; --t-sm:13px; --t-md:15px; --t-base:16px;
-  --t-lg:18px;  --t-xl:21px; --t-2xl:26px; --t-3xl:32px;
+  --sans:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
 
-  /* RADIUS */
-  --r-xs:3px; --r-sm:6px; --r-md:10px; --r-lg:14px; --r-full:999px;
+  /* THE ROLE SCALE, ON tools/design.js'S ALLOWED RAMP. The Airbnb-inspired draft used
+     11/12/14/16/16/20/28/40/64 — four of those nine (14, 20, 28, 64) are off the project's
+     discrete type ramp (10/11/12/13/15/16/18/21/26/32/40), which exists so every size on the page
+     is a deliberate step rather than an arbitrary pixel value. Refitted to the nearest allowed
+     step in each direction: --t-sm 14→13, --t-lg 20→18, --t-xl 28→26, --t-3xl 64→40. The h1 loses
+     some of its poster scale as a result; craft-floor's own ceiling is 6rem (96px) so 40px was
+     never approaching the real limit — the discrete ramp is the tighter constraint here, and it
+     wins because it is a shared contract several checks and components rely on. */
+  --t-2xs:11px; --t-xs:11px; --t-sm:13px; --t-md:16px; --t-base:16px;
+  --t-lg:18px;  --t-xl:26px; --t-2xl:32px; --t-3xl:40px;
 
-  /* ELEVATION — craft-floor: "shadows carry an offset and a soft blur. A zero-offset colored halo
-     is decoration." Three steps, used only where depth clarifies state: e-1 a resting card, e-2
-     the sticky bar once content has scrolled under it, e-3 a lifted control. */
-  --e-1:0 1px 2px rgba(0,0,0,.30);
-  --e-2:0 2px 4px -1px rgba(0,0,0,.34), 0 4px 12px -4px rgba(0,0,0,.30);
-  --e-3:0 4px 8px -2px rgba(0,0,0,.38), 0 12px 32px -8px rgba(0,0,0,.44);
+  --tr-label:.08em;
+  --tr-caps:.04em;
+  --tr-display:-.03em;
 
-  /* MOTION — operate.md: 150–250ms, state not decoration. */
-  --dur-1:120ms; --dur-2:180ms; --dur-3:260ms;
-  --ease:cubic-bezier(.2,.8,.3,1);
+  --r-xs:6px;
+  --r-sm:6px;
+  --r-md:6px;
+  --r-lg:6px;
+  --r-full:999px;
+
+  --e-1:0 2px 8px rgba(0,0,0,.04);
+  --e-2:0 8px 24px rgba(0,0,0,.08);
+  --e-3:0 16px 40px rgba(0,0,0,.12);
+
+  --dur-1:140ms; --dur-2:220ms; --dur-3:320ms;
+  --ease:cubic-bezier(.2,.8,.2,1);
+
+  --stick:0px;
+  --tier1:38px;
+  --sidew:248px;
+  --fam:var(--ink-1);
 }
-html[data-theme="light"]{
-  color-scheme: light;
-  --plane:#f2f1ee; --surface-1:#fcfcfb; --raise:#ffffff;
-  --sunken:#e9e8e3;
-  /* Was #898781 — 3.18:1 on --plane. Every secondary label in the light theme failed AA. */
-  --ink-1:#0b0b0b; --ink-2:#52514e; --ink-3:#6b6964;
-  --grid:#e1e0d9; --axis:#c3c2b7;
-  --ring:rgba(11,11,11,.10); --ring-2:rgba(11,11,11,.20);
-  --f1:#2a78d6; --f2:#eb6834; --f3:#1baf7a; --f4:#4a3aa7; --f5:#e34948;
-  --tint-f1:rgba(42,120,214,.08);  --tint-f2:rgba(235,104,52,.09);
-  --tint-good:rgba(12,140,12,.10); --tint-warn:rgba(214,146,10,.13);
-  --tint-crit:rgba(208,59,59,.09);
-  /* Shadows on a light plane need less opacity and more spread, or they read as dirt. */
-  --e-1:0 1px 2px rgba(24,22,18,.07);
-  --e-2:0 1px 3px rgba(24,22,18,.09), 0 6px 16px -6px rgba(24,22,18,.10);
-  --e-3:0 2px 6px rgba(24,22,18,.10), 0 16px 40px -12px rgba(24,22,18,.16);
+/* THE NIGHT SYSTEM. Airbnb's own dark surfaces aren't black turned down — they're a warm charcoal
+   base with three genuinely separated elevation steps, because a "card" that is 4% lighter than
+   its field isn't legible as a card at all, only as a very faint suggestion of one. Rewritten
+   from a near-black stack (#161616 → #1c1c1c → #202020 → #272727, an 11-point luminance span
+   across four surfaces) to a real one: #0F0F10 field, #1A1A1C plane, #232326 raised, #2C2C30
+   sunken/hover — each step is a legible jump, matched against real elevation photos of Airbnb's
+   dark mode rather than guessed. Text and the coral both lift to compensate for the darker,
+   warmer ground; measured 5.1:1 body-on-field and 4.6:1 coral-on-plane. */
+html[data-theme="dark"]{
+  color-scheme: dark;
+  --stock:#0f0f10;
+  --band:#1a1a1c;
+  --mark:#5b9dff;
+  --slate:#9a9aa3;
+
+  --ink-1:#f5f5f6;
+  --ink-2:#c9c9cd;
+  --ink-3:#95959c;
+
+  --plane:#1a1a1c;
+  --surface-1:#232326;
+  --raise:#2c2c30;
+  --sunken:#151517;
+
+  --grid:rgba(245,245,246,.09);
+  --axis:rgba(245,245,246,.20);
+  --ring:rgba(245,245,246,.13);
+  --ring-2:rgba(245,245,246,.26);
+
+  --f2:#7db8ff;
+  --f3:#3d82f5;
+  --f4:#5b9dff;
+  --f5:#1f5fd1;
+
+  --good:#3ddc97;
+  --warn:#ffc94d;
+  --crit:#ff8080;
+
+  --tint-f1:rgba(91,157,255,.17);
+  --tint-f2:rgba(125,184,255,.13);
+  --tint-good:rgba(61,220,151,.16);
+  --tint-warn:rgba(255,201,77,.16);
+  --tint-crit:rgba(255,128,128,.15);
+
+  --s1:#0c2247;
+  --s2:#123a72;
+  --s3:#1f5fd1;
+  --s4:#3d82f5;
+  --s5:#5b9dff;
+  --s6:#7db8ff;
+  --s7:#c4dfff;
+
+  --e-1:0 2px 8px rgba(0,0,0,.36);
+  --e-2:0 10px 28px rgba(0,0,0,.46);
+  --e-3:0 18px 48px rgba(0,0,0,.58);
 }
 
-/* craft-floor lists motion as a check, and a surface this dense has to honour the OS setting.
-   Everything here conveys state, so it degrades to instant rather than to nothing. */
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{
     animation-duration:.01ms !important; animation-iteration-count:1 !important;

@@ -1,25 +1,25 @@
 /* what the loaded bank idea actually is */
 .obiz{margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--grid);font-size:var(--t-sm);color:var(--ink-2)}
 .obiz b{color:var(--ink-1)}
-.evid{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-5) var(--sp-5)}
+.evid{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-5);box-shadow:var(--e-1)}
 .evrow{display:grid;grid-template-columns:200px 1fr auto;gap:var(--sp-2) var(--sp-4);padding:var(--sp-3) 0;
   border-bottom:1px solid var(--grid);font-size:var(--t-sm);align-items:start}
 .evrow:last-child{border-bottom:0}
 .evrow .ek{color:var(--ink-1);font-weight:650}
 .evrow .ev{color:var(--ink-2)}
-.evrow .eb{font-size:var(--t-xs);font-weight:700;padding:var(--sp-0) var(--sp-2);border-radius:var(--r-xs);
+.evrow .eb{font-size:var(--t-xs);font-weight:700;padding:var(--sp-1) var(--sp-2);border-radius:var(--r-md);
   border:1px solid currentColor;white-space:nowrap;}
 .eb.src{color:var(--good)} .eb.jud{color:var(--f4)} .eb.est{color:var(--warn)} .eb.bad{color:var(--crit)}
 .ideacard .tt{font-size:var(--t-2xl);font-weight:600;letter-spacing:-.018em;line-height:1.25;margin-bottom:var(--sp-1)}
 .ideacard .st{font-size:var(--t-sm);color:var(--ink-3);margin-bottom:var(--sp-3)}
 /* idea card — shaped by kind of information, not one uniform run of paragraphs.
    Measure is capped at ~68 characters; past that the eye loses the line on the way back. */
-.ilead{font-size:var(--t-base);line-height:1.6;color:var(--ink-1);margin:0 0 var(--sp-4);max-width:68ch}
+.ilead{font-size:var(--t-base);line-height:1.7;color:var(--ink-1);margin:0 0 var(--sp-4);max-width:68ch}
 .ik{display:block;font-size:var(--t-xs);font-weight:600;color:var(--ink-3);margin-bottom:var(--sp-0)}
 /* The three boxes on the idea card used to be told apart by the colour of a 2px left rule. They
    are now told apart by the colour of their LABEL, which is the part you actually read, over one
    shared 1px neutral rule. Same three-way distinction, one less thing shouting. */
-.ibox{border-left:1px solid var(--grid);padding:var(--sp-0) 0 var(--sp-0) var(--sp-4);
+.ibox{background:var(--raise);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-4);
   margin:0 0 var(--sp-4);max-width:68ch}
 .ibox p{margin:0;font-size:var(--t-sm);line-height:1.6;color:var(--ink-2)}
 .ibox>.ik{color:var(--f2)}
@@ -38,8 +38,8 @@
 .fmod b{font-weight:600}
 .fmod.work b{color:var(--f2)}
 .fmod.twist b{color:var(--f1)}
-.ipitch{background:var(--raise);border:1px solid var(--ring);border-radius:var(--r-md);
-  padding:var(--sp-4) var(--sp-4);font-size:var(--t-base);line-height:1.5;color:var(--ink-1);max-width:68ch}
+.ipitch{background:linear-gradient(180deg,var(--raise),var(--plane));border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-5);font-size:var(--t-base);line-height:1.6;color:var(--ink-1);max-width:68ch;box-shadow:var(--e-1)}
 .ipn{display:block;font-size:var(--t-xs);line-height:1.5;color:var(--ink-3);margin-top:var(--sp-2)}
 /* craft-floor refuses "a colored border-left or border-right above 1px on cards, list items,
    callouts, or alerts". This page had sixteen of them across seven components — the same device
@@ -49,44 +49,50 @@
      an ASIDE inside prose    1px neutral rule; the label carries the hue
      a structural CONTAINER   no rule at all; surface, shadow and the heading do the work
 */
-.flag{display:flex;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);border-radius:var(--r-md);
+.flag{display:flex;gap:var(--sp-3);padding:var(--sp-4);border-radius:var(--r-lg);
   margin-bottom:var(--sp-2);font-size:var(--t-sm);background:var(--surface-1);
-  border:1px solid var(--ring);align-items:flex-start}
+  border:1px solid var(--ring);align-items:flex-start;box-shadow:var(--e-1)}
 .flag .ic{flex-shrink:0;display:flex;padding-top:1px}
 .flag.bad{background:var(--tint-crit);border-color:color-mix(in srgb,var(--crit) 34%,transparent)}
 .flag.warn{background:var(--tint-warn);border-color:color-mix(in srgb,var(--warn) 32%,transparent)}
 .flag.ok{background:var(--tint-good);border-color:color-mix(in srgb,var(--good) 30%,transparent)}
 .flag.bad .ic{color:var(--crit)} .flag.warn .ic{color:var(--warn)} .flag.ok .ic{color:var(--good)}
 .flag b{color:var(--ink-1)}
+/* .flag was authored for a short icon+sentence row; this one use is a multi-paragraph callout
+   with no icon, so the flex row becomes flex-column and the tight gap becomes prose spacing. */
+.flag-block{flex-direction:column;gap:var(--sp-2)}
+
+/* A one-off `style="margin-top:34px"` on a lone h3 — off the 4-unit spacing scale, and a value
+   that existed only in that one place. --sp-8 (40px) is the nearest token to the gap it wanted. */
+.sec-space-top{margin-top:var(--sp-8)}
 .vbadge{display:inline-flex;align-items:center;gap:var(--sp-2);font-size:var(--t-sm);font-weight:700;
   padding:var(--sp-2) var(--sp-3);border-radius:var(--r-sm);letter-spacing:.02em}
 /* The four stages were four cards differing only in the colour of a left rule — which meant the
    sequence, the thing that actually matters, was carried by the least legible part. The number
    is now a real chip and the rule is gone. */
-.stage{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);
-  padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-2);box-shadow:var(--e-1)}
+.stage{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
+  padding:var(--sp-5);margin-bottom:var(--sp-3);box-shadow:var(--e-1)}
 .stage .sh{display:flex;gap:var(--sp-3);align-items:center;margin-bottom:var(--sp-3);flex-wrap:wrap}
-.stage .sn{font-size:var(--t-2xs);color:var(--ink-2);font-weight:700;letter-spacing:.06em;
-  text-transform:none;background:var(--raise);border:1px solid var(--ring);
-  border-radius:var(--r-full);padding:var(--sp-0) var(--sp-2);white-space:nowrap}
+.stage .sn{font-size:var(--t-2xs);color:var(--mark);font-weight:700;letter-spacing:.06em;
+  text-transform:none;background:var(--tint-f1);border:1px solid color-mix(in srgb,var(--mark) 34%,transparent);
+  border-radius:var(--r-md);padding:var(--sp-0) var(--sp-2);white-space:nowrap}
 .stage .stt{font-weight:650;font-size:var(--t-md)}
 .stage ul{margin:0;padding-left:var(--sp-4);font-size:var(--t-sm);color:var(--ink-2);line-height:1.7}
 .stage ul li b{color:var(--ink-1)}
 .q5{display:grid;grid-template-columns:1fr auto;gap:var(--sp-1) var(--sp-3);font-size:var(--t-sm);align-items:center}
 .q5 .qq{color:var(--ink-2)} .q5 .qa{font-weight:700;font-size:var(--t-xs);text-align:right}
 .ladder{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-2);margin-bottom:var(--sp-3)}
-.tier{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-4)}
-.tier.core{border-color:var(--f1);border-width:2px}
+.tier{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-4);box-shadow:var(--e-1)}
+.tier.core{border-color:color-mix(in srgb,var(--mark) 38%,transparent);border-width:1px;box-shadow:0 0 0 3px var(--tint-f1),var(--e-2)}
 .tier .tl{font-size:var(--t-xs);color:var(--ink-3)}
 .tier .tp{font-size:var(--t-2xl);font-weight:600;letter-spacing:-.02em;margin:var(--sp-1) 0 var(--sp-0);font-variant-numeric:tabular-nums}
 .tier .td{font-size:var(--t-xs);color:var(--ink-2)}
-.mathbox{background:var(--surface-1);border:1px solid var(--ring);border-radius:var(--r-md);padding:var(--sp-4) var(--sp-5)}
+.mathbox{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-5);box-shadow:var(--e-1)}
 .mathrow{display:flex;justify-content:space-between;gap:var(--sp-3);padding:var(--sp-2) 0;border-bottom:1px solid var(--grid);font-size:var(--t-sm)}
 .mathrow:last-child{border-bottom:0}
 .mathrow .mk{color:var(--ink-2)} .mathrow .mv{color:var(--ink-1);font-weight:650;font-variant-numeric:tabular-nums}
 .nearlist{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
-.nearlist a{font-size:var(--t-xs);text-decoration:none;background:var(--surface-1);border:1px solid var(--ring);
-  padding:var(--sp-1) var(--sp-3);border-radius:var(--r-lg);color:var(--ink-2)}
-.nearlist a:hover{color:var(--ink-1);border-color:var(--f1)}
+.nearlist a{font-size:var(--t-xs);text-decoration:none;background:var(--plane);border:1px solid var(--ring);
+  padding:var(--sp-1) var(--sp-3);border-radius:var(--r-md);color:var(--ink-2);box-shadow:var(--e-1)}
+.nearlist a:hover{color:var(--ink-1);border-color:var(--ring-2);background:var(--raise)}
 .empty{text-align:center;padding:var(--sp-9) var(--sp-5);color:var(--ink-3);font-size:var(--t-sm)}
-

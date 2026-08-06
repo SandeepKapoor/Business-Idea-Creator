@@ -9,7 +9,7 @@
     "serve": "node tools/serve.js",
     "dev": "node tools/serve.js 3007",
     "verify": "node tools/verify.js",
-    "check": "node build.js && node tools/verify.js && node tools/fold.js && node tools/picker.js && node tools/design.js && node tools/probe.js",
+    "check": "node build.js && node tools/verify.js && node tools/fold.js && node tools/picker.js && node tools/design.js && node tools/probe.js --width 1280 && node tools/probe.js --width 760 && node tools/probe.js --width 500",
     "open": "node build.js && open sandeep-idea-map.html",
     "fold": "node tools/fold.js",
     "premise": "node tools/premise.js",

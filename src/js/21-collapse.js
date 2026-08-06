@@ -19,7 +19,7 @@
    Charts are safe: every chart here is viewBox SVG written with innerHTML, so nothing measures
    layout width and nothing needs redrawing when a block opens. */
 
-const NOFOLD = ['custom'];   /* the workspace panel — see above */
+const NOFOLD = ['custom', 'frontier', 'bma'];   /* the two mode panels — see above */
 let FOLDSEQ = 0;
 
 /* The folds the global button acts on: only those the current mode is actually showing.
@@ -33,8 +33,13 @@ function foldSet() {
     const panel = document.getElementById(m);
     return panel ? Array.from(panel.querySelectorAll('.fold')) : [];
   }
+  /* Every mode panel, not just the workspace. This excluded #custom alone, which was right when
+     #custom held the only generated folds — the frontier and the analyser had none. Both fold
+     their contents now, so the report's counter was reading "1 of 36" while showing twelve parts,
+     twenty-four of the thirty-six being invisible inside two hidden tabs. Derived from NOFOLD so
+     a fifth mode cannot reintroduce the bug by being forgotten here. */
   return Array.from(document.querySelectorAll('.fold'))
-    .filter((el) => !el.closest('#custom'));
+    .filter((el) => !NOFOLD.some((id) => el.closest('#' + id)));
 }
 
 /* Turn `el` into a foldable block. `head` becomes the trigger; anything in `keep` stays
@@ -112,12 +117,14 @@ function foldAll(open) {
    hides itself when the current mode has nothing to fold. dataset.open is what onclick reads. */
 function syncFoldAll() {
   const btn = document.getElementById('foldAll');
-  const bar = document.getElementById('foldBar');
   if (!btn) return;
   const set = foldSet();
   const n = set.length;
   const openN = set.filter((el) => !el.classList.contains('shut')).length;
-  if (bar) bar.hidden = n === 0;
+  /* The button used to sit in a row of its own — #foldBar — which existed to be hidden when the
+     mode had nothing to fold, and cost a whole row of header height the rest of the time. The
+     button lives at the end of the section rail now, so it hides itself. */
+  btn.hidden = n === 0;
   const allOpen = n > 0 && openN === n;
   btn.dataset.open = allOpen ? '1' : '0';
   btn.innerHTML = icon(allOpen ? 'collapse' : 'expand', 'sm') +
@@ -168,6 +175,77 @@ function initFold() {
     a.addEventListener('click', () => openFold((a.getAttribute('href') || '').slice(1), true));
   });
 
+  /* ONE PART OPENS. The report used to arrive as a masthead followed by twelve closed headings
+     and nothing else — a table of contents wearing a document's clothes. Opening the first part
+     costs one screen of scrolling and buys the reader an actual paragraph to land on, which is
+     the difference between "here is a document" and "here is what it says".
+
+     Only the first, and only when the reader has not asked for something else: a deep link in
+     the hash is a specific request and it opens its own part a few lines down.
+
+     NO SECOND ARGUMENT. openFold's `scroll` flag smooth-scrolls to the target, which is right
+     when the reader clicked a rail item and wrong at boot — passing it here landed every single
+     load already scrolled past the masthead, at a position nobody asked to be at. Open it where
+     it is and leave the viewport alone. */
+  if (location.hash.length <= 1) openFold('stuck');
+
   syncFoldAll();
+  initSpy();
   if (location.hash.length > 1) openFold(location.hash.slice(1), true);
+}
+
+/* ---------- where am I ----------
+   Eleven rail items with no active state tell the reader nothing about which section they are
+   in, which is UX-guideline territory and also just annoying in a document this long. This marks
+   the one whose section currently owns the top of the viewport.
+
+   WHY NOT IntersectionObserver. Most sections here are folded to a single heading most of the
+   time, so their boxes are ~40px tall and several of them intersect the same thin band at once —
+   the observer would fire constantly and pick an arbitrary winner. Measuring which heading is
+   the last one above the fold is both simpler and correct for a document that is mostly folded.
+
+   The rail scrolls, so the active item is also scrolled into view inside it — an active state
+   you cannot see is not an active state. */
+function initSpy() {
+  const links = Array.from(document.querySelectorAll('#navRow a[href^="#"]'));
+  if (!links.length) return;
+  const rail = document.querySelector('#navRow .nav');
+  let queued = false, last = null;
+
+  const pick = () => {
+    queued = false;
+    const line = (parseInt(getComputedStyle(document.documentElement)
+      .getPropertyValue('--stick'), 10) || 74) + 8;
+    let winner = null;
+    links.forEach((a) => {
+      const el = document.getElementById((a.getAttribute('href') || '').slice(1));
+      if (!el || el.hidden || !el.offsetParent) return;
+      if (el.getBoundingClientRect().top <= line) winner = a;
+    });
+    /* Above the first section — nothing is current, and pretending otherwise would point the
+       reader at a section they have not reached. */
+    if (winner === last) return;
+    if (last) last.classList.remove('here');
+    last = winner;
+    if (!winner) return;
+    winner.classList.add('here');
+    if (rail) {
+      /* The rail is a vertical column above 720px and a horizontal strip at and below it — scroll
+         whichever axis the layout actually uses, or both would silently no-op on the other. */
+      const vertical = (window.innerWidth || 9999) > 720;
+      const r = winner.getBoundingClientRect(), b = rail.getBoundingClientRect();
+      if (vertical) {
+        if (r.top < b.top || r.bottom > b.bottom) {
+          rail.scrollTo({ top: rail.scrollTop + (r.top - b.top) - 24, behavior: 'smooth' });
+        }
+      } else if (r.left < b.left || r.right > b.right) {
+        rail.scrollTo({ left: rail.scrollLeft + (r.left - b.left) - 24, behavior: 'smooth' });
+      }
+    }
+  };
+
+  const queue = () => { if (!queued) { queued = true; requestAnimationFrame(pick); } };
+  addEventListener('scroll', queue, { passive: true });
+  addEventListener('resize', queue);
+  pick();
 }

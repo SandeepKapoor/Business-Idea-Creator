@@ -20,7 +20,7 @@ Politecnico di Milano, wants to leave and start a business, wants location-indep
 income) decide what business to start.
 
 It is **a business-ideation research artifact plus a deterministic rules engine**. It was
-produced by a structured brainstorming method: diverge to 112 ideas across 11 clusters,
+produced by a structured brainstorming method: diverge to 112 ideas across 11 clusters (114 across 12 since #113 and #114 were added later),
 then converge through a founder-fit cut, a scorecard with hard gates, and a 2-week
 validation sprint.
 
@@ -122,39 +122,123 @@ important property of the artifact.
 
 ---
 
-## 2. Three modes / tabs
+## 2. Four modes / tabs
 
-Mode switching is by `hidden` on `.sec` elements. There are 13 sections:
+Mode switching is by `hidden` on `.sec` elements. There are 17 sections:
 
 ```
-custom  deep  stuck  engine  fw  bank  obs  conv  score  map  sprint  pos  evid
+custom  frontier  bma  stuck  engine  fw  bank  obs  conv  score  map  sprint  pos  evid  (+ icons, header)
 ```
 
-`#custom` and `#deep` are mode-owned; the other 11 are the report.
+`#custom`, `#frontier` and `#bma` are mode-owned; the rest are the report. (An earlier `#deep` mode is
+gone — the ten-section business case is now the detail layer of the workspace, not its own tab.)
 
 ```js
-let CURMODE='report';
+/* Sections that belong to a mode rather than to the report, and the tab that selects each. */
+const MODESEC={custom:'tabC',frontier:'tabF',bma:'tabB'};
 function mode(m){
   if(m===CURMODE)return;   // no-op switch must not re-scroll or collapse an open <details>
   CURMODE=m;
-  // tabR / tabC / tabD get .on
+  document.getElementById('tabR').classList.toggle('on',m==='report');
+  Object.keys(MODESEC).forEach(k=>
+    document.getElementById(MODESEC[k]).classList.toggle('on',m===k));
   // #navRow and #srcBlock visible only in report mode
   document.querySelectorAll('.sec').forEach(s=>{
-    const own=(s.id==='custom'||s.id==='deep');
+    const own=Object.prototype.hasOwnProperty.call(MODESEC,s.id);
     s.hidden = own ? s.id!==m : m!=='report';
   });
+  syncFoldAll();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 ```
+
+**`MODESEC` is the single list.** It was a literal `s.id==='custom'` test until the frontier
+arrived; with two mode panels that test silently renders the new one inside the report. Adding a
+fourth mode means one entry here, one tab button, one include, and an entry in `NOFOLD`.
 
 **The early-return matters.** Nav chips call `openM('dStuck')` *and* `mode('report')`.
 Without the guard, the mode call would collapse the `<details>` the chip just opened.
 
 | Mode | Tab id | Sections shown | Entry point |
 |---|---|---|---|
-| `report` | `tabR` | the 11 report sections + nav + sources | default |
+| `report` | `tabR` | the 12 report sections + nav + sources | default |
 | `custom` | `tabC` | `#custom` only | `gen()` |
-| `deep` | `tabD` | `#deep` only | `goDeep()` |
+| `frontier` | `tabF` | `#frontier` only | rendered at parse time |
+| `bma` | `tabB` | `#bma` only | rendered at parse time |
+
+### Mode `frontier` — the watch list
+
+Ten entries, and **deliberately unscored**. Everything else on the page carries a total out of 40
+derived from four axis positions, and an axis position is a claim about a market you can already
+read. For a niche eighteen months old there is nothing to read, so the number would look
+confident and rest on nothing. The evidence is the output instead.
+
+Data lives in `17b-frontier.js`: `FRONT` (the entries), `FSRC` (13 sources), `FSTR`/`FSTRW`
+(four strength bands). Every entry must fill `sg` signal · `wt` what it is · `wn` window ·
+`wy` why still empty · `mv` first move · `by` who pays · `nr` nearest bank ideas.
+
+Source strength is a property of the publisher: **1** primary or statutory · **2** named research
+reported first-hand · **3** vendor survey or second-hand · **4** content marketing with no method.
+The badge on each card shows the **strongest** source — a floor, not an average — and every
+citation carries its own strength beside it. `verify.js` enforces the rule that makes the floor
+safe: **no figure may rest on a strength-4 source alone.** That check caught a real defect on its
+first run (the AX entry's numbers were sourced to a blog; the primary paper is arXiv 2602.14878).
+
+Nine checks in `verify.js` and four in `probe.js` cover it. Two worth knowing:
+`the frontier shows no score out of 40` guards the unscored decision against drift, and
+`every .eb modifier used has a CSS rule` catches a badge class with no rule — which silently
+inherits the surrounding colour and stops meaning anything, as `.eb.ok` did.
+
+### Mode `bma` — the business model analyser
+
+Twenty-three Indian design-education providers, read for how the money works, collapsed into the
+ten distinct models underneath them. India only; the same structure takes UK and USA.
+
+Data lives in `17c-bma.js`: `BMOD` (ten models), `BINST` (23 providers, each tagged `md` to one
+model), `BSRC` (19 sources), `DOBL`/`DOBM` (Doblin's ten types, marked 0–2 per model). It reuses
+`FSTR`/`FSTRW` from `17b-frontier.js` — one strength scale for the whole document.
+
+**Three kinds of number, kept apart.** This is the discipline the tab rests on and `verify.js`
+enforces each one:
+
+| kind | what it is | the check |
+|---|---|---|
+| counted | how many of the 23 run a model | the prose must say "of the 23 I looked at", never "in India" |
+| published | the provider's own price | every row has a `₹`/`$` figure **or** says "not published" |
+| judged | the eight criteria out of 40 | eight integers 1..5, same eight as the idea bank |
+
+**No invented economics.** Revenue, margin, enrolment and profitability are not published by
+private Indian institutes. A check rejects those words in any `fee` field.
+
+**Four models carry `cl` instead of `S`** — they need a licence, a campus or a platform he cannot
+build, so scoring them would imply a choice that does not exist. A model has one or the other,
+never both.
+
+**Order is the argument.** `bmaOrder()` renders open models first, best score first, then the
+closed four behind a divider. Authored order in `BMOD` is formal-to-informal and stays that way;
+sorting happens at render. Two checks pin it, because a decision tab that opens with three doors
+he cannot open has stopped being a decision tab.
+
+**One fact, one home.** `BMOD` used to carry its own `inst` list beside `BINST`'s `md`, and the two
+had already drifted — the foreign-progression model listed Pearl while no provider row was tagged
+to it. The copy is gone and a check forbids its return. Pearl now has two rows, because it runs
+two models.
+
+**Progressive disclosure, and a word budget.** The first build put ten prose cards on one screen —
+2,849 words, with the reader left to assemble the comparison. Now `bmaTableHTML()` renders the
+comparison as a ten-row table (model · who pays · counted · score, clicking a row opens that card),
+`initBma()` folds every card and every long block shut at boot, and the card prose is roughly half
+its original length. Measured: **~670 visible words on load against ~2,280 fully expanded.**
+`probe.js` asserts the cards start shut and that the default view stays under 800 words, so a card
+that renders open by accident cannot quietly restore the wall of text.
+
+**`makeFold` moves a heading's children into a span inside a button**, so any flex rules on the
+heading itself stop applying. `.bm > .bmhd > .sfold > span:last-child` restores the row. Any future
+card that folds needs the same.
+
+**The prose names computed figures.** The intro states that Brand scores 5 and Channel 4, and that
+Process and Product performance score zero. Both are recomputed from `DOBM` and compared to the
+copy, so changing one mark cannot silently make the sentence false.
 
 ---
 
@@ -429,15 +513,15 @@ Zero silent guesses, by construction.
 
 ---
 
-## 9. The 112-idea bank
+## 9. The 114-idea bank
 
 ```js
-const CL = [ /* 11 cluster objects */ ];
-// cluster = { L:'A'..'K', f:1..5 family, t:title, w:whatItDoes, q:promptQuestion,
+const CL = [ /* 12 cluster objects */ ];
+// cluster = { L:'A'..'L', f:1..5 family, t:title, w:whatItDoes, q:promptQuestion,
 //             i:[ [n, name, descriptionHTML, someoneElsePays01, notYouAsProduct01], ... ] }
 ```
 
-Cluster quotas — **continuous numbering 1..112, no gaps, no duplicates**:
+Cluster quotas — **continuous numbering 1..114, no gaps, no duplicates**:
 
 ```
 A Sharpened core            10   ideas 1–10
@@ -451,10 +535,19 @@ H Geo/language/regulatory   10   75–84
 I Newly possible            10   85–94
 J Contrarian / bad-idea     12   95–106
 K Anti-scale                 6   107–112
+L Added after the report     2   113–114
 ```
 
+**Cluster L is an epistemic device, not a theme.** Ideas 1–112 came out of one research pass;
+anything added afterwards goes in L so a reader can tell the two apart at a glance. Every L idea
+must carry a `prov` chip stating what is missing, and the Evidence ledger must name the cluster —
+`verify.js` checks both, pinned to the property rather than the wording. Adding to L means
+appending to the end of `CL` and to `TAGS`, so numbering stays contiguous and nothing renumbers.
+
 Quality quotas that must hold: **≥8 ideas where someone other than the end user pays**
-(actual: 61) and **≥10 where the user is not the product** (actual: 44).
+(actual: 62) and **≥10 where the user is not the product** (actual: 44). #114 counts toward
+neither — the learner pays and the learner is the customer, which is exactly the shape the two
+quotas exist to keep rare.
 
 ### Five colour families (`FAM`) — validated palette
 
@@ -488,10 +581,12 @@ const HAND={23:[...],85:[...],2:[...],78:[...],67:[...],34:[...],52:[...],37:[..
 
 8 ideas carry hand-argued scores that **override the engine**, because the prose in
 Part 7 and Part 10 makes specific claims about them (e.g. "#37 scores 1 on willingness to
-pay", "#52 scores 1 on distribution"). Rows get a `HAND-SCORED` badge; the other 104 get
+pay", "#52 scores 1 on distribution"). Rows get a `HAND-SCORED` badge; the other 106 get
 `DERIVED SCORE`.
 
-Verdict spread across the 112: **build 10 · test 38 · asset 19 · weak 43 · gate 2.**
+Verdict spread across the 114: **build 11 · test 39 · asset 19 · weak 43 · gate 2.**
+(#113 is the eleventh BUILD at 32; #114 is TEST at 30, rank 45. See the ledger row on why both
+numbers are the weakest on the page.)
 
 Where engine and judgment disagree is documented in the Evidence ledger:
 - #78 — my 5th-ranked pick, engine says 28/WEAK
@@ -640,8 +735,8 @@ differs for every twist at a given work.
 ### Kinds of work (`PREM`, `18a-premise.js`) — 7 things that can happen inside
 
 The four axes and the seven angles both leave the *premise* free, and that is why one
-combination used to render as a single idea. Proof it is a real variable: 112 bank ideas
-occupy only 106 combinations, and #36 *The Roast* and #99 *Design Court* share all four axes.
+combination used to render as a single idea. Proof it is a real variable: 114 bank ideas
+occupy only 108 combinations, and #36 *The Roast* and #99 *Design Court* share all four axes.
 
 | key | name | word | price × | score deltas (8) | availability |
 |---|---|---|---|---|---|
@@ -686,7 +781,10 @@ sentences, and scores each one: words, plus a penalty for abstract business regi
 every clause after the first. It is deliberately not Flesch-Kincaid — that rewards short words
 and would push this page toward clipped fragments. What matters is one idea per sentence.
 
-Current: **2,254 sentences, median 9 words, p90 16, longest 29.** Baseline before the copy pass
+Current: **2,445 sentences, median 9 words, p90 20, longest 49.** The p90 and the longest both
+rose when the pitch line was added (`pp` slots in `ARCH` and `pg` in `ROUTES`) — a pitch assembled
+from four clauses is long by construction, and the Contrarian twist's `who` slot is the worst of
+them. Median held at 9. **This is drift, not a target**: the p90 was 16 before the pitch work. Baseline before the copy pass
 had ~2,000 hard-word hits across 14 terms; it is now 10 across 8. If a change pushes the median
 or p90 up, the copy got worse.
 
