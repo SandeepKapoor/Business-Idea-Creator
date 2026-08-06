@@ -4,7 +4,9 @@
 select,input[type=number]{background:var(--raise);color:var(--ink-1);border:1px solid var(--ring);
   border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);font:inherit;font-size:var(--t-sm);width:100%}
 select:focus,input:focus{outline:2px solid var(--f1);outline-offset:-1px}
-.bldbar{display:flex;gap:var(--sp-2);align-items:end;flex-wrap:wrap;margin-top:var(--sp-3)}
+/* Action bars used to end in a paragraph of instructions, so the tight gap read as text-next-to-
+   button. With the prose gone the bar is buttons only and needs its own air above. */
+.bldbar{display:flex;gap:var(--sp-3);align-items:end;flex-wrap:wrap;margin-top:var(--sp-4)}
 .bldbar .fld{max-width:190px}
 /* The statement is the one line saying what you are looking at, so it leads on type, not on a
    coloured edge. The four axis words inside it already carry the four axis colours. */
@@ -103,7 +105,7 @@ tr.vrow.on td.l{box-shadow:inset 3px 0 0 var(--f1)}
   border-radius:var(--r-xs);border:1px solid currentColor;letter-spacing:.01em}
 .prov.ok{color:var(--good)} .prov.weak{color:var(--warn)} .prov.judg{color:var(--f4)}
 /* divider between the two ways into the workspace */
-.bldsplit{border-top:1px solid var(--grid);margin:var(--sp-4) 0 var(--sp-1)}
+.bldsplit{border-top:1px solid var(--grid);margin:var(--sp-6) 0 var(--sp-2)}
 /* the at-a-glance comparison at the top of the ⓘ panel */
 .viexp table.dtab{margin:var(--sp-0) 0 var(--sp-1);font-variant-numeric:tabular-nums}
 .viexp table.dtab td{font-size:var(--t-sm);padding:var(--sp-2) var(--sp-3) var(--sp-2) 0;vertical-align:top}

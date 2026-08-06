@@ -19,8 +19,6 @@
           <label>One of the 112 ideas</label>
           <select id="dSel" onchange="openInBuilder(+this.value)"></select></div>
         <button class="rollbtn" onclick="openInBuilder(+document.getElementById('dSel').value)"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Build it</button>
-        <div class="tiny" style="max-width:250px">Its four axes load into the picker. Switch to
-        <b style="color:var(--ink-1)">Build my own</b> to see them and change any one.</div>
       </div>
     </div>
 
@@ -32,10 +30,6 @@
       <div class="bldbar">
         <button class="rollbtn" onclick="gen()"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Build it</button>
         <button class="rollbtn ghost" onclick="surprise()"><svg class="i" aria-hidden="true"><use href="#i-shuffle"/></svg> Surprise me</button>
-        <div class="tiny" style="max-width:320px">Change any cell and the page rebuilds. 193,600
-        combinations are reachable from here, and each holds 12–42 different ideas — the work you
-        do × the twist you put on it. Most are garbage, and finding that out in ten seconds is the
-        entire point.</div>
       </div>
     </div>
 
@@ -44,8 +38,6 @@
       <div class="fld" style="min-width:170px"><label>Monthly income target ₹</label>
         <input type="number" id="tgt" value="250000" step="25000" min="25000"
                onchange="if(LAST)gen(1)"></div>
-      <div class="tiny" style="max-width:340px">Used for the break-even maths and the business case.
-      Set it to whatever number actually lets you resign.</div>
     </div>
   </div>
   <div id="cOut"><div class="empty">Pick one of the 112 ideas and hit

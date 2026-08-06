@@ -218,8 +218,11 @@ function renderVars(silent){
         MH[h][2]>=4?'It works from any timezone.':'It ties you to a specific place on a specific date.'}
         ${S[0]<=2?'<b style="color:var(--warn)">And nobody will pay much for it — treat it as an audience asset, not a revenue line.</b>':''}</p>
       </div>
-      <div class="tiny" style="margin-top:10px">These four dropdowns are my reading of that idea's axes.
-      Change any one to fork it — the banner disappears once you do.${diff}</div></div>
+      ${/* Only the part you cannot work out by looking: where my hand score and the derived score
+            disagree. The old line here described the picker ("these four dropdowns…") — it named a
+            control that no longer exists, and told you that changing a cell changes the result,
+            which changing a cell demonstrates. */''}
+      ${diff?`<div class="tiny" style="margin-top:var(--sp-3)">${diff.trim()}</div>`:''}</div>
       <button class="chip oback" onclick="backToTable()">${icon('arrow-left','sm')} back to the table</button></div>`;
   }
   /* statement */
