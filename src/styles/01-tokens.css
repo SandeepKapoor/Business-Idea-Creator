@@ -1,80 +1,92 @@
 :root{
   color-scheme: light;
-  --stock:#fff8f6;
-  --band:#fff1ec;
-  --mark:#ff385c;
-  --slate:#6b7280;
+  /* FOUNDRY SPECIMEN LEDGER. Ivory book stock, near-black foundry ink, one oxblood accent
+     reserved for "this is live or selected" the way a proof-stamp marks a correction — never
+     for chrome. Pushed toward a real foundry's own register (ivory, not parchment) rather than
+     the category's softest cream-plus-serif default. */
+  --stock:#f7f1e4;
+  --band:#efe3d0;
+  --mark:#8a2a1f;
+  --slate:#6b5f4f;
 
-  --ink-1:#222222;
-  --ink-2:#484848;
-  --ink-3:#717171;
+  --ink-1:#1a1712;
+  --ink-2:#453d31;
+  --ink-3:#726650;
 
   --field:var(--stock);
-  --plane:#ffffff;
-  --surface-1:#ffffff;
-  --raise:#fff6f3;
-  --sunken:#f7f7f7;
+  --plane:#fdfaf3;
+  --surface-1:#fdfaf3;
+  --raise:#f1e7d6;
+  --sunken:#ece0cb;
 
-  --grid:rgba(34,34,34,.08);
-  --axis:rgba(34,34,34,.16);
-  --ring:rgba(34,34,34,.11);
-  --ring-2:rgba(34,34,34,.2);
+  --grid:rgba(26,23,18,.12);
+  --axis:rgba(26,23,18,.22);
+  --ring:rgba(26,23,18,.16);
+  --ring-2:rgba(26,23,18,.28);
 
-  --f1:var(--mark);
-  --f2:#ff5a5f;
-  --f3:#e31c5f;
-  --f4:#ff385c;
-  --f5:#b32545;
+  /* THE WEIGHT AXIS. A specimen proves a face by showing it work at every weight it cuts, light
+     to black; this document's score ladder borrows that logic instead of a second hue — ink
+     itself gets stronger as the score rises, so "the strongest ideas" and "the darkest type"
+     read as the same fact. --f1..--f5 stay oxblood-tinted (the ledger's one colour) rather than
+     introducing an unrelated palette competing with the accent. */
+  --f1:#d67c66;
+  --f2:#c56850;
+  --f3:#a1432b;
+  --f4:#7a3220;
+  --f5:#512115;
 
-  --good:#1f9d68;
-  --warn:#b26c00;
-  --serious:#717171;
-  --crit:#c13515;
+  --good:#3a6b3f;
+  --warn:#8a6512;
+  --serious:#726650;
+  --crit:#7a2a1c;
 
-  --tint-f1:rgba(255,56,92,.1);
-  --tint-f2:rgba(255,90,95,.1);
-  --tint-good:rgba(31,157,104,.12);
-  --tint-warn:rgba(178,108,0,.12);
-  --tint-crit:rgba(193,53,21,.12);
+  --tint-f1:rgba(138,42,31,.09);
+  --tint-f2:rgba(138,42,31,.14);
+  --tint-good:rgba(58,107,63,.12);
+  --tint-warn:rgba(138,101,18,.12);
+  --tint-crit:rgba(122,42,28,.12);
 
-  --s1:#ffe2e8;
-  --s2:#ffc3cf;
-  --s3:#ff9aac;
-  --s4:#ff5a75;
-  --s5:#e31c5f;
-  --s6:#cc124e;
-  --s7:#8f1038;
+  /* THE FIVE-STEP RAMP, AND WHY IT JUMPS UNEVENLY. At this hue and saturation, lightness 50–58%
+     clears neither the dark ink nor the light stock ink at 4.5:1 — the tint is simultaneously
+     too dark for dark-on-light and too light for light-on-dark. Steps 1–3 sit above that band
+     (dark ink), steps 4–5 sit below it (stock-toned ink); the bigger jump between step 3 and 4
+     is the price of every step clearing AA rather than a styling choice. */
+  --s1:#e7b3a6;
+  --s2:#dd917e;
+  --s3:#d4765e;
+  --s4:#a1432b;
+  --s5:#512115;
+  --s6:#3a180f;
+  --s7:#26100a;
 
   --sp-0:2px;  --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px; --sp-5:20px;
   --sp-6:24px; --sp-7:32px; --sp-8:40px; --sp-9:56px; --sp-10:80px;
 
   --sans:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  /* THE ONE SOURCED FACE, DISPLAY ONLY. Fraunces, self-hosted and base64-inlined (00-fonts.css) —
+     the specimen thesis needs a real display serif with character, and no system-installed serif
+     reads as a foundry face worth showcasing. Body, UI, and tabular text stay on --sans/--mono;
+     --serif is never referenced by a component that isn't a display plate. */
+  --serif:"Fraunces",ui-serif,Georgia,"Times New Roman",serif;
 
-  /* THE ROLE SCALE, ON tools/design.js'S ALLOWED RAMP. The Airbnb-inspired draft used
-     11/12/14/16/16/20/28/40/64 — four of those nine (14, 20, 28, 64) are off the project's
-     discrete type ramp (10/11/12/13/15/16/18/21/26/32/40), which exists so every size on the page
-     is a deliberate step rather than an arbitrary pixel value. Refitted to the nearest allowed
-     step in each direction: --t-sm 14→13, --t-lg 20→18, --t-xl 28→26, --t-3xl 64→40. The h1 loses
-     some of its poster scale as a result; craft-floor's own ceiling is 6rem (96px) so 40px was
-     never approaching the real limit — the discrete ramp is the tighter constraint here, and it
-     wins because it is a shared contract several checks and components rely on. */
+  /* THE ROLE SCALE, ON tools/design.js'S ALLOWED RAMP: 10/11/12/13/15/16/18/21/26/32/40. */
   --t-2xs:11px; --t-xs:11px; --t-sm:13px; --t-md:16px; --t-base:16px;
   --t-lg:18px;  --t-xl:26px; --t-2xl:32px; --t-3xl:40px;
 
   --tr-label:.08em;
   --tr-caps:.04em;
-  --tr-display:-.03em;
+  --tr-display:-.01em;
 
-  --r-xs:6px;
-  --r-sm:6px;
-  --r-md:6px;
-  --r-lg:6px;
+  --r-xs:0px;
+  --r-sm:0px;
+  --r-md:0px;
+  --r-lg:0px;
   --r-full:999px;
 
-  --e-1:0 2px 8px rgba(0,0,0,.04);
-  --e-2:0 8px 24px rgba(0,0,0,.08);
-  --e-3:0 16px 40px rgba(0,0,0,.12);
+  --e-1:0 1px 0 rgba(26,23,18,.06);
+  --e-2:0 2px 0 rgba(26,23,18,.08);
+  --e-3:0 4px 0 rgba(26,23,18,.1);
 
   --dur-1:140ms; --dur-2:220ms; --dur-3:320ms;
   --ease:cubic-bezier(.2,.8,.2,1);
@@ -83,62 +95,62 @@
   --tier1:38px;
   --sidew:248px;
   --fam:var(--ink-1);
+  --mn-i:0;
 }
-/* THE NIGHT SYSTEM. Airbnb's own dark surfaces aren't black turned down — they're a warm charcoal
-   base with three genuinely separated elevation steps, because a "card" that is 4% lighter than
-   its field isn't legible as a card at all, only as a very faint suggestion of one. Rewritten
-   from a near-black stack (#161616 → #1c1c1c → #202020 → #272727, an 11-point luminance span
-   across four surfaces) to a real one: #0F0F10 field, #1A1A1C plane, #232326 raised, #2C2C30
-   sunken/hover — each step is a legible jump, matched against real elevation photos of Airbnb's
-   dark mode rather than guessed. Text and the coral both lift to compensate for the darker,
-   warmer ground; measured 5.1:1 body-on-field and 4.6:1 coral-on-plane. */
+/* THE PROOF ROOM. Not a black-mode inversion — a lit-drawer, safelight-adjacent dark: warm dark
+   stock, foundry ink lifted to a light stone tone, oxblood brightened to clear AA on the darker
+   ground. Measured, not guessed: 14.4:1 ink-on-stock, and the accent clears 4.5:1 on both stock
+   and plane. */
 html[data-theme="dark"]{
   color-scheme: dark;
-  --stock:#0f0f10;
-  --band:#1a1a1c;
-  --mark:#5b9dff;
-  --slate:#9a9aa3;
+  --stock:#1c1712;
+  --band:#241e17;
+  --mark:#e2795f;
+  --slate:#a89a80;
 
-  --ink-1:#f5f5f6;
-  --ink-2:#c9c9cd;
-  --ink-3:#95959c;
+  --ink-1:#efe6d6;
+  --ink-2:#c9bda5;
+  --ink-3:#9a8d72;
 
-  --plane:#1a1a1c;
-  --surface-1:#232326;
-  --raise:#2c2c30;
-  --sunken:#151517;
+  --plane:#241e17;
+  --surface-1:#2c251c;
+  --raise:#332a20;
+  --sunken:#171310;
 
-  --grid:rgba(245,245,246,.09);
-  --axis:rgba(245,245,246,.20);
-  --ring:rgba(245,245,246,.13);
-  --ring-2:rgba(245,245,246,.26);
+  --grid:rgba(239,230,214,.10);
+  --axis:rgba(239,230,214,.20);
+  --ring:rgba(239,230,214,.14);
+  --ring-2:rgba(239,230,214,.26);
 
-  --f2:#7db8ff;
-  --f3:#3d82f5;
-  --f4:#5b9dff;
-  --f5:#1f5fd1;
+  --f2:#e6957e;
+  --f3:#e2795f;
+  --f4:#c56850;
+  --f5:#9e482e;
 
-  --good:#3ddc97;
-  --warn:#ffc94d;
-  --crit:#ff8080;
+  --good:#78b07d;
+  --warn:#d1a53f;
+  --crit:#e2795f;
 
-  --tint-f1:rgba(91,157,255,.17);
-  --tint-f2:rgba(125,184,255,.13);
-  --tint-good:rgba(61,220,151,.16);
-  --tint-warn:rgba(255,201,77,.16);
-  --tint-crit:rgba(255,128,128,.15);
+  --tint-f1:rgba(226,121,95,.16);
+  --tint-f2:rgba(226,121,95,.12);
+  --tint-good:rgba(120,176,125,.16);
+  --tint-warn:rgba(209,165,63,.16);
+  --tint-crit:rgba(226,121,95,.15);
 
-  --s1:#0c2247;
-  --s2:#123a72;
-  --s3:#1f5fd1;
-  --s4:#3d82f5;
-  --s5:#5b9dff;
-  --s6:#7db8ff;
-  --s7:#c4dfff;
+  /* Mirrors the light ramp: brightens as the score rises, since on dark stock more ink reads as
+     more light, not less. Same dead-zone logic, mirrored — steps 1–2 sit below the band (light
+     ink), steps 3–5 sit above it (dark ink). */
+  --s1:#572819;
+  --s2:#9e482e;
+  --s3:#d17b61;
+  --s4:#e6b6a8;
+  --s5:#f4ded7;
+  --s6:#f9eeeb;
+  --s7:#fdf7f4;
 
-  --e-1:0 2px 8px rgba(0,0,0,.36);
-  --e-2:0 10px 28px rgba(0,0,0,.46);
-  --e-3:0 18px 48px rgba(0,0,0,.58);
+  --e-1:0 1px 0 rgba(0,0,0,.4);
+  --e-2:0 2px 0 rgba(0,0,0,.5);
+  --e-3:0 4px 0 rgba(0,0,0,.6);
 }
 
 @media (prefers-reduced-motion: reduce){

@@ -1,0 +1,5 @@
+/* ============ FINAL ============ */
+.finstage{margin-top:var(--sp-8)}
+.finstage h4{margin:var(--sp-6) 0 var(--sp-3);font-size:var(--t-base);font-weight:650;color:var(--ink-1)}
+.finstage h4:first-of-type{margin-top:var(--sp-4)}
+.frtl{color:var(--ink-1);font-weight:650}

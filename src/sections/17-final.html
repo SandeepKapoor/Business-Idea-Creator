@@ -1,0 +1,294 @@
+<!-- ============ FINAL ============
+     Runs the 5-stage converging process from business-idea-staged-prompts.md, independently of
+     the report's own engine and picks (10-picks.js, HAND overrides, 06-scorecard.data.js) — a
+     second, separate pass over the same raw research, to see whether it converges on the same
+     answer or a different one. Stages 1-4 ship here; Stage 5 (the full plan) is added once the
+     reader picks one of the Stage 4 top 3, per the source doc's explicit human-choice gate. -->
+<div class="sec" id="final" hidden>
+  <h2>Final</h2>
+  <h3>The site's own convergence method, run once more — start to Stage 4 — kept separate from the report's existing scores so the two can be compared rather than merged.</h3>
+
+  <div class="card frintro">
+    <p>Everything above this tab already scored 114 ideas and named a top 5. This tab does not
+    read that answer. It re-reads the same raw material — the axes, the six observations, the
+    evidence ledger — and runs the four-stage funnel from
+    <code>business-idea-staged-prompts.md</code> as if starting cold: map the research, generate
+    bounded candidates, filter and score, then compare the top 3 side by side.</p>
+    <p class="prov judg">Stops at Stage 4 by design. The source document is explicit: after the
+    comparison table, a person picks one — that choice is not this document's to make. Stage 5,
+    the full lean plan, gets built for whichever of the three you choose.</p>
+  </div>
+
+  <!-- ---------- STAGE 1 ---------- -->
+  <div class="finstage" id="fin-s1">
+    <h3>Stage 1 — Insight Map</h3>
+
+    <h4>User segments</h4>
+    <div class="evid">
+      <div class="evrow"><div class="ek">Enterprise / GCC design teams</div>
+        <div class="ev">Traits: buys with an allocated, expiring annual L&amp;D budget; judged on
+        outcomes, not price. Goals: upskill designers fast, prove ROI to leadership. Frustrations:
+        no India-based teacher who has shipped safety-critical or complex-systems work. Unmet need:
+        enterprise-grade UX training that isn't a repackaged consumer bootcamp.
+        <span class="prov ok">Sources: Observation 1, Observation 3, idea #23/#24/#25/#29.</span></div>
+        <div><span class="eb src">strong</span></div></div>
+      <div class="evrow"><div class="ek">Individual Indian designers (junior–mid, career switchers)</div>
+        <div class="ev">Traits: price-anchored to ₹449 Udemy courses, highest churn. Goals: get
+        hired, get promoted, stop freezing in interviews. Frustrations: content is free and
+        commoditised; nothing distinguishes one teacher from another. Unmet need: proof of
+        finishing and proof of skill, not more content.
+        <span class="prov ok">Sources: Observation 1, Observation 2, idea #6/#7/#8/#41.</span></div>
+        <div><span class="eb src">strong</span></div></div>
+      <div class="evrow"><div class="ek">Newly promoted design managers / senior ICs</div>
+        <div class="ev">Traits: 6-12 years in, first time leading or influencing without pixels.
+        Goals: sell design internally, lead a team, raise the ceiling on their career. Unmet need:
+        strategic-design method (not craft) — a gap Observation 3 says the founder can fill and
+        no other Indian educator can.
+        <span class="prov ok">Sources: Observation 3, AX.WHO, idea #4/#18.</span></div>
+        <div><span class="eb src">strong</span></div></div>
+      <div class="evrow"><div class="ek">Indian designers targeting global remote roles</div>
+        <div class="ev">Traits: skilled but locked out by geography and interview format, not by
+        craft. Goals: get hired abroad, survive a live whiteboard round. Unmet need: interview
+        readiness and portfolio framing for a non-Indian hiring bar.
+        <span class="prov ok">Sources: AX.WHO, idea #6/#7/#78, evidence ledger (#78 disagreement note).</span></div>
+        <div><span class="eb est">moderate</span></div></div>
+      <div class="evrow"><div class="ek">Non-design founders and product managers</div>
+        <div class="ev">Traits: judged on design quality, never trained in it, company pays.
+        Goals: brief a designer properly, ship faster, stop being the reason releases slip.
+        <span class="prov ok">Sources: idea #25/#26, Observation 1 (employer-pays theme).</span></div>
+        <div><span class="eb est">moderate</span></div></div>
+      <div class="evrow"><div class="ek">Parents of design aspirants / design students</div>
+        <div class="ev">Traits: parent is the real payer, price-insensitive, seasonal around
+        entrance exams and study-abroad applications. Goals: get the child into a good program or
+        placed abroad.
+        <span class="prov ok">Sources: idea #32/#33/#34, AX.WHO.</span></div>
+        <div><span class="eb est">moderate</span></div></div>
+    </div>
+
+    <h4>Recurring problems, ranked by evidence weight</h4>
+    <div class="evid">
+      <div class="evrow"><div class="ek">1 · Wrong payer</div>
+        <div class="ev">The bank's own instinct list (course, podcast, community) points at
+        individuals, who are the worst-paying, highest-churn buyer in the market; employers pay
+        3-5&times; for identical delivery with far less price sensitivity.
+        <span class="prov ok">Cited 5+ times: Observation 1, 14-rules.js gate logic, position doc,
+        sprint doc, evidence ledger.</span></div>
+        <div><span class="eb src">most-evidenced</span></div></div>
+      <div class="evrow"><div class="ek">2 · Content is commoditised, finishing is not</div>
+        <div class="ev">Median MOOC completion is 12.6% across 221 courses; accountability format
+        cuts dropout 3.4&times;. Everyone in this market still sells content.
+        <span class="prov ok">Cited 3 times: Observation 2, evidence ledger, idea #41.</span></div>
+        <div><span class="eb src">well-evidenced</span></div></div>
+      <div class="evrow"><div class="ek">3 · Craft is copyable, complexity and method are not</div>
+        <div class="ev">Figma teaching is a weekend-copyable, marketing-spend war. Safety-critical
+        design plus a European strategic-design method is not copyable in six months, and no
+        other Indian educator currently sits on that side of the line.
+        <span class="prov ok">Cited 3 times: Observation 3, idea #1/#3/#4/#10.</span></div>
+        <div><span class="eb src">well-evidenced</span></div></div>
+      <div class="evrow"><div class="ek">4 · Distribution instincts point at businesses that don't pay</div>
+        <div class="ev">The founder's most emotionally appealing formats (show, podcast, retreat)
+        score as marketing, not revenue — ad/sponsor income at likely scale is ₹20-80k/month for
+        heavy production effort.
+        <span class="prov ok">Cited 2 times: Observation 4, evidence ledger disagreement note on #37.</span></div>
+        <div><span class="eb est">moderate</span></div></div>
+      <div class="evrow"><div class="ek">5 · Two windows are closing, not standing</div>
+        <div class="ev">The "mid-exit" personal-credibility angle has roughly a 9-month shelf
+        life; the AI-repositioning niche (agentic UX, AI-era design QA) has roughly 12-18 months
+        before it's crowded.
+        <span class="prov ok">Cited 1 time directly, corroborated by Frontier tab's independent
+        12-18 month estimate for the same niche (entry "ax").</span></div>
+        <div><span class="eb est">moderate</span></div></div>
+      <div class="evrow"><div class="ek">6 · Location-independence conflicts with roughly a third of the bank</div>
+        <div class="ev">Stated goal eliminates retreats, stage shows, offline coaching and most
+        workshop economics, or demotes them to occasional rather than core.
+        <span class="prov ok">Cited 1 time directly: Observation 6.</span></div>
+        <div><span class="eb est">stated once, structurally load-bearing</span></div></div>
+    </div>
+
+    <h4>Opportunity themes (4-8 clusters to generate from)</h4>
+    <ul class="clean">
+      <li><b>Employer-funded enterprise upskilling</b> — GCCs, engineers-forced-to-design, PMs,
+      sales engineers, L&amp;D budgets. Combines problem #1 (wrong payer) with problem #3
+      (uncopyable complexity edge).</li>
+      <li><b>Proof-of-completion / proof-of-skill infrastructure</b> — assessment, certification,
+      cohort-with-no-curriculum, hiring-rubric replacement. Answers problem #2 directly.</li>
+      <li><b>Strategic-design / complexity credential for career changers</b> — senior ICs and
+      managers who need method, not craft. Answers problem #3.</li>
+      <li><b>AI-era repositioning</b> — agentic UX, design QA for AI output, evals-as-research.
+      Answers problem #5's closing window; corroborated independently by the Frontier tab.</li>
+      <li><b>Global-mobility services for Indian designers</b> — interview readiness, portfolio
+      framing, placement into remote/EU/US roles. Distinct payer (individual or recruiter) but a
+      distinct, underserved problem, not craft teaching.</li>
+      <li><b>Distribution-as-marketing, never as revenue line</b> — the show/podcast/community
+      formats, explicitly reclassified as top-of-funnel for one of the above, per problem #4.</li>
+    </ul>
+
+    <h4>Business Q&amp;A log</h4>
+    <div class="frtwrap"><table class="frt"><caption>Answered and open questions found across the site</caption>
+      <thead><tr><th>Question</th><th>Answer / status</th><th>Source</th><th>Tag</th></tr></thead>
+      <tbody>
+        <tr><td>Who is the highest-value payer in this market?</td>
+          <td>Employers with allocated L&amp;D budget, not individual designers.</td>
+          <td>Observation 1</td><td><span class="eb src">Answered</span></td></tr>
+        <tr><td>Does cohort accountability actually improve completion?</td>
+          <td>Direction yes (3.4&times; less dropout); magnitude uncertain — the widely quoted
+          85-95% figure is vendor marketing, not independent measurement.</td>
+          <td>Observation 2, evidence ledger</td><td><span class="eb src">Answered, caveated</span></td></tr>
+        <tr><td>What is the founder's actual, hard-to-copy edge?</td>
+          <td>Safety-critical/complex-systems design experience (Boeing) plus a European
+          strategic-design method (Politecnico di Milano) — the only two verified facts about the
+          founder anywhere in the evidence ledger.</td>
+          <td>Observation 3, evidence ledger</td><td><span class="eb src">Answered</span></td></tr>
+        <tr><td>Has any idea in the bank been validated with a real customer?</td>
+          <td>No. Every score, price and verdict is explicitly a prior, not evidence.</td>
+          <td>Evidence ledger</td><td><span class="eb src">Answered — the answer is "none yet"</span></td></tr>
+        <tr><td>What is the founder's network, credibility and personal fit actually like?</td>
+          <td><b>Needs Answer.</b> Three of the eight scoring criteria (distribution, founder fit,
+          energy) are explicitly guesses, inferred from two known facts and nothing else.</td>
+          <td>Evidence ledger</td><td><span class="eb bad">CRITICAL</span></td></tr>
+        <tr><td>Will an enterprise/GCC buyer actually pay for this, and at what price?</td>
+          <td><b>Needs Answer.</b> Market size (GCC count, training market size) is measured; a
+          specific willingness-to-pay for this specific offer is not.</td>
+          <td>Idea #23, evidence ledger</td><td><span class="eb bad">CRITICAL</span></td></tr>
+        <tr><td>What is the real payer multiplier employers vs individuals pay for design training?</td>
+          <td><b>Needs Answer.</b> Explicitly a heuristic (3-5&times;) with no dataset behind it,
+          except for expert-network pay bands, which are a different offer entirely.</td>
+          <td>Evidence ledger</td><td><span class="eb bad">CRITICAL</span></td></tr>
+        <tr><td>Exact starting price point for any single offer</td>
+          <td><b>Needs Answer.</b> Format base prices are ranges anchored to adjacent markets, not
+          to this specific offer tested with this specific buyer.</td>
+          <td>Evidence ledger</td><td><span class="eb est">MINOR</span></td></tr>
+        <tr><td>Which channel reaches a GCC L&amp;D buyer first — cold outreach, warm intro, or content?</td>
+          <td><b>Needs Answer.</b> Not addressed anywhere on the site.</td>
+          <td>—</td><td><span class="eb est">MINOR</span></td></tr>
+      </tbody></table></div>
+  </div>
+
+  <!-- ---------- STAGE 2 ---------- -->
+  <div class="finstage" id="fin-s2">
+    <h3>Stage 2 — Candidate Ideas</h3>
+    <p class="prov judg">Generated only from the Stage 1 map above — not from the 114-idea bank
+    directly, though several land near existing bank ideas, which the map's own themes predict.</p>
+    <div class="frtwrap"><table class="frt"><caption>12 candidates, traced to a theme and segment</caption>
+      <thead><tr><th class="frtn">№</th><th>Pitch</th><th>Segment</th><th>Problem</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td class="frtn">01</td><td>Enterprise UX upskilling cohorts sold directly to GCC L&amp;D budgets, taught from safety-critical/complex-systems experience.</td><td>Enterprise/GCC teams</td><td>Wrong payer + uncopyable edge</td><td><span class="eb src">EVIDENCE-BASED</span></td></tr>
+        <tr><td class="frtn">02</td><td>A paid ninety-minute skill assessment sold to employers, replacing the portfolio as the hiring signal.</td><td>Heads of design / employers</td><td>Content ≠ proof</td><td><span class="eb src">EVIDENCE-BASED</span></td></tr>
+        <tr><td class="frtn">03</td><td>A no-curriculum cohort: deadlines, peer review and critique only — completion is the entire product.</td><td>Individual designers</td><td>Content ≠ proof</td><td><span class="eb src">EVIDENCE-BASED</span></td></tr>
+        <tr><td class="frtn">04</td><td>An eight-week strategic-design credential for senior ICs and new managers, adapted from a Polimi-style method.</td><td>Senior ICs / new managers</td><td>Craft is copyable, method isn't</td><td><span class="eb src">EVIDENCE-BASED</span></td></tr>
+        <tr><td class="frtn">05</td><td>Design-for-regulated-industries training (aviation, medical, fintech compliance) sold to firms building in those sectors.</td><td>Enterprise/GCC teams</td><td>Uncopyable edge</td><td><span class="eb src">EVIDENCE-BASED</span></td></tr>
+        <tr><td class="frtn">06</td><td>An "agentic UX" / AI-era design-QA short course, positioned while the niche is still uncrowded.</td><td>Mid-senior designers, PMs</td><td>Closing window (AI repositioning)</td><td><span class="eb est">INFERRED</span></td></tr>
+        <tr><td class="frtn">07</td><td>Evals-as-research: teaching designers to write acceptance criteria for AI product features.</td><td>Designers at AI-feature teams</td><td>Closing window (AI repositioning)</td><td><span class="eb est">INFERRED</span></td></tr>
+        <tr><td class="frtn">08</td><td>Interview-readiness and portfolio-framing service for Indian designers targeting global remote roles.</td><td>Global-remote-track designers</td><td>Global-mobility gap</td><td><span class="eb src">EVIDENCE-BASED</span></td></tr>
+        <tr><td class="frtn">09</td><td>Design-literacy short course for product managers and non-design founders, sold to the company, not the individual.</td><td>PMs / non-design founders</td><td>Wrong payer</td><td><span class="eb src">EVIDENCE-BASED</span></td></tr>
+        <tr><td class="frtn">10</td><td>Training engineers who must design HMIs, sold to manufacturing/industrial employers.</td><td>Engineers forced to design</td><td>Wrong payer + uncopyable edge</td><td><span class="eb est">INFERRED</span></td></tr>
+        <tr><td class="frtn">11</td><td>A gated senior-designer show/podcast, run explicitly as a lead-gen funnel into one of the paid offers above, never as revenue.</td><td>Individual designers (top of funnel only)</td><td>Distribution-as-marketing reclassification</td><td><span class="eb est">INFERRED</span></td></tr>
+        <tr><td class="frtn">12</td><td>Study-abroad / global-masters application coaching for design students, sold to parents.</td><td>Parents / design students</td><td>Global-mobility gap (adjacent segment)</td><td><span class="eb est">INFERRED</span></td></tr>
+      </tbody></table></div>
+  </div>
+
+  <!-- ---------- STAGE 3 ---------- -->
+  <div class="finstage" id="fin-s3">
+    <h3>Stage 3 — Filtered and Scored</h3>
+
+    <h4>Stage A — hard filters</h4>
+    <div class="frtwrap"><table class="frt"><caption>All 12 candidates against the 3 hard filters</caption>
+      <thead><tr><th class="frtn">№</th><th>Evidenced/plausible</th><th>Testable at 5-15h/wk, $500-2k</th><th>First-customer path, no unowned resource</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td class="frtn">01</td><td>Pass</td><td>Pass — 5-10 warm-intro conversations, no build</td><td>Pass — founder's own employer network</td><td><b>Pass</b></td></tr>
+        <tr><td class="frtn">02</td><td>Pass</td><td>Pass — run free on 3 designers first</td><td>Pass — no audience required, direct outreach</td><td><b>Pass</b></td></tr>
+        <tr><td class="frtn">03</td><td>Pass</td><td>Pass — cheapest to test, no content to build</td><td>Fail — needs an existing pool of paying designers to fill a cohort; none shown to exist yet</td><td><b>Fail</b></td></tr>
+        <tr><td class="frtn">04</td><td>Pass</td><td>Pass</td><td>Pass — same network as #01</td><td><b>Pass</b></td></tr>
+        <tr><td class="frtn">05</td><td>Pass</td><td>Pass</td><td>Fail — requires specific regulated-industry contacts not evidenced in the research</td><td><b>Fail</b></td></tr>
+        <tr><td class="frtn">06</td><td>Plausible, not evidenced beyond Frontier's independent estimate</td><td>Pass</td><td>Pass</td><td><b>Pass</b></td></tr>
+        <tr><td class="frtn">07</td><td>Plausible only</td><td>Pass</td><td>Fail — needs access to a company already shipping an AI feature; not shown to exist</td><td><b>Fail</b></td></tr>
+        <tr><td class="frtn">08</td><td>Pass</td><td>Pass</td><td>Pass — direct outreach to designers, no gatekeeper needed</td><td><b>Pass</b></td></tr>
+        <tr><td class="frtn">09</td><td>Pass</td><td>Pass</td><td>Pass</td><td><b>Pass</b></td></tr>
+        <tr><td class="frtn">10</td><td>Plausible only</td><td>Pass</td><td>Fail — no manufacturing/industrial contacts evidenced anywhere in the research</td><td><b>Fail</b></td></tr>
+        <tr><td class="frtn">11</td><td>Pass, as marketing</td><td>Pass</td><td>Fail on its own terms — Observation 4 says this format alone fails the willingness-to-pay gate; it is not a standalone business</td><td><b>Fail</b> (as a business — survives only as a tactic under another idea)</td></tr>
+        <tr><td class="frtn">12</td><td>Pass</td><td>Pass</td><td>Fail — no study-abroad/parent-network access evidenced</td><td><b>Fail</b></td></tr>
+      </tbody></table></div>
+
+    <h4>Stage B &amp; C — scored survivors</h4>
+    <div class="frtwrap"><table class="frt"><caption>6 survivors, weighted score, then CRITICAL-question penalty</caption>
+      <thead><tr><th class="frtn">№</th><th>Problem 25%</th><th>Feasibility 25%</th><th>Market 15%</th><th>Differentiation 15%</th><th>Model 20%</th><th>Weighted</th><th>Penalty</th><th>Final</th></tr></thead>
+      <tbody>
+        <tr><td class="frtn">01</td><td>9</td><td>8</td><td>8</td><td>9</td><td>8</td><td>8.35</td><td>&minus;1.5 (WTP price point unconfirmed)</td><td><b>6.85</b></td></tr>
+        <tr><td class="frtn">04</td><td>8</td><td>7</td><td>6</td><td>9</td><td>7</td><td>7.45</td><td>&minus;1.5 (WTP price point unconfirmed)</td><td><b>5.95</b></td></tr>
+        <tr><td class="frtn">09</td><td>7</td><td>8</td><td>7</td><td>5</td><td>7</td><td>6.90</td><td>&minus;1 (payer multiplier unconfirmed)</td><td><b>5.90</b></td></tr>
+        <tr><td class="frtn">02</td><td>8</td><td>9</td><td>5</td><td>8</td><td>6</td><td>7.30</td><td>&minus;1.5 (founder distribution/fit unconfirmed)</td><td><b>5.80</b></td></tr>
+        <tr><td class="frtn">08</td><td>6</td><td>8</td><td>6</td><td>5</td><td>6</td><td>6.15</td><td>&minus;1 (founder distribution/fit unconfirmed)</td><td><b>5.15</b></td></tr>
+        <tr><td class="frtn">06</td><td>6</td><td>7</td><td>5</td><td>6</td><td>5</td><td>5.85</td><td>&minus;1.5 (both WTP and founder-fit unconfirmed)</td><td><b>4.35</b></td></tr>
+      </tbody></table></div>
+
+    <h4>Top 3</h4>
+    <ul class="clean">
+      <li><b>#01 — Enterprise UX upskilling for GCCs</b> — final 6.85. Highest on problem strength
+      and differentiation: it is the one candidate that combines the strongest-evidenced problem
+      (wrong payer) with the founder's only two verified facts (Boeing, Polimi).</li>
+      <li><b>#04 — Strategic-design credential for senior ICs/managers</b> — final 5.95. Same
+      uncopyable-edge argument as #01, aimed at a different payer (the individual senior designer
+      or their employer's promotion budget rather than an L&amp;D line item) — weaker market
+      evidence than #01 because no GCC-scale figures back this specific segment.</li>
+      <li><b>#09 — Design literacy for PMs, sold to the company</b> — final 5.90. Strong
+      feasibility and a correctly-identified payer, but weaker differentiation — design-literacy
+      training for PMs is a more generic, more copyable offer than #01 or #04.</li>
+    </ul>
+
+    <p class="prov judg">Everything else, in one line each: <b>#02</b> assessment-as-hiring-signal
+    scored close behind but carries the largest unresolved CRITICAL question (the founder's actual
+    distribution/credibility with hiring managers, not just designers) · <b>#08</b> global-mobility
+    coaching is real but weakest on differentiation — interview coaching is a crowded adjacent
+    market · <b>#06</b> AI-repositioning scored lowest of the survivors on this pass specifically
+    because it is the most inferred, least evidenced candidate, even though its window argument is
+    real (and corroborated independently by the Frontier tab) · <b>#03, #05, #07, #10, #11, #12</b>
+    were cut at the hard-filter stage, each for a distinct missing resource — a pool of paying
+    designers, industry-specific contacts, or access to a gatekeeper — not because the underlying
+    problem was weak.</p>
+  </div>
+
+  <!-- ---------- STAGE 4 ---------- -->
+  <div class="finstage" id="fin-s4">
+    <h3>Stage 4 — Side-by-Side Comparison</h3>
+    <div class="frtwrap"><table class="frt"><caption>The top 3, compared — no recommendation</caption>
+      <thead><tr><th></th><th>#01 Enterprise UX upskilling</th><th>#04 Strategic-design credential</th><th>#09 Design literacy for PMs</th></tr></thead>
+      <tbody>
+        <tr><td class="frtl"><b>Problem</b></td>
+          <td>GCCs have budget and need but no India-based teacher who has shipped safety-critical/complex-systems work.</td>
+          <td>Senior ICs and new managers need strategic-design method; almost no Indian educator teaches it.</td>
+          <td>PMs are judged on design quality, never trained in it; companies carry the cost of that gap.</td></tr>
+        <tr><td class="frtl"><b>Target customer</b></td>
+          <td>L&amp;D or engineering-training budget owner at an Indian GCC.</td>
+          <td>The senior designer/manager themself, or their employer's promotion/training budget.</td>
+          <td>A product/engineering leader whose PMs keep shipping weak design decisions.</td></tr>
+        <tr><td class="frtl"><b>Value proposition</b></td>
+          <td>Enterprise-grade UX training taught from real safety-critical experience, not a repackaged consumer bootcamp.</td>
+          <td>A European strategic-design method, translated, for designers ready to lead rather than execute.</td>
+          <td>Enough design judgment to brief and evaluate design work correctly, without becoming a designer.</td></tr>
+        <tr><td class="frtl"><b>Revenue model</b></td>
+          <td>Per-cohort fee from the GCC's L&amp;D budget, ₹30,000-1.5L/day range as a starting anchor.</td>
+          <td>Per-cohort fee, either individual-paid or employer-sponsored promotion budget.</td>
+          <td>Per-cohort or per-workshop fee, company-paid.</td></tr>
+        <tr><td class="frtl"><b>Biggest single risk</b></td>
+          <td>Willingness-to-pay at this specific price, for this specific offer, is unconfirmed — market size is measured, this offer's price is not.</td>
+          <td>Weakest market-size evidence of the three; no GCC-scale figures back this specific segment.</td>
+          <td>Most copyable of the three — generic design-literacy training is not a hard moat.</td></tr>
+        <tr><td class="frtl"><b>Key costs to get started</b></td>
+          <td>Time only — no build, no ad spend; cost is the founder's own outreach hours.</td>
+          <td>Time only, plus adapting the Polimi curriculum into a sellable format.</td>
+          <td>Time only — lightweight workshop material, no platform needed.</td></tr>
+        <tr><td class="frtl"><b>First validation step</b></td>
+          <td>5-10 warm-intro conversations with GCC L&amp;D or engineering-training owners; ask what last year's training budget was spent on and why, sized to &lt;10 hrs and $0-500.</td>
+          <td>5-10 conversations with senior ICs/managers about what "design leadership training" they've paid for or wished existed, sized to &lt;10 hrs and $0-500.</td>
+          <td>5-10 conversations with product/eng leaders about design-quality complaints re: their PMs, sized to &lt;10 hrs and $0-500.</td></tr>
+        <tr><td class="frtl"><b>Evidence tag &amp; score</b></td>
+          <td><span class="eb src">EVIDENCE-BASED</span> — final 6.85</td>
+          <td><span class="eb src">EVIDENCE-BASED</span> — final 5.95</td>
+          <td><span class="eb src">EVIDENCE-BASED</span> — final 5.90</td></tr>
+      </tbody></table></div>
+    <p class="prov judg">This table does not pick one. Per the source document, that choice is
+    yours. Tell me which of the three to carry into Stage 5 — the full lean plan — and I will
+    build it as a fifth section here, marking anything the research doesn't cover as
+    <i>Needs Validation</i> rather than inventing a confident number for it.</p>
+  </div>
+</div>

@@ -11,12 +11,22 @@ select:focus,input:focus{outline:2px solid color-mix(in srgb,var(--mark) 72%,whi
 .bldbar{display:flex;gap:var(--sp-3);align-items:end;flex-wrap:wrap;margin-top:var(--sp-4)}
 .bldbar .fld{max-width:190px}
 /* The statement is the one line saying what you are looking at, so it leads on type, not on a
-   coloured edge. The four axis words inside it already carry the four axis colours. */
-.stmt{background:linear-gradient(180deg,var(--plane),var(--raise));border:1px solid var(--ring);border-radius:var(--r-lg);
+   coloured edge. The four axis words inside it used to carry four axis colours — --f1..--f4 were
+   distinct hues in an earlier world; in this one they are four ink-weights of the same oxblood,
+   which made "who/outcome/how/paid-by" read as one colour repeated four times, over-using the
+   accent this world reserves for "live or selected" alone. Distinct underline styles carry the
+   same "which word is which axis" signal without spending colour on it. */
+.stmt{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);
   padding:var(--sp-6);margin-bottom:var(--sp-4);box-shadow:var(--e-2)}
 .stmt .lb{font-size:var(--t-xs);color:var(--mark);margin-bottom:var(--sp-2);font-weight:700}
 .stmt .sx{font-size:clamp(24px,3vw,36px);line-height:1.35;letter-spacing:-.02em;color:var(--ink-1);font-weight:700}
 .stmt .sx em{font-style:normal;font-weight:600}
+.axw,.axo,.axh,.axp{font-style:normal;font-weight:700;color:var(--ink-1);
+  text-decoration-color:var(--ink-3);text-underline-offset:3px}
+.axw{text-decoration:underline solid 2px}
+.axo{text-decoration:underline dashed 1.5px}
+.axh{text-decoration:underline dotted 2px}
+.axp{text-decoration:underline double 1px}
 .ideacard{background:var(--plane);border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-6);margin-bottom:var(--sp-4);box-shadow:var(--e-2)}
 /* variant navigator */
 .vnav{display:flex;gap:var(--sp-3);align-items:center;background:var(--plane);

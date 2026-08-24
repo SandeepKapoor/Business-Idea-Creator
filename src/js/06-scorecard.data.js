@@ -14,36 +14,33 @@ const CRIT=["What they’ll pay",
   "Your energy for it"];
 
 /* the eight hand-scored finalists now live in HAND, below, keyed by idea number */
-/* THE RAMP IS FIVE TINTS OF CORAL — the Airbnb-style redesign's ordinal device, replacing the
-   two-colour-press blue/vermillion plate the ramp used in two earlier worlds. Rank is still
-   carried by ink coverage rather than by five unrelated hues, so it survives greyscale, and the
-   verdict word beside every row still means nothing rides on hue alone.
+/* THE RAMP IS FIVE WEIGHTS OF FOUNDRY INK — the specimen ledger's ordinal device. A specimen
+   proves a face by showing every weight it cuts, light to black; rank here is carried by ink
+   coverage rather than by an unrelated hue, so it survives greyscale, and the verdict word
+   beside every row still means nothing rides on hue alone.
 
-   Both ladders are the same ladder. The light one darkens as the score rises, from a pale pink
-   at step 1 to a deep berry-coral at step 5; the dark one is its mirror and brightens, because on
-   near-black stock more ink means more light, not less. All ten cell/ink pairs clear AA 4.5:1,
-   every adjacent pair is separable (ΔL ≥ .045), step 1 is visible against its own stock and step
-   5 still leaves its numeral readable. tools/verify.js re-measures all of that on the built CSS
-   AND asserts these four arrays match src/styles/01a-field.css's .den-N declarations exactly —
-   that check is what caught this ramp and 01a-field.css's ramp disagreeing after the Airbnb pass:
-   the CSS had already moved to pink tints, this file was still the old vermillion five.
+   Both ladders are the same ladder. The light one darkens as the score rises, from a pale
+   oxblood wash at step 1 to near-black at step 5; the dark one is its mirror and brightens,
+   because on the proof-room's dark stock more ink means more light, not less. All ten cell/ink
+   pairs clear AA 4.5:1, every adjacent pair is separable, step 1 is visible against its own
+   stock and step 5 still leaves its numeral readable. tools/verify.js re-measures all of that
+   on the built CSS AND asserts these four arrays match src/styles/01a-field.css's .den-N
+   declarations exactly.
 
-   THE INK FLIPS AT THE CROSSOVER — this is the step that has shipped broken in three worlds now,
-   and this time the reason was a genuine dead zone: at this hue and saturation, lightness values
-   roughly 0.50–0.60 (light theme) and 0.49–0.53 (dark theme) clear NEITHER ink at 4.5:1 — the tint
-   is simultaneously too dark for white text and too light for dark text. A ramp that steps
-   smoothly through lightness will land a step inside that band by construction. The fix is not a
-   gentler curve; it is refusing to place a step there at all. Steps 1–3 sit above the light-theme
-   dead zone, steps 4–5 sit below it (and the mirror image in dark theme) — the jump across the
-   band happens between step 3 and step 4, which is a bigger visual gap than an evenly-spaced ramp
-   would give, and that unevenness is the price of every step clearing AA.
+   THE INK FLIPS AT THE CROSSOVER. At this hue and saturation, lightness values roughly 50–58%
+   clear NEITHER ink at 4.5:1 — the tint is simultaneously too dark for the stock-toned ink and
+   too light for the dark ink. Steps 1–3 sit above that band, steps 4–5 sit below it (and the
+   mirror image in dark theme) — the jump across the band happens between step 3 and step 4,
+   which is a bigger visual gap than an evenly-spaced ramp would give, and that unevenness is
+   the price of every step clearing AA.
 
-   Light flips after step 3 (1–3 dark ink, 4–5 white ink); dark flips after step 3 (1–3 light ink,
-   4–5 dark ink). Do not hand-edit one array, one theme, or one file without the other three. */
-const RAMP_L=["#fdced7","#fa89a0","#f74569","#e10935","#76051b"];
-const INK_L =["#222222","#222222","#222222","#ffffff","#ffffff"];
-const RAMP_D=["#550716","#890b24","#cb1036","#ef395d","#f5849b"];
-const INK_D =["#f5f5f6","#f5f5f6","#f5f5f6","#14110f","#14110f"];
+   Light flips after step 3 (1–3 dark ink, 4–5 stock-toned ink); dark flips after step 2 (1–2
+   light ink, 3–5 dark ink). Do not hand-edit one array, one theme, or one file without the
+   other three. */
+const RAMP_L=["#e7b3a6","#dd917e","#d4765e","#a1432b","#512115"];
+const INK_L =["#3a2418","#3a2418","#3a2418","#f7f1e4","#f7f1e4"];
+const RAMP_D=["#572819","#9e482e","#d17b61","#e6b6a8","#f4ded7"];
+const INK_D =["#f0e6d8","#f0e6d8","#14100b","#14100b","#14100b"];
 const isDark=()=>document.documentElement.dataset.theme!=='light';
 /* Column geometry for every score table on the page. Auto layout cannot do this job: the eight
    criteria are equal in meaning and must be equal in width, but their LABELS are wildly unequal

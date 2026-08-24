@@ -141,7 +141,7 @@ function jumpToIdea(n){
     if (foldEl) setFold(foldEl, true);
     const details = target.closest('details.cluster');
     if (details) details.open = true;
-    target.scrollIntoView({ behavior:'smooth', block:'center' });
+    target.scrollIntoView({ behavior:'auto', block:'center' });
     flashHit(target);
   });
 }

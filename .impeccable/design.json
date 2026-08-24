@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-06T00:00:00.000Z",
+  "title": "Design System: Business Idea Map",
+  "extensions": {
+    "colorMeta": {
+      "oxblood": {
+        "role": "primary",
+        "displayName": "Foundry Oxblood",
+        "canonical": "#8A2A1F",
+        "tonalRamp": ["#26100A", "#3A180F", "#512115", "#7A3220", "#A1432B", "#C56850", "#D67C66", "#E7B3A6"]
+      },
+      "stock": {
+        "role": "neutral",
+        "displayName": "Ivory Book Stock",
+        "canonical": "#F7F1E4",
+        "tonalRamp": ["#1C1712", "#241E17", "#332A20", "#453D31", "#726650", "#9A8D72", "#EFE3D0", "#F7F1E4"]
+      },
+      "ink-1": {
+        "role": "neutral",
+        "displayName": "Foundry Ink",
+        "canonical": "#1A1712",
+        "tonalRamp": ["#1A1712", "#453D31", "#726650", "#9A8D72", "#C9BDA5", "#EFE6D6", "#F1E7D6", "#FDFAF3"]
+      },
+      "good": {
+        "role": "neutral",
+        "displayName": "Verdict Good",
+        "canonical": "#3A6B3F",
+        "tonalRamp": ["#173A1B", "#264F2A", "#3A6B3F", "#4E8654", "#63A268", "#78B07D", "#9BC79E", "#C4E0C6"]
+      },
+      "warn": {
+        "role": "neutral",
+        "displayName": "Verdict Warn",
+        "canonical": "#8A6512",
+        "tonalRamp": ["#3D2E08", "#5C480C", "#8A6512", "#A9821C", "#C39F2C", "#D1A53F", "#DFC072", "#EEDCA8"]
+      },
+      "crit": {
+        "role": "neutral",
+        "displayName": "Verdict Critical",
+        "canonical": "#7A2A1C",
+        "tonalRamp": ["#2E0F09", "#4A170F", "#7A2A1C", "#9E3A26", "#C24E38", "#E2795F", "#EBA491", "#F5CFC4"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "h1 title plate and top-level headings only, Fraunces at opsz 144 / wght 600. Never used for body copy, chrome, or tabulated data." },
+      "headline": { "displayName": "Headline", "purpose": "h2 section headings, same Fraunces variation settings as Display, one size down." },
+      "title": { "displayName": "Title", "purpose": "h3 subsection headings, platform sans, weight 700." },
+      "body": { "displayName": "Body", "purpose": "Running prose: paragraphs, list items, section decks. Platform sans, capped at 68ch measure." },
+      "label": { "displayName": "Label / Mono", "purpose": "Field labels, index numbers, score grids, and any control the reader types into or picks from. Platform mono, tabular numerals, tracked-caps." }
+    },
+    "shadows": [
+      { "name": "e-1", "value": "0 1px 0 rgba(26,23,18,.06)", "purpose": "Resting cards, chips, buttons at rest (light theme)." },
+      { "name": "e-2", "value": "0 2px 0 rgba(26,23,18,.08)", "purpose": "Raised controls, hover states, primary button at rest (light theme)." },
+      { "name": "e-3", "value": "0 4px 0 rgba(26,23,18,.1)", "purpose": "Search overlay, primary button on hover — deepest offset (light theme)." }
+    ],
+    "motion": [
+      { "name": "dur-1", "value": "140ms", "purpose": "Micro-interactions: color/background/border transitions on hover." },
+      { "name": "dur-2", "value": "220ms", "purpose": "Chevron rotation, mid-weight state changes." },
+      { "name": "dur-3", "value": "320ms", "purpose": "Larger reveals." },
+      { "name": "ease", "value": "cubic-bezier(.2,.8,.2,1)", "purpose": "The single easing curve used for all transitions in the system." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "720px" },
+      { "name": "axpick-2col", "value": "900px" },
+      { "name": "axpick-1col", "value": "560px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one primary action per region (e.g. running the scoring engine). Solid oxblood fill — the only place the accent gets a full permanent fill.",
+      "html": "<button class=\"ds-btn-primary\">Roll the specimen</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:8px;background:#8A2A1F;color:#F7F1E4;border:1px solid transparent;border-radius:0;padding:12px 20px;font-size:13px;font-weight:700;line-height:1;cursor:pointer;box-shadow:0 2px 0 rgba(26,23,18,.08);min-height:46px;transition:transform 140ms cubic-bezier(.2,.8,.2,1),box-shadow 140ms cubic-bezier(.2,.8,.2,1)} .ds-btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 0 rgba(26,23,18,.1)} .ds-btn-primary:active{transform:translateY(0)} .ds-btn-primary:focus-visible{outline:2px solid color-mix(in srgb,#8A2A1F 72%,white);outline-offset:3px;box-shadow:0 0 0 6px color-mix(in srgb,#8A2A1F 18%,transparent)}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action, same box as the primary button, unfilled. No tertiary variant exists.",
+      "html": "<button class=\"ds-btn-ghost\">Build it</button>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#1A1712;border:1px solid rgba(26,23,18,.16);border-radius:0;padding:12px 20px;font-size:13px;font-weight:700;line-height:1;cursor:pointer;min-height:46px;transition:background 140ms cubic-bezier(.2,.8,.2,1),color 140ms cubic-bezier(.2,.8,.2,1),border-color 140ms cubic-bezier(.2,.8,.2,1)} .ds-btn-ghost:hover{background:#F1E7D6;color:#1A1712;border-color:rgba(26,23,18,.28)} .ds-btn-ghost:focus-visible{outline:2px solid color-mix(in srgb,#8A2A1F 72%,white);outline-offset:3px}"
+    },
+    {
+      "name": "Idea Card",
+      "kind": "card",
+      "refersTo": "idea-card",
+      "description": "One specimen plate: a numbered idea with name, one-line pitch, and tags. Square corners, hairline border, flat offset shadow.",
+      "html": "<div class=\"ds-idea\"><div class=\"ds-idea-num\">037</div><div class=\"ds-idea-body\"><div class=\"ds-idea-nm\">Idea name</div><div class=\"ds-idea-ln\">One line describing the idea.</div><div class=\"ds-idea-tags\"><span class=\"ds-tag ds-tag-pay\">Paying customer</span></div></div></div>",
+      "css": ".ds-idea{background:#FDFAF3;border:1px solid rgba(26,23,18,.16);border-radius:0;padding:16px;display:flex;gap:12px;box-shadow:0 1px 0 rgba(26,23,18,.06);transition:transform 140ms cubic-bezier(.2,.8,.2,1),box-shadow 140ms cubic-bezier(.2,.8,.2,1)} .ds-idea:hover{transform:translateY(-2px);box-shadow:0 2px 0 rgba(26,23,18,.08)} .ds-idea-num{font-family:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;font-size:13px;font-weight:700;color:#726650;min-width:26px} .ds-idea-nm{font-weight:650;font-size:13px;margin-bottom:2px;color:#1A1712} .ds-idea-ln{font-size:13px;color:#453D31;line-height:1.45} .ds-idea-tags{margin-top:4px;display:flex;gap:4px;flex-wrap:wrap} .ds-tag{font-size:13px;padding:2px 8px;border-radius:0;border:1px solid rgba(26,23,18,.16);color:#726650} .ds-tag-pay{color:#1A1712;border-color:rgba(26,23,18,.28);background:#F1E7D6}"
+    },
+    {
+      "name": "Sidebar Navigation Tab",
+      "kind": "nav",
+      "refersTo": "nav-tab",
+      "description": "Vertical mode tab in the fixed sidebar. Selected state is an underline-on-select pattern (left border + tint-wash), never a fill.",
+      "html": "<button class=\"ds-tab ds-tab-on\">Report</button>",
+      "css": ".ds-tab{display:flex;align-items:center;gap:12px;background:transparent;border:0;border-left:1px solid transparent;color:#726650;border-radius:0;padding:12px;font-size:11px;font-weight:600;line-height:1;cursor:pointer;text-align:left;width:100%;transition:color 140ms cubic-bezier(.2,.8,.2,1),border-color 140ms cubic-bezier(.2,.8,.2,1),background 140ms cubic-bezier(.2,.8,.2,1)} .ds-tab:hover{color:#1A1712;background:#F1E7D6} .ds-tab-on{color:#8A2A1F;border-left-color:#8A2A1F;background:rgba(138,42,31,.09)}"
+    },
+    {
+      "name": "Cluster Letter Badge",
+      "kind": "chip",
+      "refersTo": "cluster-badge",
+      "description": "Identifies a cluster of ideas by letter and number, ink-on-raise — deliberately NOT oxblood, so the one reserved accent never becomes ambient decoration on a permanently-visible element.",
+      "html": "<span class=\"ds-cletter\">A</span>",
+      "css": ".ds-cletter{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;font-size:13px;font-weight:700;color:#453D31;line-height:1;border-radius:0;background:#F1E7D6;border:1px solid rgba(26,23,18,.16);flex:none}"
+    },
+    {
+      "name": "Ink-Weight Rank Cell",
+      "kind": "custom",
+      "refersTo": "denfield",
+      "description": "The signature scoring device: five densities of oxblood-tinted ink (light to near-black) instead of a second hue, so rank survives greyscale and never competes with the one reserved accent.",
+      "html": "<div class=\"ds-den ds-den-4\">4</div>",
+      "css": ".ds-den{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;font-family:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;font-weight:700;border-radius:0} .ds-den-1{background:#e7b3a6;color:#3a2418} .ds-den-2{background:#dd917e;color:#3a2418} .ds-den-3{background:#d4765e;color:#3a2418} .ds-den-4{background:#a1432b;color:#f7f1e4} .ds-den-5{background:#512115;color:#f7f1e4}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Foundry Specimen Ledger",
+    "overview": "This is a working type foundry's own ledger, not a dashboard. The 114 ideas it holds are specimens — numbered plates proved by being set at genuine scale, the way a real specimen book proves a face by showing it work rather than by a swatch. Everything on the page follows from that: ivory book stock and near-black foundry ink stand in for paper and print, one reserved oxblood accent behaves like a proof-stamp marking a live correction, and the display face (Fraunces, shown at real specimen scale) carries the personality that a coloured UI would otherwise supply.\n\nThe ledger replaced an earlier \"Vermillion Broadsheet\" world — correct for a newsprint-style report, but wrong once the page's actual density (114 numbered items, ten score columns, four axes) made it read as argument rather than as the catalogue it actually is. Confirmed visual rejections carried forward from that replacement: no grey neutrals (ivory/near-black only), no second accent hue, no shadows with blur or colour, no rounded corners anywhere chrome lives, no gradient \"glow\" painted onto the background.",
+    "keyCharacteristics": [
+      "Flat ink on stock — no lighting effects, no gradients, no blur-shadows.",
+      "Square corners everywhere except one full-pill radius reserved for data-viz (a Gantt-style timeline bar), never for chrome.",
+      "One accent color, oxblood, used only to mark \"this is live or selected\" — never as decoration.",
+      "Rank and score are shown as ink-weight (light-to-black), never as a second hue.",
+      "One self-hosted display serif (Fraunces) carries every heading at genuine scale; everything else, including all tabulated data, is set in platform sans or platform mono."
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Oxblood appears in exactly three places: the primary button's full fill, the \"live/selected/current-location\" tint-wash or underline, and nowhere else. It never decorates chrome, and it never fills a permanently-visible element (a badge, a tag that's always on screen) with a solid color.", "section": "colors" },
+      { "name": "The Ink-Weight Rank Rule", "body": "Score and rank are never colored with a second hue. They're shown as ink density — a five-step ramp from pale oxblood wash to near-black (light theme) or from dark to bright (dark theme) — so \"the strongest idea\" and \"the darkest type\" are the same fact, and rank still reads correctly in greyscale.", "section": "colors" },
+      { "name": "The Neutral Badge Rule", "body": "Cluster-identity badges (.cletter) are ink-on-raise, not oxblood. A specimen ledger identifies its plates by letter and number, not by color; filling twelve permanently-visible badges with the one reserved accent would turn a live-signal into ambient decoration.", "section": "colors" },
+      { "name": "The Content-Not-Container Rule", "body": "Mono is assigned by what the content IS, not by what element it's in: score grids, matrices, field labels, index numbers, and anything the reader types into or picks from are mono; a table of running prose (even if visually tabular) stays in the sans reading face. A table is not automatically \"tabulated data.\"", "section": "typography" },
+      { "name": "The One Sourced Face Rule", "body": "Fraunces is display-only. Body, UI chrome, and tabular text never reference --serif — no system-installed serif reads as a foundry face worth showcasing, so the one licensed exception exists solely for display plates.", "section": "typography" },
+      { "name": "The Offset-Only Rule", "body": "Every shadow in this system is a flat vertical offset with zero blur and zero color tint. A shadow that blurs or tints is describing light; this system only describes ink sitting slightly above stock.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do treat oxblood as a signal, not a color choice: use it only for the primary button's full fill, or a tint-wash/underline marking \"live, selected, or current location.\"",
+      "Do express rank and score as ink-weight (the five-step .den-N ladder), never as a second hue.",
+      "Do use square corners (0px) for every UI element; reserve --r-full (999px) exclusively for true pills and data-viz (e.g. a timeline bar).",
+      "Do keep shadows offset-only with zero blur and zero color tint (0 Npx 0 rgba(ink, alpha)).",
+      "Do restrict Fraunces to display headings (h1/h2); keep body copy, UI chrome, and all tabulated data on the platform sans/mono stacks.",
+      "Do mark state twice when the primary signal is color (e.g. current-location links get oxblood text AND heavier weight AND a tint-wash) — nothing may rest on hue alone, per this product's WCAG AA accessibility commitment.",
+      "Do use distinct underline styles (solid/dashed/dotted/double), not additional colors, when four parallel categories need to be told apart."
+    ],
+    "donts": [
+      "Don't introduce a Secondary or Tertiary accent color. This system has exactly one accent (oxblood); everything else is Primary + Neutral.",
+      "Don't fill a permanently-visible element (a badge, a persistent tag, cluster chrome) with a solid oxblood — that's reserved for transient/live/selected states and the one primary button.",
+      "Don't add blur or color tint to any shadow, or use it to simulate ambient light — this is a flat, printed depth model.",
+      "Don't round any corner beyond 0px outside the one --r-full pill/data-viz exception.",
+      "Don't reintroduce grey as a neutral; the palette is ivory stock and foundry ink, warm in both themes, never neutral grey.",
+      "Don't set running prose (paragraphs, list items, section decks) in the mono face — mono is reserved for tabulated data, labels, index numbers, and typed/picked controls."
+    ]
+  }
+}

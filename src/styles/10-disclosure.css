@@ -2,7 +2,7 @@
 .expand>summary{list-style:none}
 .expand>summary::-webkit-details-marker{display:none}
 summary.trig{display:flex;align-items:center;gap:var(--sp-3);background:var(--plane);
-  border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-4) var(--sp-5);cursor:pointer;
+  border:1px solid var(--ring);border-radius:var(--r-lg);padding:var(--sp-3) var(--sp-5);cursor:pointer;
   font:inherit;text-align:left;max-width:820px;user-select:none;box-shadow:var(--e-1)}
 summary.trig:hover{border-color:var(--ring-2);background:var(--raise)}
 .trig .ti{display:inline-flex;align-items:center;color:var(--f2)}
@@ -71,7 +71,7 @@ summary.trig:hover .tchev{color:var(--f2)}
    Open, the part gets its normal breathing room back. */
 .sec.fold{margin-top:0;border-top:1px solid var(--grid);padding:var(--sp-4) 0 var(--sp-1)}
 .sec.fold:not(.shut){padding-bottom:var(--sp-8)}
-.sec.fold>h2{margin:0 0 var(--sp-1)}
+.sec.fold>h2{margin:0 0 var(--sp-4)}
 /* Closed, a part is one line of a contents list: the title leads and the deck follows quietly
    beneath it, indented to clear the chevron. This used to need a size override because the open
    h3 was 22px and bold; now that .sec>h3 is a deck at every state, the closed rule only has to

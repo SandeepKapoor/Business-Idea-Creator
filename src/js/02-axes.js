@@ -98,10 +98,10 @@ function renderAx(){
   if(!document.getElementById('engPick').firstChild)buildPicker('engPick','e','pick');
   syncPicker('e',sel,false);
   const t=document.getElementById('comboTxt');
-  t.innerHTML = `<em style="color:var(--f1)">${AX.WHO[sel.WHO]}</em> who want to
-   <em style="color:var(--f2)">${AX.OUT[sel.OUT].toLowerCase()}</em>, delivered as
-   <em style="color:var(--f3)">${AX.HOW[sel.HOW].toLowerCase()}</em>, paid for by
-   <em style="color:var(--f4)">${AX.PAY[sel.PAY].toLowerCase()}</em>.`;
+  t.innerHTML = `<em class="axw">${AX.WHO[sel.WHO]}</em> who want to
+   <em class="axo">${AX.OUT[sel.OUT].toLowerCase()}</em>, delivered as
+   <em class="axh">${AX.HOW[sel.HOW].toLowerCase()}</em>, paid for by
+   <em class="axp">${AX.PAY[sel.PAY].toLowerCase()}</em>.`;
 }
 function pick(k,i){sel[k]=i;renderAx();}
 function roll(log){
@@ -110,9 +110,9 @@ function roll(log){
   const rows=[];
   for(let n=0;n<5;n++){const w=R('WHO'),o=R('OUT'),h=R('HOW'),p=R('PAY');
     rows.push(`<div class="card" style="padding:var(--sp-3) var(--sp-4);font-size:var(--t-sm)">
-      <span style="color:var(--f1)">${AX.WHO[w]}</span> ·
-      <span style="color:var(--f2)">${AX.OUT[o].toLowerCase()}</span> ·
-      <span style="color:var(--f3)">${AX.HOW[h].toLowerCase()}</span> ·
-      <span style="color:var(--f4)">${AX.PAY[p].toLowerCase()}</span></div>`);}
+      <span class="axw">${AX.WHO[w]}</span> ·
+      <span class="axo">${AX.OUT[o].toLowerCase()}</span> ·
+      <span class="axh">${AX.HOW[h].toLowerCase()}</span> ·
+      <span class="axp">${AX.PAY[p].toLowerCase()}</span></div>`);}
   document.getElementById('rollLog').innerHTML=rows.join('');
 }

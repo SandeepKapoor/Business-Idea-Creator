@@ -277,7 +277,7 @@ function openFr(k){
   const el=document.getElementById('fr-'+k);
   if(!el)return;
   if(typeof setFold==='function'&&el.classList.contains('fold'))setFold(el,true);
-  el.scrollIntoView({behavior:'smooth',block:'start'});
+  el.scrollIntoView({behavior:'auto',block:'start'});
 }
 
 /* Fold every entry shut on load, so the tab opens as an index plus ten headlines rather than ten
@@ -349,6 +349,25 @@ const FSTRW=[null,
  'A vendor survey, or solid research reported second-hand. The direction is probably right; the decimal is not.',
  'Content marketing with no stated method. Used only to show that a term exists and is being used. No number on this page rests on one of these alone.'];
 
+/* The recap table, at the foot of the tab. Same ten rows as the index at the top, but with the
+   two fields that matter for comparing across entries once you already know what each one is:
+   who pays, and the first move — the index up top instead pairs window with evidence strength,
+   because that is what a reader needs before opening any entry at all. */
+function frontierRecapHTML(){
+  return `<div class="frtwrap"><table class="frt"><caption>The same ten, compared rather than argued</caption>
+    <thead><tr><th class="frtn">№</th><th>Name</th><th>Window</th><th>Who would pay</th><th>First move</th></tr></thead>
+    <tbody>${FRONT.map((F,i)=>`<tr class="frtr" tabindex="0" role="link"
+        onclick="openFr('${F.k}')" onkeydown="if(event.key==='Enter'||event.key===' ')
+          {event.preventDefault();openFr('${F.k}');}">
+        <td class="frtn">${String(i+1).padStart(2,'0')}</td>
+        <td class="frtl"><b>${F.nm}</b></td>
+        <td class="frtw">${F.wnShort||F.wn.split(/[.]/)[0]}</td>
+        <td>${F.by}</td>
+        <td>${F.mv}</td>
+      </tr>`).join('')}</tbody></table></div>`;
+}
+
 document.getElementById('frIndex').innerHTML=frontierIndexHTML();
 document.getElementById('frList').innerHTML=frontierHTML();
 document.getElementById('frSrc').innerHTML=frontierSrcHTML();
+document.getElementById('frRecap').innerHTML=frontierRecapHTML();

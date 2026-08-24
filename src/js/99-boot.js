@@ -11,3 +11,7 @@ initFold();   /* last: wraps each part's body, so everything above must already 
 initLift();   /* after initFold, which changes document height and so the initial scroll state */
 syncStick();  /* the header is laid out by now, so its height can be measured rather than guessed */
 initRoute();  /* last: #frontier / #bma / #custom in the address switch to that tab */
+initEdFilter(); /* the 26-idea type filter on the Strategy Brief tab */
+initEdTop(); /* back-to-top button on the Brainstorm/Strategy tabs */
+initFinal(); /* folds the FINAL tab's four stage sections */
+initFinal2(); /* scroll-spy for the FINAL 2.0 tab's idea rail and per-plan anchors */

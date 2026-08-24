@@ -1,0 +1,33 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [
+      "src/sections/15-brainstorm.html",
+      "src/sections/16-strategy.html",
+      "src/styles/12-education.css"
+    ],
+    "ignoreValues": [
+      {
+        "rule": "design-system-color",
+        "value": "rgba(0,0,0,.72)",
+        "createdAt": "2026-08-06T17:01:58.920Z",
+        "reason": "User confirmed: search-overlay scrim, deliberately theme-independent black so it darkens the page in both light and dark mode"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(0,0,0,.28)",
+        "createdAt": "2026-08-06T17:02:07.965Z",
+        "reason": "User confirmed: scroll-shadow fade masks on horizontally-scrolling tables, deliberately theme-independent black so the shadow reads correctly in both light and dark mode"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#fff",
+        "files": [
+          "src/styles/04-report.css"
+        ],
+        "createdAt": "2026-08-06T17:02:18.003Z",
+        "reason": "User confirmed: false positive, #fff appears only inside a code comment describing an already-fixed historical bug, not in live CSS"
+      }
+    ]
+  }
+}

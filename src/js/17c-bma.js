@@ -289,7 +289,7 @@ function openModel(k){
   const el=document.getElementById('bm-'+k);
   if(!el)return;
   if(typeof setFold==='function'&&el.classList.contains('fold'))setFold(el,true);
-  el.scrollIntoView({behavior:'smooth',block:'start'});
+  el.scrollIntoView({behavior:'auto',block:'start'});
 }
 
 /* Fold every card shut on load, so the default view is the table plus ten headlines rather than

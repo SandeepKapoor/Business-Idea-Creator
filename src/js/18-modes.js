@@ -75,15 +75,15 @@ let CURMODE='report';
 /* Sections that belong to a mode rather than to the report. Each is shown only in its own mode;
    everything else is report-only. It was a single `s.id==='custom'` test until the frontier
    arrived — one more mode and that test silently shows the new panel inside the report. */
-const MODESEC={custom:'tabC',frontier:'tabF',bma:'tabB'};
+const MODESEC={custom:'tabC',frontier:'tabF',bma:'tabB',brainstorm:'tabBrain',strategy:'tabStrat',final:'tabFinal',final2:'tabFinal2'};
 function mode(m){
   if(m===CURMODE)return;          /* a no-op switch shouldn't re-scroll or re-collapse anything */
   CURMODE=m;
   document.getElementById('tabR').classList.toggle('on',m==='report');
   Object.keys(MODESEC).forEach(k=>
     document.getElementById(MODESEC[k]).classList.toggle('on',m===k));
-  /* aria-selected has to move with the class or a screen reader reads four unselected tabs. */
-  ['tabR','tabC','tabF','tabB'].forEach(id=>{
+  /* aria-selected has to move with the class or a screen reader reads unselected tabs. */
+  ['tabR','tabC','tabF','tabB','tabBrain','tabStrat','tabFinal','tabFinal2'].forEach(id=>{
     const b=document.getElementById(id);
     b.setAttribute('aria-selected',b.classList.contains('on')?'true':'false');});
   document.getElementById('navRow').hidden=m!=='report';
@@ -96,7 +96,7 @@ function mode(m){
   syncFoldAll();                  /* the global toggle now counts only the mode on screen */
   syncStick();
   syncHash(m);
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top:0,behavior:'auto'});
 }
 
 /* THE STICKY HEADER IS TWO TIERS IN REPORT MODE AND ONE EVERYWHERE ELSE, so the offset that

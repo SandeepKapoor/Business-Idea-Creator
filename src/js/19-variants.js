@@ -135,7 +135,7 @@ function buildVars(w,o,h,p,P,R){
 function setVar(i){
   if(i<0)i=VARS.length-1; if(i>=VARS.length)i=0;
   VIDX=i; renderVars(1);
-  document.getElementById('vnav').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('vnav').scrollIntoView({behavior:'auto',block:'start'});
 }
 /* Switching premise rebuilds the angle set, because every angle's score and price sit on top of
    the premise's. The angle you were reading is kept — the whole point is comparing like for like. */
@@ -146,7 +146,7 @@ function setRoute(i){
   VARS=buildVars(w,o,h,p,PREMS[PIDX],curRoute());
   if(VIDX>=VARS.length)VIDX=0;
   renderVars(1);
-  document.getElementById('rtlist').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('rtlist').scrollIntoView({behavior:'auto',block:'start'});
 }
 function setPrem(i){
   if(i<0)i=PREMS.length-1; if(i>=PREMS.length)i=0;
@@ -155,7 +155,7 @@ function setPrem(i){
   VARS=buildVars(w,o,h,p,PREMS[PIDX],curRoute());
   if(VIDX>=VARS.length)VIDX=0;
   renderVars(1);
-  document.getElementById('vnav').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('vnav').scrollIntoView({behavior:'auto',block:'start'});
 }
 function gen(silent){
   const w=AXPICK.WHO,o=AXPICK.OUT,h=AXPICK.HOW,p=AXPICK.PAY;
@@ -227,10 +227,10 @@ function renderVars(silent){
   }
   /* statement */
   html+=`<div class="stmt"><div class="lb">${ORIGIN?`Bank idea #${ORIGIN}`:'Your combination'} · #${w+1}·${o+1}·${h+1}·${p+1} of 193,600</div>
-    <div class="sx"><em style="color:var(--f1)">${AX.WHO[w]}</em> who want to
-    <em style="color:var(--f2)">${AX.OUT[o].toLowerCase()}</em>, delivered as
-    <em style="color:var(--f3)">${AX.HOW[h].toLowerCase()}</em>, paid for by
-    <em style="color:var(--f4)">${AX.PAY[p].toLowerCase()}</em>.</div></div>`;
+    <div class="sx"><em class="axw">${AX.WHO[w]}</em> who want to
+    <em class="axo">${AX.OUT[o].toLowerCase()}</em>, delivered as
+    <em class="axh">${AX.HOW[h].toLowerCase()}</em>, paid for by
+    <em class="axp">${AX.PAY[p].toLowerCase()}</em>.</div></div>`;
 
   /* ---------- the businesses ----------
      Under the statement, before anything structural. These are not variations of one idea the
@@ -248,7 +248,7 @@ function renderVars(silent){
     html+=`<div class="rtlist" id="rtlist">
       <div class="rthead"><b>${RTS.length} businesses</b> you could build from these four axes.
         They are not versions of one idea — each attacks a different part of
-        <em style="color:var(--f2)">${AX.OUT[o].toLowerCase()}</em>. Pick one and the whole page
+        <em class="axo">${AX.OUT[o].toLowerCase()}</em>. Pick one and the whole page
         builds for it.</div>
       <table class="rtab"><tbody>
         <tr class="rrow${RIDX<0?' on':''}" onclick="setRoute(-1)">
@@ -290,9 +290,9 @@ function renderVars(silent){
      is written and needs it. It was further down and threw a temporal-dead-zone error. */
   const hasP = CURP.k!=='none';
   html+=`<div class="vnav2" id="vnav">
-    <div class="vhead">${curRoute()?`Building <b style="color:var(--f2)">${curRoute().nm}</b> — `:''}<b>${total} ideas</b> from this one combination:
+    <div class="vhead">${curRoute()?`Building <b class="axo">${curRoute().nm}</b> — `:''}<b>${total} ideas</b> from this one combination:
       ${PREMS.length} kinds of work × ${VARS.length} twists. You are on
-      <b style="color:var(--f2)">${CURP.nm}</b> × <b style="color:var(--f1)">${A.nm}</b>,
+      <b class="axo">${CURP.nm}</b> × <b class="axw">${A.nm}</b>,
       number <b>${PIDX*VARS.length+VIDX+1}</b>.</div>
     <div class="nrow">
       <div class="vrl">The work<span>what you actually do</span></div>
@@ -465,7 +465,7 @@ function renderVars(silent){
       <div><b>${f.tt}</b><br><span style="color:var(--ink-2)">${f.tx}</span></div></div>`;});}
 
   /* PART 6 — four stages */
-  html+=`<h3 style="margin:30px 0 12px">Part 6 · The four stages, for <span style="color:var(--f1)">${title}</span></h3>`;
+  html+=`<h3 style="margin:30px 0 12px">Part 6 · The four stages, for <span class="axw">${title}</span></h3>`;
   const q5=[
    ["Can you name ten people who want this today?",MW[w][0]>=4?"LIKELY YES":"PROBABLY NOT",MW[w][0]>=4],
    ["Do you have access, or a name, that others do not?",MW[w][1]>=4?"YES":"NO",MW[w][1]>=4],
@@ -537,7 +537,7 @@ function renderVars(silent){
     return {P,i,S:s,tot:s.reduce((x,y)=>x+y),V:verdict(s,baseF),core:pc,ev:premEv(P,h)};});
   const pBest=Math.max(...pRows.map(r=>r.tot));
   html+=`<h3 style="margin:30px 0 12px">Part 7b · All ${PREMS.length} kinds of work, with the
-    <span style="color:var(--f1)">${A.nm.toLowerCase()}</span> twist</h3>
+    <span class="axw">${A.nm.toLowerCase()}</span> twist</h3>
    <p class="tiny" style="margin:-6px 0 12px">The table above keeps the work and changes the twist.
    This one keeps the twist and changes the work. Together they are the ${total} ideas you can get
    out of these four dropdowns.</p>
@@ -570,7 +570,7 @@ function renderVars(silent){
    have found something better than the bank, or merely something different.</p>`;
 
   /* PART 9 — money */
-  html+=`<h3 style="margin:30px 0 12px">Part 9 · The money for <span style="color:var(--f1)">${title}</span></h3>
+  html+=`<h3 style="margin:30px 0 12px">Part 9 · The money for <span class="axw">${title}</span></h3>
    <p class="tiny" style="margin:-6px 0 12px">${(()=>{
      const hi=VARS.reduce((a,b)=>b.core>a.core?b:a), lo=VARS.reduce((a,b)=>b.core<a.core?b:a);
      const r=hi.core/lo.core;
@@ -623,7 +623,7 @@ function renderVars(silent){
      their implied twist. Built from the variant's own scores and price multiplier, so the money
      here matches the money on the card above rather than quietly reverting to the ×1 version. */
   html+=`<h3 style="margin:30px 0 12px">Part 10 · The full business case for
-    <span style="color:var(--f1)">${title}</span></h3>
+    <span class="axw">${title}</span></h3>
     <p class="tiny" style="margin:-6px 0 12px">Ten sections, each one collapsible. Every number
     carries its provenance: where a market figure is verified you get the source, and where it is
     not, the plan says so and leaves you the arithmetic rather than inventing a total.</p>`;
@@ -663,7 +663,7 @@ function renderVars(silent){
       <text class="dlab pick" x="${X(cx)+17}" y="${Y(cy)+4}" style="font-size:13px;font-weight:700">${title} · ${tot}</text>`;
   document.getElementById('cScatter').innerHTML=s+'</svg>';
   foldOut();   /* innerHTML above destroyed the wrappers — rebuild them */
-  if(!silent)document.getElementById('cOut').scrollIntoView({behavior:'smooth',block:'start'});
+  if(!silent)document.getElementById('cOut').scrollIntoView({behavior:'auto',block:'start'});
 }
 
 /* ---------- the premise explainer ----------
