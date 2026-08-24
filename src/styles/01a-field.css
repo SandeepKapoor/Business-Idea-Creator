@@ -2,43 +2,45 @@
    Four materials carry this world, and all four are drawn in CSS. No image, no canvas, no
    external anything — the artifact is one self-contained file and that constraint is absolute.
 
-     .den-1..5  the tint ladder. Five coverages of the vermillion, the ordinal device.
+     .den-1..5  the weight ladder. Five densities of foundry ink, the ordinal device — a
+                specimen proves a face by showing every weight it cuts, light to black; this
+                ladder borrows that logic instead of a second hue.
      .marg      the hanging provenance margin — a figure's method, set beside it, not under it.
      .struck    a struck line. What a ledger does to a voided entry, and what an errata slip
                 does to a claim that turned out to be wrong.
      .secno     the decimal section number. Numbered method is the whole conceit.
 
    WHY TINT AND NOT BAR DENSITY. An earlier world ranked by bar spacing because its grammar
-   forbade hue. A press with a spot plate has the opposite habit: it ranks by how much of that
-   one plate it lays down, and here the plate is vermillion. Tint also survives the thing bar fields do not — a cell 30px tall
-   with a numeral on top, where four hairlines and five hairlines are the same picture. */
+   forbade hue. A specimen ledger has the opposite habit: it ranks by how much ink a weight
+   lays down, and here that ink is the ledger's own oxblood. Tint also survives the thing bar
+   fields do not — a cell 30px tall with a numeral on top, where four hairlines and five
+   hairlines are the same picture. */
 
 /* THE TINT LADDER — ONE DEFINITION, used by every ranked thing on the page: score cells, funnel
    stages, anything else needing five ordered steps. Each step declares its coverage AND the ink
-   that still reads on it, because the ladder crosses over: light flips after step 4, dark after
-   step 3.
+   that still reads on it, because the ladder crosses over.
 
    These five pairs are the same values as RAMP_L / INK_L / RAMP_D / INK_D in
    06-scorecard.data.js. They are duplicated here because CSS cannot read a JS array, and
    tools/verify.js asserts the two copies agree — so the duplication is checked rather than
-   merely regretted. It had drifted (this file already carried the redesign's pink tints while
-   06-scorecard.data.js still held the old vermillion five) until that check caught it.
+   merely regretted.
 
    THE UNEVEN GAP BETWEEN STEP 3 AND STEP 4 IS DELIBERATE. At this hue there is a lightness band
-   (roughly L 0.50–0.60 in light theme, 0.49–0.53 in dark) where the tint is too dark for white
-   text and too light for dark text at once — neither ink clears AA 4.5:1. Steps 1–3 sit above
-   that band, 4–5 sit below it; see the long comment beside RAMP_L in 06-scorecard.data.js. */
-.den-1{--tint:#fdced7;--tint-ink:#222222}
-.den-2{--tint:#fa89a0;--tint-ink:#222222}
-.den-3{--tint:#f74569;--tint-ink:#222222}
-.den-4{--tint:#e10935;--tint-ink:#ffffff}
-.den-5{--tint:#76051b;--tint-ink:#ffffff}
-/* On near-black stock the ladder is its mirror: more ink means more light, so it ascends. */
-html[data-theme="dark"] .den-1{--tint:#550716;--tint-ink:#f5f5f6}
-html[data-theme="dark"] .den-2{--tint:#890b24;--tint-ink:#f5f5f6}
-html[data-theme="dark"] .den-3{--tint:#cb1036;--tint-ink:#f5f5f6}
-html[data-theme="dark"] .den-4{--tint:#ef395d;--tint-ink:#14110f}
-html[data-theme="dark"] .den-5{--tint:#f5849b;--tint-ink:#14110f}
+   (roughly L 50–58% in light theme) where the tint is too dark for the stock-toned ink and too
+   light for the dark ink at once — neither clears AA 4.5:1. Steps 1–3 sit above that band, 4–5
+   sit below it; see the long comment beside RAMP_L in 06-scorecard.data.js. */
+.den-1{--tint:#e7b3a6;--tint-ink:#3a2418}
+.den-2{--tint:#dd917e;--tint-ink:#3a2418}
+.den-3{--tint:#d4765e;--tint-ink:#3a2418}
+.den-4{--tint:#a1432b;--tint-ink:#f7f1e4}
+.den-5{--tint:#512115;--tint-ink:#f7f1e4}
+/* On the proof-room's dark stock the ladder is its mirror: more ink means more light, so it
+   ascends. */
+html[data-theme="dark"] .den-1{--tint:#572819;--tint-ink:#f0e6d8}
+html[data-theme="dark"] .den-2{--tint:#9e482e;--tint-ink:#f0e6d8}
+html[data-theme="dark"] .den-3{--tint:#d17b61;--tint-ink:#14100b}
+html[data-theme="dark"] .den-4{--tint:#e6b6a8;--tint-ink:#14100b}
+html[data-theme="dark"] .den-5{--tint:#f4ded7;--tint-ink:#14100b}
 /* The painter. Any element wanting the ladder adds .denfield and a .den-N. */
 .denfield{background:var(--tint,transparent);color:var(--tint-ink,var(--ink-1))}
 
@@ -78,22 +80,13 @@ html[data-theme="dark"] .den-5{--tint:#f5849b;--tint-ink:#14110f}
 .idx{font-variant-numeric:tabular-nums;font-size:var(--t-2xs);letter-spacing:var(--tr-caps);
   color:var(--ink-3)}
 
-/* ---------- masthead ----------
-   The title block. A report opens by saying what it is, when it was revised and what it found —
-   not with a picture of its own data. */
-.mast{margin-top:var(--sp-8);padding:var(--sp-8);border:1px solid var(--ring);border-radius:var(--r-lg);
-  background:
-    radial-gradient(circle at top right,rgba(255,56,92,.14),transparent 28%),
-    radial-gradient(circle at top left,rgba(255,180,164,.35),transparent 32%),
-    linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.92));
-  box-shadow:var(--e-3)}
-html[data-theme="dark"] .mast{
-  background:
-    radial-gradient(circle at top right,rgba(255,90,95,.18),transparent 28%),
-    radial-gradient(circle at top left,rgba(255,255,255,.04),transparent 32%),
-    linear-gradient(180deg,rgba(32,32,32,.96),rgba(24,24,24,.94));
-}
-.mast h1{margin:0 0 var(--sp-4);max-width:12ch}
+/* ---------- the title plate ----------
+   A specimen ledger's own cover: flat stock, one hairline rule, the display face shown at its
+   own genuine scale — the way the first plate inside proves the face before any specimen does.
+   No glow, no radial light; a ledger's cover page is printed, not lit. */
+.mast{margin-top:var(--sp-8);padding:var(--sp-8);border:1px solid var(--ring);border-radius:0;
+  border-bottom:3px solid var(--mark);background:var(--plane);box-shadow:none}
+.mast h1{margin:0 0 var(--sp-4);max-width:14ch}
 .mastdeck{font-size:var(--t-md);color:var(--ink-2);max-width:60ch;margin:0 0 var(--sp-7);
   line-height:1.7}
 
@@ -105,13 +98,34 @@ html[data-theme="dark"] .mast{
   text-transform:uppercase;color:var(--ink-3);margin-bottom:var(--sp-6)}
 .mastrev b{color:var(--ink-2);font-weight:600}
 
-/* THE SUMMARY OF FINDINGS. The counts, as a ruled table rather than five cards: they are being
-   compared, so they share one baseline and one set of rules. */
-.mastnums{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:var(--sp-3)}
-.mn{display:flex;flex-direction:column;gap:var(--sp-2);padding:var(--sp-4) var(--sp-5);
+/* THE SPECIMEN SPIN. Where five hand-counted findings used to sit as a ruled table, one idea from
+   the bank now surfaces at a time — a live draw against the same ALLC the rest of the document
+   scores from. A reader advances it with the arrow beside it; nothing here moves on its own.
+   Each draw fades up from a settled, slightly-lower starting position (never a hard cut). Off
+   entirely under prefers-reduced-motion: the class below never lands, so a fresh draw just sits
+   still. */
+.mastspin{position:relative;padding:var(--sp-5) var(--sp-8) var(--sp-5) var(--sp-6);
   background:rgba(255,255,255,.82);border:1px solid var(--ring);border-radius:var(--r-md);
-  box-shadow:var(--e-1)}
-html[data-theme="dark"] .mn{background:rgba(255,255,255,.03)}
-.mn b{font-size:var(--t-xl);font-weight:700;line-height:1;letter-spacing:var(--tr-display);
-  color:var(--ink-1);font-variant-numeric:tabular-nums}
-.mn .lbl{line-height:1.4}
+  box-shadow:var(--e-1);min-height:150px;display:flex;align-items:center;max-width:640px}
+html[data-theme="dark"] .mastspin{background:rgba(255,255,255,.03)}
+.spintext{display:flex;flex-direction:column;gap:var(--sp-2)}
+.spintext .idx{display:block}
+.spintext b{font-family:var(--serif);font-size:var(--t-xl);font-weight:600;line-height:1.25;
+  color:var(--ink-1)}
+.spintext .lbl{line-height:1.4;text-transform:none;letter-spacing:0;color:var(--ink-3)}
+.spintext .dsc{display:block;margin-top:var(--sp-1);font-family:var(--sans);font-size:var(--t-sm);
+  line-height:1.6;color:var(--ink-2)}
+.spintext.spin-in{animation:mn-in .6s var(--ease) both}
+@keyframes mn-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.mastnext{position:absolute;top:var(--sp-4);right:var(--sp-4);display:inline-flex;
+  align-items:center;justify-content:center;flex:none;width:32px;height:32px;
+  background:var(--plane);color:var(--ink-3);border:1px solid var(--ring);
+  border-radius:var(--r-md);cursor:pointer;
+  transition:background var(--dur-1) var(--ease),color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease)}
+.mastnext:hover{background:var(--raise);color:var(--f2);border-color:var(--ring-2)}
+.mastopen{display:inline-flex;align-items:center;gap:var(--sp-1);align-self:flex-start;
+  margin-top:var(--sp-2);background:none;border:0;padding:0;cursor:pointer;
+  font-family:var(--sans);font-size:var(--t-sm);font-weight:600;color:var(--mark)}
+.mastopen:hover{color:var(--ink-1)}
+.mastopen .i{transition:transform var(--dur-1) var(--ease)}
+.mastopen:hover .i{transform:translateX(2px)}

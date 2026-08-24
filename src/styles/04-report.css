@@ -71,11 +71,11 @@
    the moment the accent token became the ink. Hence the padding being written out rather than
    inherited from a flank that no longer exists. */
 .rollbtn{display:inline-flex;align-items:center;gap:var(--sp-2);
-  background:linear-gradient(135deg,var(--mark),var(--f3));color:#ffffff;
+  background:var(--mark);color:var(--stock);
   border:1px solid transparent;border-radius:var(--r-md);padding:var(--sp-3) var(--sp-5);
   font-size:var(--t-sm);font-weight:700;line-height:1;cursor:pointer;box-shadow:var(--e-2);min-height:46px;
-  transition:transform var(--dur-1) var(--ease),box-shadow var(--dur-1) var(--ease),filter var(--dur-1) var(--ease)}
-.rollbtn:hover{transform:translateY(-1px);box-shadow:var(--e-3);filter:saturate(1.04)}
+  transition:transform var(--dur-1) var(--ease),box-shadow var(--dur-1) var(--ease)}
+.rollbtn:hover{transform:translateY(-1px);box-shadow:var(--e-3)}
 .rollbtn:active{transform:translateY(0)}
 /* SECONDARY. Same box, not filled. */
 .rollbtn.ghost:hover{background:var(--raise);color:var(--ink-1);border-color:var(--ring-2)}
@@ -125,10 +125,15 @@ details.cluster[open]>summary .cchev{transform:rotate(90deg)}
 summary.chead:hover .cchev{color:var(--fam)}
 .cmatch{font-size:var(--t-xs);color:var(--f1);font-weight:600}
 .cluster .ideas{padding-top:var(--sp-3);padding-bottom:var(--sp-1)}
+/* NEUTRAL, NOT --fam. Five cluster "families" used to carry five distinct hues; this world has
+   one hue, reserved for "live or selected" by the direction contract, so filling twelve
+   permanently-visible cluster badges with it would turn the one live-signal into ambient
+   decoration. A specimen ledger identifies its plates by letter and number, not by colour — the
+   badge is ink-on-stock like everything else, and stays that way whether its cluster is open
+   or shut. */
 .cletter{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
-  font-size:var(--t-sm);font-weight:700;color:var(--fam);line-height:1;border-radius:var(--r-sm);
-  background:color-mix(in srgb,var(--fam) 14%,transparent);
-  border:1px solid color-mix(in srgb,var(--fam) 30%,transparent);flex:none}
+  font-size:var(--t-sm);font-weight:700;color:var(--ink-2);line-height:1;border-radius:var(--r-sm);
+  background:var(--raise);border:1px solid var(--ring);flex:none}
 .ctitle{font-weight:650;font-size:var(--t-md)}
 .cwhat{font-size:var(--t-xs);color:var(--ink-3)}
 .cq{font-size:var(--t-xs);color:var(--ink-3);background:var(--raise);border:1px solid var(--ring);
@@ -143,7 +148,7 @@ summary.chead:hover .cchev{color:var(--fam)}
    ("you arrived here") and not a persistent state. */
 .idea.shit{background:var(--tint-f1);border-color:color-mix(in srgb,var(--mark) 40%,transparent);
   transition:background 1.8s var(--ease),border-color 1.8s var(--ease)}
-.idea .num{font-size:var(--t-xs);font-weight:700;color:var(--fam);min-width:26px;padding-top:1px}
+.idea .num{font-size:var(--t-xs);font-weight:700;color:var(--ink-3);min-width:26px;padding-top:1px}
 .idea .nm{font-weight:650;font-size:var(--t-sm);margin-bottom:var(--sp-0)}
 .idea .ln{font-size:var(--t-xs);color:var(--ink-2);line-height:1.45}
 .idea .tags{margin-top:var(--sp-1);display:flex;gap:var(--sp-1);flex-wrap:wrap}

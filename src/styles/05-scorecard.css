@@ -110,7 +110,7 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 /* A sprint bar is a span of days, so it is an outlined block with its label inside — not a filled
    chip, which on an ink-only palette would be white text on white. */
 .gbar{position:absolute;top:0;height:28px;border-radius:var(--r-full);display:flex;align-items:center;
-  padding:0 var(--sp-3);font-size:var(--t-2xs);color:#fff;background:linear-gradient(135deg,var(--mark),var(--f3));
+  padding:0 var(--sp-3);font-size:var(--t-2xs);color:var(--stock);background:var(--mark);
   font-weight:700;white-space:nowrap;letter-spacing:var(--tr-caps);margin:1px}
 .gdays{display:grid;grid-template-columns:repeat(14,1fr);gap:0;font-size:var(--t-xs);color:var(--ink-3);
   text-align:center}

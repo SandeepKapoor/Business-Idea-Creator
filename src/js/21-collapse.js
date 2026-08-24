@@ -19,7 +19,7 @@
    Charts are safe: every chart here is viewBox SVG written with innerHTML, so nothing measures
    layout width and nothing needs redrawing when a block opens. */
 
-const NOFOLD = ['custom', 'frontier', 'bma'];   /* the two mode panels — see above */
+const NOFOLD = ['custom', 'frontier', 'bma', 'brainstorm', 'strategy', 'final', 'final2'];   /* the mode panels — see above */
 let FOLDSEQ = 0;
 
 /* The folds the global button acts on: only those the current mode is actually showing.
@@ -104,7 +104,7 @@ function openFold(id, scroll) {
   if (s) setFold(s, true);
   if (scroll) {
     const t = document.getElementById(id);
-    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (t) t.scrollIntoView({ behavior: 'auto', block: 'start' });
   }
   return s;
 }
@@ -236,10 +236,10 @@ function initSpy() {
       const r = winner.getBoundingClientRect(), b = rail.getBoundingClientRect();
       if (vertical) {
         if (r.top < b.top || r.bottom > b.bottom) {
-          rail.scrollTo({ top: rail.scrollTop + (r.top - b.top) - 24, behavior: 'smooth' });
+          rail.scrollTo({ top: rail.scrollTop + (r.top - b.top) - 24, behavior: 'auto' });
         }
       } else if (r.left < b.left || r.right > b.right) {
-        rail.scrollTo({ left: rail.scrollLeft + (r.left - b.left) - 24, behavior: 'smooth' });
+        rail.scrollTo({ left: rail.scrollLeft + (r.left - b.left) - 24, behavior: 'auto' });
       }
     }
   };

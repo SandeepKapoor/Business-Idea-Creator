@@ -54,9 +54,16 @@ measured or judged, and the document names its own weakest claims in an evidence
 
 ## Capabilities and Constraints
 
-- **Absolute: one self-contained HTML file.** No external stylesheet, script, font, image or
-  `@import`. Exactly one `<style>` and one `<script>`. Confirmed still binding, which means
-  **system fonts only** — the visual system works through scale, spacing, colour and layout.
+- **Absolute: one self-contained HTML file, zero external requests.** No external stylesheet,
+  script, image, or `@import`. Exactly one `<style>` and one `<script>`. Confirmed still binding.
+- Revised 6 Aug 2026: **one self-hosted display face is permitted, base64-inlined in the
+  stylesheet.** Originally "system fonts only"; the specimen-book world (Foundry Specimen Ledger)
+  needs a real display serif with character, and no installed system serif reads as a foundry
+  face worth showcasing. Fraunces (variable, ~106KB before base64 overhead) is inlined as a
+  `data:` URL — still zero external requests, still one file — used for display type only; body,
+  UI, and tabular text stay on system stacks. This is a one-time exception tied to this visual
+  world, not a general license: a future world reverts to system-only unless it makes the same
+  case.
 - Zero dependencies, zero build tooling beyond plain Node. No framework, no bundler.
 - Concatenation, not bundling: one shared script scope, inline `onclick` handlers.
 - Source order is load-bearing; files carry two-digit prefixes.
@@ -83,11 +90,12 @@ measured or judged, and the document names its own weakest claims in an evidence
 
 Name: *Business Idea Map*. No logo, no external identity, nothing binding to anyone else.
 
-The visual world is **Vermillion Broadsheet**, chosen 6 Aug 2026 and recorded in full in the
-contract at the top of `src/index.html`. Three values and no fourth: warm ink is the record,
-vermillion is anything live or selected, and one cold slate is reserved for what failed. The
-accent marks content, never chrome — a live region takes a hairline box with a single vermillion
-rule down its left edge, never a four-sided accent outline.
+The visual world is **Foundry Specimen Ledger**, chosen 6 Aug 2026 (replacing Vermillion
+Broadsheet) and recorded in full in the contract at the top of `src/index.html`. Every idea, plate,
+and section is a numbered specimen in a working type foundry's own ledger — ivory book stock, a
+self-hosted display serif (Fraunces) shown at genuine scale the way a real specimen shows its
+face, monospace technical annotation in place of x-height/cap-height labels, and one accent
+reserved for "live or selected," never for chrome.
 
 ## Evidence on Hand
 

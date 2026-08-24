@@ -19,19 +19,12 @@
                  control the reader types into or picks from, and anything set in tracked caps
    A number that sits inside a sentence stays in the sentence's face. A number that sits in a
    column joins the column. */
-html{scroll-behavior:smooth;background:var(--field)}
-body{margin:0;
-  background:
-    radial-gradient(circle at top left,rgba(255,56,92,.08),transparent 22%),
-    radial-gradient(circle at top right,rgba(255,184,164,.18),transparent 24%),
-    linear-gradient(180deg,#fff8f6 0%,#fffefe 28%,#fff8f4 100%);
+/* FLAT INK ON STOCK — a specimen ledger has no lighting effect painted onto its paper, so the
+   old world's radial-gradient "glow" is gone. The ground is exactly --field in both themes. */
+html{scroll-behavior:auto;background:var(--field)}
+body{margin:0;background:var(--field);
   color:var(--ink-1);font:var(--t-base)/1.68 var(--sans);font-variant-numeric:tabular-nums;
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-html[data-theme="dark"] body{
-  background:
-    radial-gradient(circle at top left,rgba(255,90,95,.12),transparent 20%),
-    linear-gradient(180deg,#171717 0%,#121212 100%);
-}
 /* padding-top, not 0 — .sec's own margin-top would otherwise collapse straight through .wrap
    and <main> onto <body>'s top edge (nothing here has a border or padding to stop it), pushing
    body's painted background down and exposing bare html background above it. header cannot
@@ -60,15 +53,16 @@ html[data-theme="dark"] body{
    ordinary way, and case is left alone. Headings were uppercase under an earlier world because a
    mono face has almost no weight axis to work with; that constraint is gone.
 
-   BROADSHEET WEIGHT. A poster headline is set as heavy and as tight as the face will take, and a
-   platform grotesque will take 800 at -0.032em without the counters closing up. This is where
-   nearly all the personality of the page comes from — there is one hue and no imagery, so the
-   headline has to carry it. The decks stay light and quiet underneath, which is what makes the
-   contrast read as deliberate rather than as everything shouting. */
-h1{font-size:var(--t-3xl);line-height:1.02;margin:0 0 var(--sp-3);
-  letter-spacing:var(--tr-display);font-weight:800}
-h2{font-size:var(--t-2xl);line-height:1.08;margin:0 0 var(--sp-3);
-  letter-spacing:var(--tr-display);font-weight:800;color:var(--ink-1)}
+   THE SPECIMEN VOICE. Fraunces at its heaviest cut and its widest optical size, set the way a
+   real specimen shows a display weight: large enough to judge on sight, tight enough that the
+   weight reads as deliberate. This is where nearly all the personality of the page comes from —
+   one sourced face, shown at genuine scale, is the whole thesis. The decks stay on the system
+   sans underneath, which is what makes the contrast between "specimen" and "annotation" legible
+   as two different kinds of text rather than one voice at two sizes. */
+h1{font-family:var(--serif);font-size:var(--t-3xl);line-height:1.02;margin:0 0 var(--sp-3);
+  letter-spacing:var(--tr-display);font-weight:600;font-variation-settings:"opsz" 144,"wght" 600}
+h2{font-family:var(--serif);font-size:var(--t-2xl);line-height:1.08;margin:0 0 var(--sp-3);
+  letter-spacing:var(--tr-display);font-weight:600;font-variation-settings:"opsz" 144,"wght" 600;color:var(--ink-1)}
 h3{font-size:var(--t-lg);line-height:1.3;margin:0 0 var(--sp-3);letter-spacing:-.014em;
   font-weight:700}
 h4{font-size:var(--t-base);line-height:1.4;font-weight:700;letter-spacing:-.008em;margin:0 0 var(--sp-2)}
